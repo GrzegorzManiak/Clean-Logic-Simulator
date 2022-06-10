@@ -1,0 +1,17 @@
+{
+    "name": "lsmt",
+    "version": "0.1.0",
+    "private": false,
+    "main": "index.js",
+    "scripts": {
+      "build": "tsc",
+      "serve": "live-server"
+    },
+    "devDependencies": {
+        "live-server": "^1.2.2",
+        "typescript": "^2.8.0"
+    },
+    "dependencies": {
+        "@types/node": "9.6.0"
+    }
+}
