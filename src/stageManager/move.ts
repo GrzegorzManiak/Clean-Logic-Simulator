@@ -2,7 +2,9 @@ import Konva from "konva";
 import { GridConstants } from "../consts";
 
 // https://konvajs.org/docs/sandbox/Zooming_Relative_To_Pointer.html
-function scrollManager(stage: Konva.Stage): void {
+function movementManager(stage: Konva.Stage): void {
+
+    // Scrolling
     stage.on('wheel', (e) => {
         // stop default scrolling
         e.evt.preventDefault();
@@ -36,8 +38,17 @@ function scrollManager(stage: Konva.Stage): void {
 
         stage.position(newPos);
 
-        stage.fire('scrollManager');
+        stage.fire('movementManager');
     });
+
+    // Panning
+    // stage.on('mousedown', (e) => {
+    //     if (e.evt.button !== 0) return;
+
+    //     stage.startDrag();
+
+    //     stage.fire('movementManager');
+    // });
 }
 
-export default scrollManager;
+export default movementManager;

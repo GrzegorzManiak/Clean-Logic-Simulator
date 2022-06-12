@@ -17,14 +17,9 @@ export namespace CanvasTypes {
     export type IBlock = {
         borderRadius: number;
         borderWidth: number;
-        borderColor: string;
-
         id: string;
-        type: BlockList.TBaseLogic | BlockList.TTemplateLogic; 
-        coordinates: ICoordinates;
         size: ISize;
         color: string;
-
         snapToGrid: boolean;
     }
 }
@@ -44,5 +39,15 @@ export namespace Constants {
         gridSize: number;
         scaleBy: number;
         scrollSpeed: number;
+    }
+
+    export type TThemeConstants = {
+        backgroundColor: string;
+        gridColor: string;
+        gridLineWidth: number;
+        blockBarColor: string;
+        blockBarPadding: number;
+        blockColor: string;
+        blockBarBorderRadius: number;
     }
 }

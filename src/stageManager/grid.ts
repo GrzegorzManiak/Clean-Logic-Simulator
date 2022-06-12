@@ -1,5 +1,5 @@
 import Konva from "konva";
-import { GridConstants } from "../consts";
+import { GridConstants, ThemeConstants } from "../consts";
 
 // Adapted from:
 // https://longviewcoder.com/2021/12/08/konva-a-better-grid/
@@ -23,8 +23,8 @@ function constructGrid(stage: Konva.Stage, subDivide: number = 1): Konva.Layer {
             new Konva.Line({
                 x: i * stepSize,
                 points: [0, 0, 0, ySize],
-                stroke: 'rgba(0, 0, 0, 0.2)',
-                strokeWidth: 1,
+                stroke: ThemeConstants.gridColor,
+                strokeWidth: ThemeConstants.gridLineWidth,
             })
         );
     }
@@ -35,8 +35,8 @@ function constructGrid(stage: Konva.Stage, subDivide: number = 1): Konva.Layer {
             new Konva.Line({
                 y: i * stepSize,
                 points: [0, 0, xSize, 0],
-                stroke: 'rgba(0, 0, 0, 0.2)',
-                strokeWidth: 1,
+                stroke: ThemeConstants.gridColor,
+                strokeWidth: ThemeConstants.gridLineWidth,
             })
         );
     }

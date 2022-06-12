@@ -15,3 +15,13 @@ export const GridConstants: Constants.TGridConstants = {
     scrollSpeed: 1,
     scaleBy: 1.1
 }
+
+export const ThemeConstants: Constants.TThemeConstants = {
+    backgroundColor: '#2b2b2b',
+    gridColor: 'rgba(0, 0, 0, 0.2)',
+    gridLineWidth: 2,
+    blockBarBorderRadius: 10,
+    blockBarColor: "#2b2b2b",
+    blockBarPadding: 10,
+    blockColor: '#2b2b2b'
+}

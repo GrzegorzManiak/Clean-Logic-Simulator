@@ -1,4 +1,4 @@
-import BaseBlock from "../logic/baseBlock";
+import BaseBlock from "../blocks/baseBlock";
 import konva from 'konva';
 import constructBezier from './bezier';
 import constructArrow from './arrow';
@@ -41,6 +41,10 @@ class ConnectionManager {
 
         this.canvas = canvas;
         this.canvas.setZIndex(5);
+    }
+
+    public getBlock(id: string): BaseBlock {
+        return this.blocks.find(block => block.blockOpts.id === id);
     }
 
     public snapToGrid(force: boolean = true): void {
@@ -107,12 +111,12 @@ class ConnectionManager {
     }
 
     private glow(block: BaseBlock) {
-        block.block.shadowColor('#ffffff');
+        block.block.shadowColor(block.blockOpts.color);
         block.block.shadowBlur(10);
         block.block.shadowOffset({ x: 0, y: 0 });
         block.block.shadowOpacity(0.5);
 
-        block.block.stroke('#ffffff');
+        block.block.stroke('rgba(0, 0, 0, 0.2)');
         block.block.strokeWidth(VisualConstants.strokeWidth);
 
         block.layer.draw();
@@ -159,8 +163,10 @@ class ConnectionManager {
             // choose a side that is perpendicular to the other side
 
             // Get the coordinates of the two blocks
-            const b1 = block1.block.getAbsolutePosition(),
-                b2 = block2.block.getAbsolutePosition();
+            const b1 = block1.block.getPosition(),
+                b2 = block2.block.getPosition();
+
+            const scale = this.canvas.scale();
 
             // Get the width and height of the two blocks
             const b1w = block1.block.width(),
@@ -181,6 +187,8 @@ class ConnectionManager {
                 y: b2.y + b2h / 2
             };
 
+
+            // return the cords
             return [b1c.x, b1c.y, b2c.x, b2c.y];
         };
 
@@ -216,7 +224,7 @@ class ConnectionManager {
     addBlock(block: BaseBlock): void {
         this.blocks.push(block);
 
-        block.onClick(() => {
+        block.block.on('click', () => {
             this.clickHandler(block);
         });
     }

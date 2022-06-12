@@ -1,6 +1,6 @@
 import konva from 'konva';
 import ConnectionManager from '../connectionManager/main';
-import { GridConstants, VisualConstants } from '../consts';
+import { GridConstants } from '../consts';
 import { CanvasTypes } from '../index.d';
 
 class BaseBlock {
@@ -13,32 +13,26 @@ class BaseBlock {
     public canBeConnected: boolean = true;
     public canConntect: boolean = true;
 
-    constructor(connectionManager: ConnectionManager, stage: konva.Stage, layer: konva.Layer, block: CanvasTypes.IBlock) {
+    constructor(connectionManager: ConnectionManager, stage: konva.Stage, layer: konva.Layer, block: CanvasTypes.IBlock, cords: [number, number]) {
         this.stage = stage;
         this.layer = layer;
-
         this.blockOpts = block;
-
-        this.drawBlock(block);
-
+        this.drawBlock(block, cords);
         this.block.zIndex(10);
-
         this.cm = connectionManager;
-
         this.cm.addBlock(this);
-
         this.snapToGrid();
     }
 
-    private drawBlock(block: CanvasTypes.IBlock): void {
+    public drawBlock(block: CanvasTypes.IBlock, cords: [number, number]): void {
         this.block = new konva.Rect({
             cornerRadius: block.borderRadius,
-            x: block.coordinates.x,
-            y: block.coordinates.y,
+            x: cords[0],
+            y: cords[1],
             width: block.size.width,
             height: block.size.height,
             fill: block.color,
-            stroke: block.borderColor,
+            stroke: 'rgba(0, 0, 0, 0.2)',
             strokeWidth: block.borderWidth,
         });
 
@@ -91,26 +85,6 @@ class BaseBlock {
     public changeColor(color: string): void {
         this.block.fill(color);
         this.layer.draw();
-    }
-
-    public onClick(callback: () => void): void {
-        this.block.on('click', callback);
-    }
-
-    public onDragStart(callback: () => void): void {
-        this.block.on('dragstart', callback);
-    }
-
-    public onDragEnd(callback: () => void): void {
-        this.block.on('dragend', callback);
-    }
-
-    public onDragMove(callback: () => void): void {
-        this.block.on('dragmove', callback);
-    }
-
-    public onMouseOver(callback: () => void): void {
-        this.block.on('mouseover', callback);
     }
 
     public startMove(): void {
