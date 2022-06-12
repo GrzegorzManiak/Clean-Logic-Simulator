@@ -3,9 +3,8 @@ import { Constants } from "./index.d";
 export const VisualConstants: Constants.TVisualConstants = {
     arrowWidth: 10,
     arrowHeight: 10,
-
+    fontSize: 30,
     strokeWidth: 3,
-
     blockWidth: 75,
     blockHeight: 75
 }

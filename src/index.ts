@@ -23,7 +23,8 @@ let cm: ConnectionManager = new ConnectionManager(stage);
 
 // then create layer
 let layer = new konva.Layer();
-layer.zIndex(10);
+
+stage.add(layer);
 
 // Manage movement
 movementManager(stage);

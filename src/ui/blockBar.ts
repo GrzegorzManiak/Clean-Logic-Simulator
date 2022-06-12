@@ -1,10 +1,10 @@
 import konva from 'konva';
-import BlockRegistry from '../blocks/register';
 import BaseBlock from '../blocks/baseBlock';
-import { ThemeConstants, VisualConstants } from '../consts';
-import { CanvasTypes } from '../index.d';
 import BlockRegister from '../blocks/register';
 import ConnectionManager from '../connectionManager/main';
+
+import { ThemeConstants, VisualConstants } from '../consts';
+import { CanvasTypes } from '../index.d';
 
 export class BlockBar {
     private stage: konva.Stage;
@@ -22,6 +22,11 @@ export class BlockBar {
         this.layer = new konva.Layer();
         this.stage.add(this.layer);
         
+        // Make this layer immune to canvas scaling and moving
+
+        layer.scaleX(stage.scaleX() * stage.width() / this.layer.getWidth());
+        layer.scaleY(stage.scaleY() * stage.height() / this.layer.getHeight()); 
+
         // loop through all the blocks and add them to the block bar
         BlockRegister.getBlockList().forEach((block) => {
             this.addBlock(block.id);

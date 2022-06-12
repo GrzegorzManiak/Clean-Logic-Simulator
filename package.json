@@ -1,5 +1,9 @@
 {
   "dependencies": {
-    "konva": "^8.3.9"
+    "konva": "^8.3.9",
+    "uuid": "^8.3.2"
+  },
+  "devDependencies": {
+    "@types/uuid": "^8.3.4"
   }
 }

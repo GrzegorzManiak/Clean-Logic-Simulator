@@ -1,27 +1,37 @@
 import konva from 'konva';
 import ConnectionManager from '../connectionManager/main';
-import { GridConstants } from '../consts';
+import processText from '../ui/fontManager';
+
+import { GridConstants, VisualConstants } from '../consts';
 import { CanvasTypes } from '../index.d';
+import { v4 as uuidv4 } from 'uuid';
 
 class BaseBlock {
     public stage: konva.Stage;
     public layer: konva.Layer;
     public block: konva.Rect;
+
     public cm: ConnectionManager;
     public blockOpts: CanvasTypes.IBlock;
 
+    public uuid: string;
+
     public canBeConnected: boolean = true;
     public canConntect: boolean = true;
+
+    public text: konva.Text;
 
     constructor(connectionManager: ConnectionManager, stage: konva.Stage, layer: konva.Layer, block: CanvasTypes.IBlock, cords: [number, number]) {
         this.stage = stage;
         this.layer = layer;
         this.blockOpts = block;
         this.drawBlock(block, cords);
-        this.block.zIndex(10);
         this.cm = connectionManager;
         this.cm.addBlock(this);
         this.snapToGrid();
+
+        // Calculate the uuid
+        this.uuid = uuidv4().toString();
     }
 
     public drawBlock(block: CanvasTypes.IBlock, cords: [number, number]): void {
@@ -36,8 +46,8 @@ class BaseBlock {
             strokeWidth: block.borderWidth,
         });
 
-        this.layer.add(this.block);
-        this.stage.add(this.layer);
+        this.layer.add(this.block);     
+
         this.layer.draw();
 
         this.block.on('dragend', () => {
@@ -63,28 +73,6 @@ class BaseBlock {
 
         // Trigger the dragmove event
         this.block.fire('dragmove');
-    }
-
-    // External functions, will remove later
-    public removeBlock(): void {
-        this.block.remove();
-    }
-
-    public moveBlock(x: number, y: number): void {
-        this.block.x(x);
-        this.block.y(y);
-        this.layer.draw();
-    }
-
-    public resizeBlock(width: number, height: number): void {
-        this.block.width(width);
-        this.block.height(height);
-        this.layer.draw();
-    }
-
-    public changeColor(color: string): void {
-        this.block.fill(color);
-        this.layer.draw();
     }
 
     public startMove(): void {

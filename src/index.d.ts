@@ -28,9 +28,8 @@ export namespace Constants {
     export type TVisualConstants = {
         arrowWidth: number;
         arrowHeight: number;
-
+        fontSize: number;
         strokeWidth: number;
-
         blockWidth: number;
         blockHeight: number;
     }

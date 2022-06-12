@@ -16,6 +16,8 @@ html {
 
     width: 100vw;
     height: 100vh;
+
+    font-family: 'Nunito', sans-serif;
 }
 
 #canvas {
