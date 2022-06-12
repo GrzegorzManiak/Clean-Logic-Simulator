@@ -6,7 +6,10 @@ export const VisualConstants: Constants.TVisualConstants = {
     fontSize: 30,
     strokeWidth: 3,
     blockWidth: 75,
-    blockHeight: 75
+    blockHeight: 75,
+    strokeColor: '#fff',
+    strokeOutlineWidth: 5,
+    strokeOutlineColor: '#757575',
 }
 
 export const GridConstants: Constants.TGridConstants = {

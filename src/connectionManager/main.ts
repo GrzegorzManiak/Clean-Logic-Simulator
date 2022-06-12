@@ -171,10 +171,18 @@ class ConnectionManager {
         block1.block.on('dragmove', reRender);
         block2.block.on('dragmove', reRender);
 
+        
+        // We cant directly just use 'block.off' as we need
+        // that event lister for other things.
+        let clickable = true;
+        block2.block.on('click', () => clickable === true ? reRender() : null);
+
         // Return a function to remove the connection
         return () => {
             line.remove();
             arrow.remove();
+
+            clickable = false;
 
             block1.block.off('dragmove', reRender);
             block2.block.off('dragmove', reRender);

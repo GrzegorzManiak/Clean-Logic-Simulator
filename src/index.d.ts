@@ -30,8 +30,12 @@ export namespace Constants {
         arrowHeight: number;
         fontSize: number;
         strokeWidth: number;
+        strokeColor: string;
         blockWidth: number;
         blockHeight: number;
+
+        strokeOutlineWidth: number;
+        strokeOutlineColor: string;
     }
 
     export type TGridConstants = {
