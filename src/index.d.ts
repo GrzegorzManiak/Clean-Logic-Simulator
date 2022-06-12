@@ -15,10 +15,34 @@ export namespace CanvasTypes {
     }
 
     export type IBlock = {
+        borderRadius: number;
+        borderWidth: number;
+        borderColor: string;
+
         id: string;
-        type: BlockList.TBaseLogic | BlockList.TTemplateLogic;
+        type: BlockList.TBaseLogic | BlockList.TTemplateLogic; 
         coordinates: ICoordinates;
         size: ISize;
         color: string;
+
+        snapToGrid: boolean;
+    }
+}
+
+export namespace Constants {
+    export type TVisualConstants = {
+        arrowWidth: number;
+        arrowHeight: number;
+
+        strokeWidth: number;
+
+        blockWidth: number;
+        blockHeight: number;
+    }
+
+    export type TGridConstants = {
+        gridSize: number;
+        scaleBy: number;
+        scrollSpeed: number;
     }
 }

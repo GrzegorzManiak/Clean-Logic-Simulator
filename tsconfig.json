@@ -1,14 +1,11 @@
 {
-  "compilerOptions": {
-    "target": "es6",
-    "module": "es2015",
-    "moduleResolution": "node",
-    "esModuleInterop": true,
-    "strict": true,
-    "outDir": "./dist",
-  },
-  "include": [
-    "src/index.ts",
-    "src/**/*.ts"
-  ],
+    "compilerOptions": {
+      "noImplicitAny": true,
+      "lib": ["es2017", "es7", "es6", "dom"],
+      "module": "CommonJS",
+      "target": "es5"
+    },
+    "include": [
+      "./src/*.ts"
+, "src/stageManager/grid.ts"    ]
 }
