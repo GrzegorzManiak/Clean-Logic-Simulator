@@ -35,7 +35,11 @@ class BaseBlock {
         this.uuid = uuidv4().toString();
 
         // Add the prompt
-        new ButtonPrompt(this.block, () => {}, {
+        const prompt = new ButtonPrompt(this.block, () => {
+            console.log('Prompt');
+
+
+        }, {
             text: 'Use',
             // e key code
             keyCode: 69,

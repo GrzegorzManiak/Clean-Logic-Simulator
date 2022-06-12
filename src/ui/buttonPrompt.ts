@@ -125,7 +125,10 @@ class ButtonPrompt {
             });
 
             // Draw the layer
-            promptLayer.draw();
+            if(this.enabled === true) 
+                promptLayer.draw();
+            
+            else this.disablePrompt();
         });
 
         this.item.on('mouseout', () => this.disablePrompt());
