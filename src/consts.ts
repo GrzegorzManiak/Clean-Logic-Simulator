@@ -13,7 +13,7 @@ export const VisualConstants: Constants.TVisualConstants = {
 }
 
 export const GridConstants: Constants.TGridConstants = {
-    gridSize: 75 / 2,
+    gridSize: 75,
     scrollSpeed: 1,
     scaleBy: 1.1
 }

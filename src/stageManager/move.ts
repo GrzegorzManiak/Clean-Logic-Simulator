@@ -1,16 +1,19 @@
 import Konva from "konva";
 import { GridConstants } from "../consts";
 
-let scale = 1;
+let scale = 1,
+    pos = { x: 0, y: 0 };
 
 export function getScale(): number {
     return scale;
 }
 
-// https://konvajs.org/docs/sandbox/Zooming_Relative_To_Pointer.html
-function movementManager(stage: Konva.Stage, cl: Konva.Layer, followers: Array<Konva.Layer>): void {
-    followers = [cl, ...followers];
+export function getPos(): { x: number, y: number } {
+    return pos;
+}
 
+// https://konvajs.org/docs/sandbox/Zooming_Relative_To_Pointer.html
+function movementManager(stage: Konva.Stage, followers: Array<Konva.Layer>): void {
     // Scrolling
     stage.on('wheel', (e) => {
         // stop default scrolling
@@ -22,8 +25,8 @@ function movementManager(stage: Konva.Stage, cl: Konva.Layer, followers: Array<K
         if(!pointer) return;
 
         const mousePointTo = {
-            x: (pointer.x - cl.x()) / oldScale,
-            y: (pointer.y - cl.y()) / oldScale,
+            x: (pointer.x - followers[0].x()) / oldScale,
+            y: (pointer.y - followers[0].y()) / oldScale,
         };
 
         // how to scale? Zoom in? Or zoom out?
@@ -44,6 +47,9 @@ function movementManager(stage: Konva.Stage, cl: Konva.Layer, followers: Array<K
         // set new scale
         scale = newScale;
 
+        // set new position
+        pos = newPos;
+
         followers.forEach((follower) => {
             follower.scale({ x: newScale, y: newScale });
             follower.position(newPos);
@@ -52,14 +58,6 @@ function movementManager(stage: Konva.Stage, cl: Konva.Layer, followers: Array<K
         stage.fire('movementManager');
     });
 
-    // Panning
-    // stage.on('mousedown', (e) => {
-    //     if (e.evt.button !== 0) return;
-
-    //     stage.startDrag();
-
-    //     stage.fire('movementManager');
-    // });
 }
 
 export default movementManager;

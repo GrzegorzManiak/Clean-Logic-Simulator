@@ -1,41 +1,64 @@
 import Konva from "konva";
 import { GridConstants, ThemeConstants } from "../consts";
-import { getScale } from "./move";
+import { getPos, getScale } from "./move";
 
-function constructGrid(stage: Konva.Stage, controlLayer: Konva.Layer, subDivide: number = 1): Konva.Layer {
-    const stepSize = GridConstants.gridSize / subDivide,
-        gridLayer = new Konva.Layer(),
-        scale = getScale();
+function constructGrid(stage: Konva.Stage): Konva.Layer {
+    const stepSize = GridConstants.gridSize * getScale(),
+        gridLayer = new Konva.Layer();
 
-    const scaledStepSize = stepSize * scale;
+    // How many horizontal lines?
+    const horizontalLines = Math.ceil((stage.height() / getScale()) / stepSize);
 
-    // How many steps do we need to draw? we need to account for the scale
-    const stepsX = Math.ceil((controlLayer.width() * scale) / stepSize),
-        stepsY = Math.ceil((controlLayer.height() * scale) / stepSize);
+    // How many vertical lines?
+    const verticalLines = Math.ceil((stage.width() / getScale()) / stepSize);
 
-    // draw vertical lines  
-    for (let i = 0; i <= stepsX; i++) {
-        gridLayer.add(
-            new Konva.Line({
-                x: i * scaledStepSize,
-                points: [0, 0, 0, controlLayer.getHeight()],
+    // Make sure to account for the fact that the grid has to align
+    // with the edges of the blocks
+    const gridWidth = (verticalLines * stepSize);
+    const gridHeight = (horizontalLines * stepSize);
+
+    // Currently the grid starts at 0,0, but thats incorrect
+    // when the stage is zoomed into or moved.
+    // So we need to offset the grid to account for this.
+    const gridOffsetX = getPos().x;
+    const gridOffsetY = getPos().y;
+
+    if(getScale() > 0.5) {
+        // Create the grid
+        for (let i = 0; i < horizontalLines; i++) {
+            const point: number = (i * stepSize ) + gridOffsetY;           
+
+            const line = new Konva.Line({
+                points: [0, point, gridWidth, point],
                 stroke: ThemeConstants.gridColor,
-                strokeWidth: ThemeConstants.gridLineWidth,
-            })
-        );
+                strokeWidth: 2,
+                lineCap: 'round',
+                lineJoin: 'round',  
+                dash: [5, 5],
+                dashOffset: 0,
+            });
+            
+            gridLayer.add(line);
+        }
+
+        for (let i = 0; i < verticalLines; i++) {
+            const point: number = (i * stepSize) + gridOffsetX;
+
+            const line = new Konva.Line({
+                points: [point, 0, point, gridHeight],
+                stroke: ThemeConstants.gridColor,
+                strokeWidth: 2,
+                lineCap: 'round',
+                lineJoin: 'round',
+                dash: [5, 5],
+                dashOffset: 0,
+            });
+            
+            gridLayer.add(line);
+        }
     }
 
-    //draw Horizontal lines
-    for (let i = 0; i <= stepsY; i++) {
-        gridLayer.add(
-            new Konva.Line({
-                y: i * scaledStepSize,
-                points: [0, 0, controlLayer.getWidth(), 0],
-                stroke: ThemeConstants.gridColor,
-                strokeWidth: ThemeConstants.gridLineWidth,
-            })
-        );
-    }
+    gridLayer.draw();
 
     return gridLayer;
 }

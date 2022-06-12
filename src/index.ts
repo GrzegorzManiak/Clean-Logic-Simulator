@@ -12,14 +12,11 @@ let stage = new konva.Stage({
     height: window.innerHeight,
 });
 
-const controlLayer = new konva.Layer();
-stage.add(controlLayer);
-
 // Instantiate the connection manager
 let cm: ConnectionManager = new ConnectionManager(stage);
 
 // initialize the grid
-let grid = constructGrid(stage, controlLayer, 0);
+let grid = constructGrid(stage);
 
 // then create the main layer
 let layer = new konva.Layer();
@@ -33,7 +30,7 @@ export const promptLayer = UIpromptLayer;
 stage.add(UIpromptLayer); 
 
 // Manage movement
-movementManager(stage, controlLayer, [grid, cm.connectionLayer, layer]);
+movementManager(stage, [grid, cm.connectionLayer, layer]);
 
 // Register 2 blocks    
 BlockRegistry.registerBlock({
@@ -77,7 +74,7 @@ const blockBar = new BlockBar(stage, cm, layer);
 
 function reDraw() {
     grid.remove();
-    grid = constructGrid(stage, controlLayer);
+    grid = constructGrid(stage);
     grid.zIndex(0);
     blockBar.render();
     stage.add(grid);
@@ -93,7 +90,7 @@ window.addEventListener('resize', () => reDraw());
 
 stage.on('movementManager', () => {
     grid.remove();
-    grid = constructGrid(stage, controlLayer, 0);
+    grid = constructGrid(stage);
 
     blockBar.render();
 
