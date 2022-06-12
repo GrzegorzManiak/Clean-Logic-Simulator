@@ -1,28 +1,24 @@
 import Konva from "konva";
 import { GridConstants, ThemeConstants } from "../consts";
+import { getScale } from "./move";
 
-// Adapted from:
-// https://longviewcoder.com/2021/12/08/konva-a-better-grid/
-function constructGrid(stage: Konva.Stage, subDivide: number = 1): Konva.Layer {
+function constructGrid(stage: Konva.Stage, controlLayer: Konva.Layer, subDivide: number = 1): Konva.Layer {
     const stepSize = GridConstants.gridSize / subDivide,
-        gridLayer = new Konva.Layer();
+        gridLayer = new Konva.Layer(),
+        scale = getScale();
 
-    let xSize= stage.width(), 
-        ySize= stage.height();
+    const scaledStepSize = stepSize * scale;
 
-    // Offset the xSize and Ysize by the stage scale
-    xSize /= stage.scaleX();
-    ySize /= stage.scaleY();
-    
-    const xSteps = Math.round(xSize / stepSize), 
-        ySteps = Math.round(ySize / stepSize);
-    
-    // draw vertical lines
-    for (let i = 0; i <= xSteps; i++) {
+    // How many steps do we need to draw? we need to account for the scale
+    const stepsX = Math.ceil((controlLayer.width() * scale) / stepSize),
+        stepsY = Math.ceil((controlLayer.height() * scale) / stepSize);
+
+    // draw vertical lines  
+    for (let i = 0; i <= stepsX; i++) {
         gridLayer.add(
             new Konva.Line({
-                x: i * stepSize,
-                points: [0, 0, 0, ySize],
+                x: i * scaledStepSize,
+                points: [0, 0, 0, controlLayer.getHeight()],
                 stroke: ThemeConstants.gridColor,
                 strokeWidth: ThemeConstants.gridLineWidth,
             })
@@ -30,17 +26,17 @@ function constructGrid(stage: Konva.Stage, subDivide: number = 1): Konva.Layer {
     }
 
     //draw Horizontal lines
-    for (let i = 0; i <= ySteps; i++) {
+    for (let i = 0; i <= stepsY; i++) {
         gridLayer.add(
             new Konva.Line({
-                y: i * stepSize,
-                points: [0, 0, xSize, 0],
+                y: i * scaledStepSize,
+                points: [0, 0, controlLayer.getWidth(), 0],
                 stroke: ThemeConstants.gridColor,
                 strokeWidth: ThemeConstants.gridLineWidth,
             })
         );
     }
-    
+
     return gridLayer;
 }
 

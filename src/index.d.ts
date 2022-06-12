@@ -47,6 +47,13 @@ export namespace Constants {
         blockBarColor: string;
         blockBarPadding: number;
         blockColor: string;
+        promptColor: string;
         blockBarBorderRadius: number;
+        promptPadding: number;
+        fontPrimarySize: number;
+        fontSecondarySize: number;
+        promptBorderRadius: number;
+        fontFamily: string;
+        fontColor: string;
     }
 }

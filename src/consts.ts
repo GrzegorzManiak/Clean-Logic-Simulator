@@ -10,7 +10,7 @@ export const VisualConstants: Constants.TVisualConstants = {
 }
 
 export const GridConstants: Constants.TGridConstants = {
-    gridSize: 75,
+    gridSize: 75 / 2,
     scrollSpeed: 1,
     scaleBy: 1.1
 }
@@ -22,5 +22,13 @@ export const ThemeConstants: Constants.TThemeConstants = {
     blockBarBorderRadius: 10,
     blockBarColor: "#2b2b2b",
     blockBarPadding: 10,
-    blockColor: '#2b2b2b'
+    blockColor: '#2b2b2b',
+
+    promptColor: '#2b2b2b',    
+    fontPrimarySize: 20,
+    fontSecondarySize: 15,
+    promptPadding: 5,
+    promptBorderRadius: 5,
+    fontFamily: 'Arial',
+    fontColor: '#fff'
 }

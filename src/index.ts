@@ -1,5 +1,4 @@
 import konva from 'konva';
-import BaseBlock from './blocks/baseBlock';
 import ConnectionManager from './connectionManager/main';
 import constructGrid from './stageManager/grid';
 import movementManager from './stageManager/move';
@@ -13,21 +12,28 @@ let stage = new konva.Stage({
     height: window.innerHeight,
 });
 
-let grid = constructGrid(stage);
-
-stage.add(grid);
-stage.draw();
+const controlLayer = new konva.Layer();
+stage.add(controlLayer);
 
 // Instantiate the connection manager
 let cm: ConnectionManager = new ConnectionManager(stage);
 
-// then create layer
+// initialize the grid
+let grid = constructGrid(stage, controlLayer, 0);
+
+// then create the main layer
 let layer = new konva.Layer();
 
+stage.add(grid);
+stage.add(cm.connectionLayer);
 stage.add(layer);
 
+const UIpromptLayer = new konva.Layer()
+export const promptLayer = UIpromptLayer;
+stage.add(UIpromptLayer); 
+
 // Manage movement
-movementManager(stage);
+movementManager(stage, controlLayer, [grid, cm.connectionLayer, layer]);
 
 // Register 2 blocks    
 BlockRegistry.registerBlock({
@@ -54,14 +60,26 @@ BlockRegistry.registerBlock({
     snapToGrid: true
 });
 
+BlockRegistry.registerBlock({
+    id: 'NOT',
+    size: {
+        width: 75,
+        height: 75
+    },
+    color: '#ff6b81',
+    borderRadius: 10,
+    borderWidth: 0,
+    snapToGrid: true
+});
+
 // Create the UI 
 const blockBar = new BlockBar(stage, cm, layer);
 
 function reDraw() {
     grid.remove();
-    grid = constructGrid(stage);
+    grid = constructGrid(stage, controlLayer);
     grid.zIndex(0);
-
+    blockBar.render();
     stage.add(grid);
 
     stage.width(window.innerWidth);
@@ -75,9 +93,10 @@ window.addEventListener('resize', () => reDraw());
 
 stage.on('movementManager', () => {
     grid.remove();
-    grid = constructGrid(stage);
-    grid.zIndex(0);
+    grid = constructGrid(stage, controlLayer, 0);
+
     blockBar.render();
+
     stage.add(grid);
     stage.draw();
 });
