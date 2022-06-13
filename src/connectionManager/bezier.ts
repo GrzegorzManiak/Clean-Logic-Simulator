@@ -1,7 +1,8 @@
 import konva from 'konva';
+import BaseBlock from '../blocks/baseBlock';
 import { VisualConstants } from '../consts';
 
-function constructBezier(points: [number, number, number, number]): konva.Group {
+function constructBezier(points: [number, number, number, number], selected: boolean, block: BaseBlock): konva.Group {
     const [x1, y1, x2, y2] = points;
 
     const P1 = { x: x1, y: y1 },
@@ -31,7 +32,7 @@ function constructBezier(points: [number, number, number, number]): konva.Group 
     // Create the bezier curve
     const MainPath = new konva.Path({
         data: data,
-        stroke: VisualConstants.strokeColor,
+        stroke: selected ? block.blockOpts.color : VisualConstants.strokeColor,
         strokeWidth: VisualConstants.strokeWidth,
         lineCap: 'round',
         lineJoin: 'round'

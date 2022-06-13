@@ -15,13 +15,17 @@ export const VisualConstants: Constants.TVisualConstants = {
 export const GridConstants: Constants.TGridConstants = {
     gridSize: 75,
     scrollSpeed: 1,
-    scaleBy: 1.1
+    scaleBy: 1.1,
+    maxScale: 3,
+    minScale: 0.5,
+    gridColor: 'rgba(0, 0, 0, 0.2)',
+    gridLineWidth: 2,
+    gridDashAmnt: 8
 }
 
 export const ThemeConstants: Constants.TThemeConstants = {
     backgroundColor: '#2b2b2b',
-    gridColor: 'rgba(0, 0, 0, 0.2)',
-    gridLineWidth: 2,
+
     blockBarBorderRadius: 10,
     blockBarColor: "#2b2b2b",
     blockBarPadding: 10,

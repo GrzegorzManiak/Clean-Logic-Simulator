@@ -42,12 +42,15 @@ export namespace Constants {
         gridSize: number;
         scaleBy: number;
         scrollSpeed: number;
+        maxScale: number;
+        minScale: number;
+        gridColor: string;
+        gridLineWidth: number;
+        gridDashAmnt: number;
     }
 
     export type TThemeConstants = {
         backgroundColor: string;
-        gridColor: string;
-        gridLineWidth: number;
         blockBarColor: string;
         blockBarPadding: number;
         blockColor: string;

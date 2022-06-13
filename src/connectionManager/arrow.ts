@@ -11,7 +11,7 @@ function constructArrow(pos: [number, number], point: 'left' | 'right' | 'up' | 
         pointerWidth: VisualConstants.arrowHeight,
         stroke: VisualConstants.strokeOutlineColor,
         strokeWidth: VisualConstants.strokeOutlineWidth + VisualConstants.strokeWidth,
-        strokeScaleEnabled: false,
+        strokeScaleEnabled: true,
         lineCap: 'round',
         lineJoin: 'round',
     });
@@ -27,7 +27,7 @@ function constructArrow(pos: [number, number], point: 'left' | 'right' | 'up' | 
         stroke: VisualConstants.strokeColor,
         fill: VisualConstants.strokeColor,
         strokeWidth: VisualConstants.strokeWidth,
-        strokeScaleEnabled: false,
+        strokeScaleEnabled: true,
         lineCap: 'round',
         lineJoin: 'round',
     });

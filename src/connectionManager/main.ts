@@ -135,11 +135,20 @@ class ConnectionManager {
     private drawConnection(block1: BaseBlock, block2: BaseBlock): () => void {
 
         let [x1, y1, x2, y2] = this.calculateConnections(block1, block2),
-            line = constructBezier([x1, y1, x2, y2]),
+            line = constructBezier([x1, y1, x2, y2], true, block1),
             arrow = constructArrow([x2, y2], 'right');
 
 
         const reRender = () => {
+            let selected = false;
+
+            // Check if the block is currently selected
+            if(block1.uuid === this.selectedBlock1?.uuid || block1.uuid === this.selectedBlock2?.uuid)
+                selected = true;
+
+            if(block2.uuid === this.selectedBlock1?.uuid || block2.uuid === this.selectedBlock2?.uuid)
+                selected = true;
+
             // Calculate the new coordinates
             const [x1, y1, x2, y2] = this.calculateConnections(block1, block2);
 
@@ -147,7 +156,7 @@ class ConnectionManager {
             line.remove();
             
             // Construct a new line
-            line = constructBezier([x1, y1, x2, y2]);
+            line = constructBezier([x1, y1, x2, y2], selected, block1);
 
             // Add the new line back
             this.connectionLayer.add(line);

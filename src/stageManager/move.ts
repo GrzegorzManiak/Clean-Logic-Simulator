@@ -44,6 +44,9 @@ function movementManager(stage: Konva.Stage, followers: Array<Konva.Layer>): voi
             y: pointer.y - mousePointTo.y * newScale,
         };
 
+        if (newScale > GridConstants.maxScale) return;
+        if (newScale < GridConstants.minScale) return;
+        
         // set new scale
         scale = newScale;
 

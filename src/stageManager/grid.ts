@@ -7,10 +7,10 @@ function constructGrid(stage: Konva.Stage): Konva.Layer {
         gridLayer = new Konva.Layer();
 
     // How many horizontal lines?
-    const horizontalLines = Math.ceil((stage.height() / getScale()) / stepSize);
+    const horizontalLines = Math.ceil((stage.height() / getScale()) / stepSize) * 2;
 
     // How many vertical lines?
-    const verticalLines = Math.ceil((stage.width() / getScale()) / stepSize);
+    const verticalLines = Math.ceil((stage.width() / getScale()) / stepSize) * 2;
 
     // Make sure to account for the fact that the grid has to align
     // with the edges of the blocks
@@ -26,15 +26,16 @@ function constructGrid(stage: Konva.Stage): Konva.Layer {
     if(getScale() > 0.5) {
         // Create the grid
         for (let i = 0; i < horizontalLines; i++) {
-            const point: number = (i * stepSize ) + gridOffsetY;           
+            const point: number = (i * stepSize ) + gridOffsetY,
+                startPoint: number = gridOffsetX;     
 
             const line = new Konva.Line({
-                points: [0, point, gridWidth, point],
-                stroke: ThemeConstants.gridColor,
-                strokeWidth: 2,
+                points: [startPoint, point, gridWidth, point],
+                stroke: GridConstants.gridColor,
+                strokeWidth: GridConstants.gridLineWidth,
                 lineCap: 'round',
                 lineJoin: 'round',  
-                dash: [5, 5],
+                dash: [GridConstants.gridDashAmnt, GridConstants.gridDashAmnt],
                 dashOffset: 0,
             });
             
@@ -42,15 +43,16 @@ function constructGrid(stage: Konva.Stage): Konva.Layer {
         }
 
         for (let i = 0; i < verticalLines; i++) {
-            const point: number = (i * stepSize) + gridOffsetX;
+            const point: number = (i * stepSize) + gridOffsetX,
+                startPoint: number = gridOffsetY;
 
             const line = new Konva.Line({
-                points: [point, 0, point, gridHeight],
-                stroke: ThemeConstants.gridColor,
-                strokeWidth: 2,
+                points: [point, startPoint, point, gridHeight],
+                stroke: GridConstants.gridColor,
+                strokeWidth: GridConstants.gridLineWidth,
                 lineCap: 'round',
                 lineJoin: 'round',
-                dash: [5, 5],
+                dash: [GridConstants.gridDashAmnt, GridConstants.gridDashAmnt],
                 dashOffset: 0,
             });
             

@@ -12,11 +12,15 @@ let stage = new konva.Stage({
     height: window.innerHeight,
 });
 
+
+
 // Instantiate the connection manager
 let cm: ConnectionManager = new ConnectionManager(stage);
+cm.connectionLayer.listening(false);
 
 // initialize the grid
 let grid = constructGrid(stage);
+grid.listening(false);
 
 // then create the main layer
 let layer = new konva.Layer();
@@ -26,6 +30,7 @@ stage.add(cm.connectionLayer);
 stage.add(layer);
 
 const UIpromptLayer = new konva.Layer()
+
 export const promptLayer = UIpromptLayer;
 stage.add(UIpromptLayer); 
 
@@ -39,7 +44,19 @@ BlockRegistry.registerBlock({
         width: 75,
         height: 75
     },
-    color: '#e6e6e6',
+    color: '#2083fc',
+    borderRadius: 10,
+    borderWidth: 0,
+    snapToGrid: true
+});
+
+BlockRegistry.registerBlock({
+    id: 'XOR',
+    size: {
+        width: 75,
+        height: 75
+    },
+    color: '#8320fc',
     borderRadius: 10,
     borderWidth: 0,
     snapToGrid: true
@@ -75,8 +92,10 @@ const blockBar = new BlockBar(stage, cm, layer);
 function reDraw() {
     grid.remove();
     grid = constructGrid(stage);
-    grid.zIndex(0);
+    grid.moveToBottom();
+
     blockBar.render();
+    blockBar.blockLayer.moveToTop();
     stage.add(grid);
 
     stage.width(window.innerWidth);
