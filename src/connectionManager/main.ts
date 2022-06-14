@@ -209,7 +209,7 @@ class ConnectionManager {
         return Math.sqrt(Math.pow(a.x - b.x, 2) + Math.pow(a.y - b.y, 2));
     }
 
-    private calculateConnections(block1: BaseBlock, block2: BaseBlock): { pos: [number, number, number, number], dir: TArrowDirection } {
+    private calculateConnections(block1: BaseBlock, block2: BaseBlock): { pos: [number, number, number, number], dir: 1 | 2 | 3 | 4 } {
 
         // Get the coordinates of the two blocks
         const b1: ICords = block1.block.getPosition(),
@@ -249,22 +249,22 @@ class ConnectionManager {
         switch(face) {
             case 1: return { 
                 pos: [b1.x, b1.y + b1h / 2, b2.x + b2w, b2.y + b2h / 2], 
-                dir: 'left' 
+                dir: 1 // Left
             };
     
             case 2: return { 
                 pos: [b1.x + b1w, b1.y + b1h / 2, b2.x, b2.y + b2h / 2],
-                dir: 'right' 
+                dir: 2 // Right
             };
     
             case 3: return { 
                 pos: [b1.x + b1w / 2, b1.y, b2.x + b2w / 2, b2.y + b2h],
-                dir: 'up' 
+                dir: 3 // Top
             };
     
             case 4: return { 
                 pos: [b1.x + b1w / 2, b1.y + b1h, b2.x + b2w / 2, b2.y],
-                dir: 'down' 
+                dir: 4 // Bottom
             };
         }
     };

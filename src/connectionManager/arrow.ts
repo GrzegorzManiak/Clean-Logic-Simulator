@@ -2,7 +2,7 @@ import konva from 'konva';
 import { TArrowDirection } from '../index.d';
 import { VisualConstants } from '../consts';
 
-function constructArrow(pos: [number, number], point: TArrowDirection): konva.Group  {
+function constructArrow(pos: [number, number], point: 1 | 2 | 3 | 4): konva.Group  {
     let [x, y] = pos,
         Group = new konva.Group();
 
@@ -38,35 +38,30 @@ function constructArrow(pos: [number, number], point: TArrowDirection): konva.Gr
     Group.add(arrow);
 
     switch(point) {
-        case 'left':
-                x = x + VisualConstants.arrowWidth;
-                points = [x, y, x - VisualConstants.arrowWidth, y];
-                arrow.points(points);
-                arrowOutline.points(points);
+        case 1:
+            x = x + VisualConstants.arrowWidth;
+            points = [x, y, x - VisualConstants.arrowWidth, y];
             break;
 
-        case 'up':
-                y = y + VisualConstants.arrowHeight;
-                points = [x, y, x, y - VisualConstants.arrowHeight];
-                arrow.points(points);
-                arrowOutline.points(points);
+        case 2:
+            x = x - VisualConstants.arrowWidth;
+            points = [x, y, x + VisualConstants.arrowWidth, y];
             break;
 
-        case 'down':
-                y = y - VisualConstants.arrowHeight;
-                points = [x, y, x, y + VisualConstants.arrowHeight];
-                arrow.points(points);
-                arrowOutline.points(points);
+        case 3:
+            y = y + VisualConstants.arrowHeight;
+            points = [x, y, x, y - VisualConstants.arrowHeight];
             break;
 
-        case 'right':
-                x = x - VisualConstants.arrowWidth;
-                points = [x, y, x + VisualConstants.arrowWidth, y];
-                arrow.points(points);
-                arrowOutline.points(points);
+        case 4:
+            y = y - VisualConstants.arrowHeight;
+            points = [x, y, x, y + VisualConstants.arrowHeight];
             break;
     }
 
+    arrow.points(points);
+    arrowOutline.points(points);
+    
     return Group;
 }
 
