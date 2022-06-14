@@ -10,6 +10,7 @@ export const VisualConstants: Constants.TVisualConstants = {
     strokeColor: '#fff',
     strokeOutlineWidth: 5,
     strokeOutlineColor: '#757575',
+    flowDirection: 0,
 }
 
 export const GridConstants: Constants.TGridConstants = {

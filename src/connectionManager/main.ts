@@ -4,6 +4,7 @@ import constructBezier from './bezier';
 import constructArrow from './arrow';
 
 import { VisualConstants } from "../consts";
+import { TArrowDirection } from "../index.d";
 
 interface ICords {
     x: number;
@@ -133,10 +134,12 @@ class ConnectionManager {
     }
 
     private drawConnection(block1: BaseBlock, block2: BaseBlock): () => void {
+        let cords = this.calculateConnections(block1, block2),
+            [x1, y1, x2, y2] = cords.pos,
+            direction = cords.dir;
 
-        let [x1, y1, x2, y2] = this.calculateConnections(block1, block2),
-            line = constructBezier([x1, y1, x2, y2], true, block1),
-            arrow = constructArrow([x2, y2], 'right');
+        let line = constructBezier([x1, y1, x2, y2], true, block1),
+            arrow = constructArrow([x2, y2], direction);
 
 
         const reRender = () => {
@@ -150,7 +153,9 @@ class ConnectionManager {
                 selected = true;
 
             // Calculate the new coordinates
-            const [x1, y1, x2, y2] = this.calculateConnections(block1, block2);
+            cords = this.calculateConnections(block1, block2),
+                [x1, y1, x2, y2] = cords.pos,
+                direction = cords.dir;
 
             // Remove the old line
             line.remove();
@@ -165,7 +170,7 @@ class ConnectionManager {
             arrow.remove();
 
             // Construct a new arrow
-            arrow = constructArrow([x2, y2], 'right');
+            arrow = constructArrow([x2, y2], direction);
 
             // Add the new arrow back
             this.connectionLayer.add(arrow);
@@ -200,39 +205,68 @@ class ConnectionManager {
         }
     }
 
-    private calculateConnections(block1: BaseBlock, block2: BaseBlock): [number, number, number, number] {
-        // A rectangle has 4 sid    es, we want to draw a line from the
-        // center of one of these sides to the center of the other
-        // choose a side that is perpendicular to the other side
+    private calculateDistance(a: ICords, b: ICords): number {
+        return Math.sqrt(Math.pow(a.x - b.x, 2) + Math.pow(a.y - b.y, 2));
+    }
+
+    private calculateConnections(block1: BaseBlock, block2: BaseBlock): { pos: [number, number, number, number], dir: TArrowDirection } {
 
         // Get the coordinates of the two blocks
-        const b1 = block1.block.getPosition(),
-            b2 = block2.block.getPosition();
-
+        const b1: ICords = block1.block.getPosition(),
+            b2: ICords = block2.block.getPosition();
 
         // Get the width and height of the two blocks
-        const b1w = block1.block.width(),
-            b1h = block1.block.height(),
+        const b1w: number = block1.block.width(),
+            b1h: number = block1.block.height(),
+            b2w: number = block2.block.width(),
+            b2h: number  = block2.block.height();
 
-            b2w = block2.block.width(),
-            b2h = block2.block.height();
-            
+        // Block 1 Face Left middle
+        const b1Left: ICords = { x: b1.x, y: b1.y + b1h / 2 },
+            b1Right: ICords = { x: b1.x + b1w, y: b1.y + b1h / 2 },
+            b1Top: ICords = { x: b1.x + b1w / 2, y: b1.y },
+            b1Bottom: ICords = { x: b1.x + b1w / 2, y: b1.y + b1h };
+
+        const b1LeftDist: number = this.calculateDistance(b1Left, b2),
+            b1RightDist: number = this.calculateDistance(b1Right, b2),
+            b1TopDist: number = this.calculateDistance(b1Top, b2),
+            b1BottomDist: number = this.calculateDistance(b1Bottom, b2);
+
+        // Calculate the closest point to the block2
+        const closest: number = Math.min(b1LeftDist, b1RightDist, b1TopDist, b1BottomDist),
+            desiredFlow = VisualConstants.flowDirection;
+
+        let face = 0;
+
+        if(closest === b1LeftDist) face = 1;
+        else if(closest === b1RightDist) face = 2;
+        else if(closest === b1TopDist) face = 3;
+        else if(closest === b1BottomDist) face = 4;
         
-        // Get the center of the two blocks
-        const b1c = {
-            x: (b1.x + b1w / 2) + (b1w / 2),
-            y: b1.y + b1h / 2
-        };
+        // If flow 
+        face = desiredFlow === 0 ? face : desiredFlow;
 
-
-        const b2c = {
-            x: (b2.x + b2w / 2) - (b2w / 2) - (VisualConstants.arrowWidth / 2),
-            y: b2.y + b2h / 2
-        };
-
-
-        // return the cords
-        return [b1c.x, b1c.y, b2c.x, b2c.y];
+        switch(face) {
+            case 1: return { 
+                pos: [b1.x, b1.y + b1h / 2, b2.x + b2w, b2.y + b2h / 2], 
+                dir: 'left' 
+            };
+    
+            case 2: return { 
+                pos: [b1.x + b1w, b1.y + b1h / 2, b2.x, b2.y + b2h / 2],
+                dir: 'right' 
+            };
+    
+            case 3: return { 
+                pos: [b1.x + b1w / 2, b1.y, b2.x + b2w / 2, b2.y + b2h],
+                dir: 'up' 
+            };
+    
+            case 4: return { 
+                pos: [b1.x + b1w / 2, b1.y + b1h, b2.x + b2w / 2, b2.y],
+                dir: 'down' 
+            };
+        }
     };
 
     private glow(block: BaseBlock) {

@@ -3,6 +3,8 @@ export namespace BlockList {
     export type TTemplateLogic = 'NOT';
 }
 
+export type TArrowDirection = 'left' | 'right' | 'up' | 'down';
+
 export namespace CanvasTypes {
     export type ISize = {
         width: number;
@@ -36,6 +38,8 @@ export namespace Constants {
 
         strokeOutlineWidth: number;
         strokeOutlineColor: string;
+
+        flowDirection: 0 | 1 | 2 | 3 | 4;
     }
 
     export type TGridConstants = {
