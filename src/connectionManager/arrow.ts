@@ -2,7 +2,7 @@ import konva from 'konva';
 import { TArrowDirection } from '../index.d';
 import { VisualConstants } from '../consts';
 
-function constructArrow(pos: [number, number], point: 1 | 2 | 3 | 4): konva.Group  {
+function constructArrow(pos: [number, number], direction: 1 | 2 | 3 | 4): konva.Group  {
     let [x, y] = pos,
         Group = new konva.Group();
 
@@ -37,7 +37,7 @@ function constructArrow(pos: [number, number], point: 1 | 2 | 3 | 4): konva.Grou
 
     Group.add(arrow);
 
-    switch(point) {
+    switch(direction) {
         case 1:
             x = x + VisualConstants.arrowWidth;
             points = [x, y, x - VisualConstants.arrowWidth, y];
@@ -61,7 +61,7 @@ function constructArrow(pos: [number, number], point: 1 | 2 | 3 | 4): konva.Grou
 
     arrow.points(points);
     arrowOutline.points(points);
-    
+
     return Group;
 }
 

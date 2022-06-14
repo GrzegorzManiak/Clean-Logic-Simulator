@@ -1,10 +1,9 @@
-import BaseBlock, { ILineRef } from "../blocks/baseBlock";
+import BaseBlock from "../blocks/baseBlock";
 import konva from 'konva';
 import constructBezier from './bezier';
 import constructArrow from './arrow';
 
 import { VisualConstants } from "../consts";
-import { TArrowDirection } from "../index.d";
 
 interface ICords {
     x: number;
@@ -14,11 +13,6 @@ interface ICords {
 interface ISize {
     width: number;
     height: number;
-}
-
-interface IInfo {
-    size: ISize;
-    position: ICords;
 }
 
 class ConnectionManager {
@@ -138,7 +132,7 @@ class ConnectionManager {
             [x1, y1, x2, y2] = cords.pos,
             direction = cords.dir;
 
-        let line = constructBezier([x1, y1, x2, y2], true, block1),
+        let line = constructBezier([x1, y1, x2, y2], true, block1, direction),
             arrow = constructArrow([x2, y2], direction);
 
 
@@ -161,7 +155,7 @@ class ConnectionManager {
             line.remove();
             
             // Construct a new line
-            line = constructBezier([x1, y1, x2, y2], selected, block1);
+            line = constructBezier([x1, y1, x2, y2], selected, block1, direction);
 
             // Add the new line back
             this.connectionLayer.add(line);

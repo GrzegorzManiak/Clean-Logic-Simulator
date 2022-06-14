@@ -2,16 +2,31 @@ import konva from 'konva';
 import BaseBlock from '../blocks/baseBlock';
 import { VisualConstants } from '../consts';
 
-function constructBezier(points: [number, number, number, number], selected: boolean, block: BaseBlock): konva.Group {
+function constructBezier(points: [number, number, number, number], selected: boolean, block: BaseBlock, direction: 1 | 2 | 3 | 4): konva.Group {
     const [x1, y1, x2, y2] = points;
 
-    const P1 = { x: x1, y: y1 },
-        P2 = { x: x1 + (x2 - x1) / 2, y: y1 },
-        P3 = { x: x2 + (x1 - x2) / 2, y: y2 },
-        P4 = { x: x2, y: y2 };
+    // Variable to store data for the bezier curve
+    let data = '';
 
-    // SVG path data
-    const data: string = `M ${P1.x} ${P1.y} C ${P2.x} ${P2.y} ${P3.x} ${P3.y} ${P4.x} ${P4.y}`;
+    // Left Rigth
+    if(direction === 1 || direction === 2) {
+        const P1 = { x: x1, y: y1 },
+            P2 = { x: x1 + (x2 - x1) / 2, y: y1 },
+            P3 = { x: x2 + (x1 - x2) / 2, y: y2 },
+            P4 = { x: x2, y: y2 };
+
+        data = `M ${P1.x} ${P1.y} C ${P2.x} ${P2.y} ${P3.x} ${P3.y} ${P4.x} ${P4.y}`;
+    } 
+
+    // Up Down
+    if(direction === 3 || direction === 4) {
+        const P1 = { x: x1, y: y1 },
+            P2 = { x: x1, y: y1 + (y2 - y1) / 2 },
+            P3 = { x: x2, y: y2 - (y2 - y1) / 2 },
+            P4 = { x: x2, y: y2 };
+
+        data = `M ${P1.x} ${P1.y} C ${P2.x} ${P2.y} ${P3.x} ${P3.y} ${P4.x} ${P4.y}`;
+    }
 
     // group to hold all the elements
     const Group = new konva.Group();
