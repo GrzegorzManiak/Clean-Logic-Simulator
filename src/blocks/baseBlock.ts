@@ -18,10 +18,12 @@ class BaseBlock {
     public cm: ConnectionManager;
     public blockOpts: CanvasTypes.IBlock;
     public uuid: string;
+
     public canBeConnected: boolean = true;
     public canConntect: boolean = true;
-    public text: konva.Text;
 
+    public connectionFace: 0 | 1 | 2 | 3 | 4 = 0;
+    
     constructor(connectionManager: ConnectionManager, stage: konva.Stage, layer: konva.Layer, block: CanvasTypes.IBlock, cords: [number, number]) {
         this.stage = stage;
         this.layer = layer;

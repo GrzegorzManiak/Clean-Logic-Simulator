@@ -171,6 +171,9 @@ class ConnectionManager {
 
             // Re-render the canvas
             this.connectionLayer.draw();
+
+            // Set the connection face
+            block1.connectionFace = direction;
         }   
 
         reRender();
@@ -191,6 +194,7 @@ class ConnectionManager {
             arrow.remove();
 
             clickable = false;
+            block1.connectionFace = 0;
 
             block1.block.off('dragmove', reRender);
             block2.block.off('dragmove', reRender);
