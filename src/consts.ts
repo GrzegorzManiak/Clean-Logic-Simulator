@@ -7,7 +7,7 @@ export const VisualConstants: Constants.TVisualConstants = {
     strokeWidth: 3,
     blockWidth: 75,
     blockHeight: 75,
-    strokeColor: '#fff',
+    strokeColor: '#ffffff',
     strokeOutlineWidth: 5,
     strokeOutlineColor: '#757575',
     flowDirection: 0,
@@ -38,5 +38,5 @@ export const ThemeConstants: Constants.TThemeConstants = {
     promptPadding: 5,
     promptBorderRadius: 5,
     fontFamily: 'Arial',
-    fontColor: '#fff'
+    fontColor: '#ffffff'
 }
