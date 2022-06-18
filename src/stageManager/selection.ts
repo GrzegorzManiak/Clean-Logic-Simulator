@@ -173,8 +173,6 @@ function addBoxSelection(uiLayer: Konva.Layer, connectionManager: ConnectionMana
                         x: mousePos.x + baseBlock.dragOffset[0],
                         y: mousePos.y + baseBlock.dragOffset[1]
                     });
-
-                    baseBlock.block.fire('dragmove');
                 });
             });
         });
@@ -188,6 +186,8 @@ function addBoxSelection(uiLayer: Konva.Layer, connectionManager: ConnectionMana
                 connectionManager.global.movingBlockSelection = false;
 
                 const baseBlock = block.getter();
+
+                baseBlock.block.fire('dragmove');
 
                 // Set the block to not selected
                 baseBlock.deselectBlock();

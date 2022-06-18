@@ -44,7 +44,7 @@ export const ThemeConstants: Constants.TThemeConstants = {
 export const SelectionConstants: Constants.TSelectionConstants = {
     borderRadius: 5,
     borderWidth: 4,
-    color: '#03a1fc',
-    borderColor: '#0088d6',
+    color: '#54afff',
+    borderColor: '#36a1ff',
     transparency: 0.1
 }
