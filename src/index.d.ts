@@ -53,6 +53,14 @@ export namespace Constants {
         gridDashAmnt: number;
     }
 
+    export type TSelectionConstants = {
+        borderRadius: number;
+        borderWidth: number;
+        color: string;
+        borderColor: string;
+        transparency: number;
+    }
+
     export type TThemeConstants = {
         backgroundColor: string;
         blockBarColor: string;

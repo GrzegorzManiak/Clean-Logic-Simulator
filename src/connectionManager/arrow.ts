@@ -1,5 +1,4 @@
 import konva from 'konva';
-import { TArrowDirection } from '../index.d';
 import { VisualConstants } from '../consts';
 
 function constructArrow(pos: [number, number], direction: 1 | 2 | 3 | 4): konva.Group  {

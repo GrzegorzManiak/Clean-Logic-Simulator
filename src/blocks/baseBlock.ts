@@ -2,7 +2,7 @@ import konva from 'konva';
 import ConnectionManager from '../connectionManager/main';
 import ButtonPrompt from '../ui/buttonPrompt';
 
-import { GridConstants } from '../consts';
+import { GridConstants, VisualConstants } from '../consts';
 import { CanvasTypes } from '../index.d';
 import { v4 as uuidv4 } from 'uuid';
 
@@ -12,15 +12,19 @@ export interface ILineRef {
 }
 
 class BaseBlock {
-    public stage: konva.Stage;
-    public layer: konva.Layer;
     public block: konva.Rect;
-    public cm: ConnectionManager;
-    public blockOpts: CanvasTypes.IBlock;
-    public uuid: string;
+    public dragOffset: [number, number] = [0, 0];
+    
+    readonly stage: konva.Stage;
+    readonly layer: konva.Layer;
+    readonly cm: ConnectionManager;
+    readonly blockOpts: CanvasTypes.IBlock;
+    readonly uuid: string;
 
-    public canBeConnected: boolean = true;
-    public canConntect: boolean = true;
+    private selected: boolean = false;
+
+    readonly canBeConnected: boolean = true;
+    readonly canConntect: boolean = true;
 
     public connectionFace: 0 | 1 | 2 | 3 | 4 = 0;
     
@@ -38,9 +42,6 @@ class BaseBlock {
 
         // Add the prompt
         const prompt = new ButtonPrompt(this.block, () => {
-            console.log('Prompt');
-
-
         }, {
             text: 'Use',
             // e key code
@@ -48,6 +49,30 @@ class BaseBlock {
             key: 'E',
         });
     }
+
+    public selectBlock(): void {
+        this.selected = true;
+        this.block.shadowColor(this.blockOpts.color);
+        this.block.shadowBlur(10);
+        this.block.shadowOffset({ x: 0, y: 0 });
+        this.block.shadowOpacity(0.5);
+        this.block.stroke('rgba(0, 0, 0, 0.2)');
+        this.block.strokeWidth(VisualConstants.strokeWidth);
+        this.layer.draw();
+    }
+
+    public deselectBlock(): void {
+        this.selected = false;
+        this.block.shadowColor('rgba(0, 0, 0, 0)');
+        this.block.shadowBlur(0);
+        this.block.shadowOffset({ x: 0, y: 0 });
+        this.block.shadowOpacity(0);
+        this.block.stroke('rgba(0, 0, 0, 0)');
+        this.block.strokeWidth(0);
+        this.layer.draw();
+    }
+
+    public isSelected(): boolean { return this.selected; }
 
     public drawBlock(block: CanvasTypes.IBlock, cords: [number, number]): void {
         this.block = new konva.Rect({
@@ -74,7 +99,6 @@ class BaseBlock {
         });
     }
 
-
     // Array of blocks that are taking in
     // connections from this block. Block -> Child
     public child: Array<ILineRef> = [];
@@ -98,7 +122,6 @@ class BaseBlock {
         }
     }
     public removeParent(parent: ILineRef): void { this.parent.splice(this.parent.indexOf(parent), 1); }
-
 
     // This function checks if a block is a parent of the block
     // that is being passed in

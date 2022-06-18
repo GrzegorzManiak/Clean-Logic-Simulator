@@ -4,6 +4,8 @@ import constructGrid from './stageManager/grid';
 import movementManager from './stageManager/move';
 import BlockBar from './ui/blockBar';
 import BlockRegistry from './blocks/register';
+import addBoxSelection from './stageManager/selection';
+import Global from './global';
 
 // first we need to create a stage
 let stage = new konva.Stage({
@@ -12,15 +14,13 @@ let stage = new konva.Stage({
     height: window.innerHeight,
 });
 
-
-
-// Instantiate the connection manager
-let cm: ConnectionManager = new ConnectionManager(stage);
-cm.connectionLayer.listening(false);
-
 // initialize the grid
 let grid = constructGrid(stage);
 grid.listening(false);
+
+// Instantiate the connection manager
+let cm = new ConnectionManager(stage, new Global());
+cm.connectionLayer.listening(false);
 
 // then create the main layer
 let layer = new konva.Layer();
@@ -32,6 +32,8 @@ stage.add(layer);
 const UIpromptLayer = new konva.Layer()
 
 export const promptLayer = UIpromptLayer;
+
+addBoxSelection(UIpromptLayer, cm, stage);
 stage.add(UIpromptLayer); 
 
 // Manage movement

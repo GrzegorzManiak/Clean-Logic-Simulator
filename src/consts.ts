@@ -40,3 +40,11 @@ export const ThemeConstants: Constants.TThemeConstants = {
     fontFamily: 'Arial',
     fontColor: '#ffffff'
 }
+
+export const SelectionConstants: Constants.TSelectionConstants = {
+    borderRadius: 5,
+    borderWidth: 4,
+    color: '#03a1fc',
+    borderColor: '#0088d6',
+    transparency: 0.1
+}

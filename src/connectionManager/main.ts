@@ -1,7 +1,9 @@
-import BaseBlock from "../blocks/baseBlock";
 import konva from 'konva';
-import constructBezier from './bezier';
+import Global from '../global';
+import BaseBlock from "../blocks/baseBlock";
 import constructArrow from './arrow';
+import constructBezier from './bezier';
+import BookKeeper from '../stageManager/tracker';
 
 import { VisualConstants } from "../consts";
 
@@ -10,17 +12,14 @@ interface ICords {
     y: number;
 }
 
-interface ISize {
-    width: number;
-    height: number;
-}
-
 class ConnectionManager {
     dragSelect: boolean = true;
     clickSelect: boolean = true;
     canvas: konva.Stage;
     blocks: BaseBlock[] = [];
     connectionLayer: konva.Layer;
+    bookKeeper: BookKeeper;
+    global: Global;
 
     conections: Map<string, {
         block1: BaseBlock,
@@ -31,9 +30,12 @@ class ConnectionManager {
     public selectedBlock1: BaseBlock;
     public selectedBlock2: BaseBlock;
 
-    constructor(canvas: konva.Stage) {
+    constructor(canvas: konva.Stage, global: Global) {
         this.connectionLayer = new konva.Layer();
         this.canvas = canvas;
+
+        this.bookKeeper = new BookKeeper(this);
+        this.global = global;
     }
 
     public getBlock(uuid: string): BaseBlock {
@@ -58,7 +60,7 @@ class ConnectionManager {
             this.selectedBlock1 = block;
             
             // Visualize the connection
-            return this.glow(block);
+            return block.selectBlock();
         }
 
         else if (this.selectedBlock2 === undefined)
@@ -81,11 +83,11 @@ class ConnectionManager {
             return this.deselectAll();
 
 
-
         // Check if the blocks are already connected
         const UUID_12 = this.selectedBlock1.uuid + this.selectedBlock2.uuid,
             UUID_21 = this.selectedBlock2.uuid + this.selectedBlock1.uuid;
 
+            
         if(this.conections.has(UUID_12)) {
             this.conections.get(UUID_12).removeConnection();
             this.conections.delete(UUID_12);
@@ -118,10 +120,10 @@ class ConnectionManager {
 
     private deselectAll(): void {
         if(this.selectedBlock1 !== undefined)
-            this.unglow(this.selectedBlock1);
+            this.selectedBlock1.deselectBlock();
 
         if(this.selectedBlock2 !== undefined)
-            this.unglow(this.selectedBlock2);
+            this.selectedBlock2.deselectBlock();
 
         this.selectedBlock1 = undefined;
         this.selectedBlock2 = undefined;
@@ -267,35 +269,25 @@ class ConnectionManager {
         }
     };
 
-    private glow(block: BaseBlock) {
-        block.block.shadowColor(block.blockOpts.color);
-        block.block.shadowBlur(10);
-        block.block.shadowOffset({ x: 0, y: 0 });
-        block.block.shadowOpacity(0.5);
-
-        block.block.stroke('rgba(0, 0, 0, 0.2)');
-        block.block.strokeWidth(VisualConstants.strokeWidth);
-
-        block.layer.draw();
-    }
-
-    private unglow(block: BaseBlock) {
-        block.block.shadowColor('#ffffff');
-        block.block.shadowBlur(0);
-        block.block.shadowOffset({ x: 0, y: 0 });
-        block.block.shadowOpacity(0);
-
-        block.block.stroke('#ffffff');
-        block.block.strokeWidth(0);
-
-        block.layer.draw();
-    }
-
     addBlock(block: BaseBlock): void {
         this.blocks.push(block);
 
+        this.bookKeeper.trackBlock(block);
+
         block.block.on('click', () => {
             this.clickHandler(block);
+        });
+
+        // Add a listener to the block
+        // when the user hovers over it
+        block.block.on('mouseover', () => {
+            this.global.hoveringOverBlock = true;
+        });
+
+        // Add a listener to the block
+        // when the user stops hovering over it
+        block.block.on('mouseout', () => {
+            this.global.hoveringOverBlock = false;
         });
     }
 }
