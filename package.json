@@ -1,9 +1,14 @@
 {
   "dependencies": {
     "konva": "^8.3.9",
-    "uuid": "^8.3.2"
+    "live-serve": "^0.0.0",
+    "ts-loader": "^9.3.1",
+    "ts-node": "^10.8.1",
+    "uuid": "^8.3.2",
+    "webpack": "^5.73.0"
   },
   "devDependencies": {
-    "@types/uuid": "^8.3.4"
+    "@types/uuid": "^8.3.4",
+    "webpack-cli": "^4.10.0"
   }
 }
