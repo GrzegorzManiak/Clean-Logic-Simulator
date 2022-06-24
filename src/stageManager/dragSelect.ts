@@ -1,6 +1,7 @@
 import Konva from "konva";
 import ConnectionManager from '../connectionManager/main';
 import { SelectionConstants } from '../consts';
+import { IPos } from "./positionTracker";
 
 const rect = (x: number, y: number, width: number, height: number) => new Konva.Rect({
     x,
@@ -32,16 +33,26 @@ function addBoxSelection(uiLayer: Konva.Layer, connectionManager: ConnectionMana
     uiLayer.add(dragBox);
 
     // Stage on mouse down
-    stage.on('mousedown', (e: Konva.KonvaEventObject<MouseEvent>) => {
+    stage.on('mousedown', () => {
         // If the user is hovering over a block
         // Do not allow the selection box to be created as 
         // that will disallow the user from clicking on the block
-        if(connectionManager.global.hoveringOverBlock === true) return;
+        if(connectionManager.global.hoveringOverBlock === true) { 
+            // Stop following the mouse
+            allowSelect = false;
+
+            return;
+        }
 
         // If the user is currently moving a group of blocks
         // Do not allow the selection box to be created as
         // that would create a new selection box
-        if(connectionManager.global.movingBlockSelection === true) return;
+        if(connectionManager.global.movingBlockSelection === true) { 
+            // Stop following the mouse
+            allowSelect = false;
+            
+            return;
+        }
 
         allowSelect = true;
         selectionBox.opacity(SelectionConstants.transparency);
@@ -61,7 +72,7 @@ function addBoxSelection(uiLayer: Konva.Layer, connectionManager: ConnectionMana
             orginalY = mousePos.y;
 
         // Set the stage to follow the mouse
-        stage.on('mousemove', (e: Konva.KonvaEventObject<MouseEvent>) => {
+        stage.on('mousemove', () => {
             if(allowSelect === false) return;
 
             // Get the mouse position
@@ -116,7 +127,8 @@ function addBoxSelection(uiLayer: Konva.Layer, connectionManager: ConnectionMana
     });
 
     // Stage on mouse up
-    stage.on('mouseup', (e: Konva.KonvaEventObject<MouseEvent>) => {    
+    stage.on('mouseup', () => {    
+
         // Stop following the mouse
         allowSelect = false;
 
@@ -138,13 +150,17 @@ function addBoxSelection(uiLayer: Konva.Layer, connectionManager: ConnectionMana
             selectionBox.width() + selectionBox.x(),  
             selectionBox.height() + selectionBox.y()
         );
-        
+
+        // Do nothing if there are no blocks in the selection box
+        if(blocks.length < 1)
+            return;
+
         // loop through the blocks
         blocks.forEach(block => 
             // Set the block to selected
             block.getter().selectBlock());
 
-
+        // When the user engages the drag box
         dragBox.on('mousedown', () => {
 
             // Allow the draging of the selection box
@@ -160,40 +176,56 @@ function addBoxSelection(uiLayer: Konva.Layer, connectionManager: ConnectionMana
   
             // Move all the selected blocks to that of the selection box
             dragBox.on('dragmove', () => {
-                connectionManager.global.movingBlockSelection = true;
-
                 // Get the mouse position
                 const mousePos = stage.getPointerPosition();
 
+                // Set the global var that the user is moving the selection box
+                connectionManager.global.movingBlockSelection = true;
+
                 // Move all the selected blocks
                 blocks.forEach(block => {
+
+                    // Get the block
                     const baseBlock = block.getter();
 
-                    block.getter().block.position({
+                    // Change the block position  
+                    baseBlock.block.position({
                         x: mousePos.x + baseBlock.dragOffset[0],
                         y: mousePos.y + baseBlock.dragOffset[1]
                     });
                 });
             });
-        });
 
 
-        dragBox.on('dragend', () => {
-            // Remove the drag box
-            dragBox.draggable(false);
+            // When the user releases the drag box
+            dragBox.on('dragend', () => {
 
-            blocks.forEach(block => {
+                // Remove the drag box
+                dragBox.draggable(false);
+
+                // Set the global 
                 connectionManager.global.movingBlockSelection = false;
+                
+                // Loop through the blocks
+                blocks.forEach(block => {
+                    
+                    // Get the block
+                    const baseBlock = block.getter();
+    
+                    // Trigger renender of all 
+                    baseBlock.block.fire('dragmove');
+    
+                    // Set the block to not selected
+                    baseBlock.deselectBlock();
+    
+                    // Snap the block to the grid
+                    baseBlock.snapToGrid();
+                });
 
-                const baseBlock = block.getter();
-
-                baseBlock.block.fire('dragmove');
-
-                // Set the block to not selected
-                baseBlock.deselectBlock();
-
-                // Snap the block to the grid
-                baseBlock.snapToGrid();
+                // Remove the listeners  
+                dragBox.off('dragend');
+                dragBox.off('dragmove');
+                dragBox.off('mousedown');
             });
         });
     });

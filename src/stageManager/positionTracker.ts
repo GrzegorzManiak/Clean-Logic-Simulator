@@ -2,7 +2,7 @@
 import ConnectionManager from '../connectionManager/main';
 import BaseBlock from "../blocks/baseBlock";
 
-interface IPos {
+export interface IPos {
     x: number,
     y: number,
     width: number,
