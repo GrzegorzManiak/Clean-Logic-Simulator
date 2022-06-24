@@ -3,7 +3,7 @@ import Global from '../global';
 import BaseBlock from "../blocks/baseBlock";
 import constructArrow from './arrow';
 import constructBezier from './bezier';
-import BookKeeper from '../stageManager/tracker';
+import BookKeeper from '../stageManager/positionTracker';
 
 import { VisualConstants } from "../consts";
 

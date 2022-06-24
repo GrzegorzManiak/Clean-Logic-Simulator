@@ -1,6 +1,6 @@
 import Konva from "konva";
 import { GridConstants, ThemeConstants } from "../consts";
-import { getPos, getScale } from "./move";
+import { getPos, getScale } from "./scrollManager";
 
 function constructGrid(stage: Konva.Stage): Konva.Layer {
     const stepSize = GridConstants.gridSize * getScale(),
