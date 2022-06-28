@@ -1,7 +1,11 @@
 import Konva from "konva";
-import ConnectionManager from '../connectionManager/main';
-import { SelectionConstants } from '../consts';
-import { IPos } from "./positionTracker";
+import ConnectionManager from '../../connectionManager/main';
+import beginSelection from './selection';
+
+import { SelectionConstants } from '../../consts';
+
+//TODO: Split the addBoxSelection function into multiple different functions
+//     to make it easier to read and understand
 
 const rect = (x: number, y: number, width: number, height: number) => new Konva.Rect({
     x,
@@ -18,7 +22,7 @@ const rect = (x: number, y: number, width: number, height: number) => new Konva.
 function addBoxSelection(uiLayer: Konva.Layer, connectionManager: ConnectionManager, stage: Konva.Stage) {
     // Im aiming for a windows esk style selection box
     // when you click and drag to select files and folders
-    let allowSelect = true;
+    let allreadySelected = false;
 
     // Create a rectangle
     let selectionBox: Konva.Rect = rect(0, 0, 0, 0),
@@ -37,24 +41,19 @@ function addBoxSelection(uiLayer: Konva.Layer, connectionManager: ConnectionMana
         // If the user is hovering over a block
         // Do not allow the selection box to be created as 
         // that will disallow the user from clicking on the block
-        if(connectionManager.global.hoveringOverBlock === true) { 
-            // Stop following the mouse
-            allowSelect = false;
+        if(connectionManager.global.hoveringOverBlock === true 
+            || connectionManager.global.movingBlockSelection === true
+            || allreadySelected === true) { 
+
+            // Make the selection box invisible
+            selectionBox.opacity(0);
+
+            // Make the drag box invisible
+            dragBox.opacity(0);
 
             return;
         }
 
-        // If the user is currently moving a group of blocks
-        // Do not allow the selection box to be created as
-        // that would create a new selection box
-        if(connectionManager.global.movingBlockSelection === true) { 
-            // Stop following the mouse
-            allowSelect = false;
-            
-            return;
-        }
-
-        allowSelect = true;
         selectionBox.opacity(SelectionConstants.transparency);
 
         // Get the mouse position
@@ -72,65 +71,16 @@ function addBoxSelection(uiLayer: Konva.Layer, connectionManager: ConnectionMana
             orginalY = mousePos.y;
 
         // Set the stage to follow the mouse
-        stage.on('mousemove', () => {
-            if(allowSelect === false) return;
-
-            // Get the mouse position
-            const mousePos = stage.getPointerPosition();
-
-            // Size
-            const sizeX = mousePos.x - orginalX,
-                sizeY = mousePos.y - orginalY;
-
-            // X
-            if(sizeX < 0) {
-                // Move the box to the mouse
-                selectionBox.x(mousePos.x);
-
-                // Distance from the original mouse position
-                const distanceX = Math.abs(orginalX - mousePos.x);
-
-                // Set the width to the distance
-                selectionBox.width(distanceX);
-
-            } else {
-                // Reset X
-                selectionBox.x(orginalX);
-
-                // Change the width
-                selectionBox.width(sizeX);
-            }
-
-            // Y
-            if(sizeY < 0) {
-                // Move the box to the mouse
-                selectionBox.y(mousePos.y);
-                
-                // Distance from the original mouse position
-                const distanceY = Math.abs(orginalY - mousePos.y);
-
-                // Set the height to the distance
-                selectionBox.height(distanceY);
-
-            } else {
-                // Reset Y
-                selectionBox.y(orginalY);
-
-                // Change the height
-                selectionBox.height(sizeY);
-            }
-
-
-            // Redraw the layer
-            uiLayer.draw();
-        });
+        stage.on('mousemove', () => beginSelection(
+            stage,
+            selectionBox,
+            { x: orginalX, y: orginalY }
+        ));
     });
+
 
     // Stage on mouse up
     stage.on('mouseup', () => {    
-
-        // Stop following the mouse
-        allowSelect = false;
 
         // Make the selection box invisible
         selectionBox.opacity(0);
@@ -162,6 +112,7 @@ function addBoxSelection(uiLayer: Konva.Layer, connectionManager: ConnectionMana
 
         // When the user engages the drag box
         dragBox.on('mousedown', () => {
+            allreadySelected = true;
 
             // Allow the draging of the selection box
             dragBox.draggable(true);
@@ -199,7 +150,8 @@ function addBoxSelection(uiLayer: Konva.Layer, connectionManager: ConnectionMana
 
             // When the user releases the drag box
             dragBox.on('dragend', () => {
-
+                allreadySelected = false;
+                
                 // Remove the drag box
                 dragBox.draggable(false);
 
@@ -219,6 +171,7 @@ function addBoxSelection(uiLayer: Konva.Layer, connectionManager: ConnectionMana
                     baseBlock.deselectBlock();
     
                     // Snap the block to the grid
+                    // (Snap to grid checks if the block wants to snap to the grid)
                     baseBlock.snapToGrid();
                 });
 

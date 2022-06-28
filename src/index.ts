@@ -4,7 +4,7 @@ import constructGrid from './stageManager/grid';
 import movementManager from './stageManager/scrollManager';
 import BlockBar from './ui/blockBar';
 import BlockRegistry from './blocks/register';
-import addBoxSelection from './stageManager/dragSelect';
+import addBoxSelection from './stageManager/dragSelect/main';
 import Global from './global';
 
 // first we need to create a stage
