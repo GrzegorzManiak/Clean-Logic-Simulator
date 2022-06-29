@@ -4,6 +4,7 @@ import trackMouse from './trackMouse';
 import Global from "../../global";
 
 import { SelectionConstants } from '../../consts';
+import { BlockTypes } from "../../index.d";
 
 //TODO: Split the addBoxSelection function into multiple different functions
 //     to make it easier to read and understand
@@ -131,12 +132,10 @@ class Selection {
     public static getCanSelect = () => Selection.canSelect;
     public static setCanSelect = (value: boolean) => Selection.canSelect = value;
 
-
     // Boolean that determines if the user is moving the draggableBox
     private static movingBlockSelection: boolean = false;
     public static getMovingBlockSelection = () => Selection.movingBlockSelection;
     private static setMovingBlockSelection = (value: boolean) => Selection.movingBlockSelection = value;
-
 
     // { x, y }, lastOrigin of the selection box in the stage
     private static lastOrigin: { x: number, y: number } = { x: 0, y: 0 };
@@ -148,6 +147,10 @@ class Selection {
     public static getLastPoint = () => Selection.lastPoint;
     private static setLastPoint = (value: { x: number, y: number }) => Selection.lastPoint = value;  
 
+    // Array to store the blocks that are currently selected
+    private static selectedBlocks: Array<BlockTypes.TSelectedRef> = [];
+    public static getSelectedBlocks = () => Selection.selectedBlocks;
+    public static clearSelectedBlocks = () => { Selection.selectedBlocks = [] };
 
     public constructor(stage: Konva.Stage, uiLayer: Konva.Layer, globals: Global) { 
         if(Selection.instance)
@@ -207,8 +210,20 @@ class Selection {
             // reset both boxes
             this.resetSelection();
 
-            // Console log orgin and point
-            console.log(Selection.getLastOrigin(), Selection.getLastPoint());
+
+        });
+    }
+
+    private static instantiateMove() {
+        this.draggableBox.opacity(1);
+
+        const origin = this.stage.getPointerPosition(),
+            point = this.stage.getPointerPosition();
+
+        this.draggableBox.position(origin);
+        this.draggableBox.size({
+            width: point.x - origin.x,
+            height: point.y - origin.y
         });
     }
 

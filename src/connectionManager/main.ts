@@ -3,14 +3,8 @@ import Global from '../global';
 import BaseBlock from "../blocks/baseBlock";
 import constructArrow from './arrow';
 import constructBezier from './bezier';
-import BookKeeper from '../stageManager/positionTracker';
-
-import { VisualConstants } from "../consts";
-
-interface ICords {
-    x: number;
-    y: number;
-}
+import calculateCords from './calculateCords';
+import { BlockTypes } from '../index.d';
 
 class ConnectionManager {
     dragSelect: boolean = true;
@@ -18,7 +12,6 @@ class ConnectionManager {
     canvas: konva.Stage;
     blocks: BaseBlock[] = [];
     connectionLayer: konva.Layer;
-    bookKeeper: BookKeeper;
     global: Global;
 
     conections: Map<string, {
@@ -34,7 +27,6 @@ class ConnectionManager {
         this.connectionLayer = new konva.Layer();
         this.canvas = canvas;
 
-        this.bookKeeper = new BookKeeper(this);
         this.global = global;
     }
 
@@ -130,7 +122,11 @@ class ConnectionManager {
     }
 
     private drawConnection(block1: BaseBlock, block2: BaseBlock): () => void {
-        let cords = this.calculateConnections(block1, block2),
+        const getBlockInfo = (block: BaseBlock): BlockTypes.IBlockInfo => {
+            return { x: block.block.position().x, y: block.block.position().y, w: block.block.width(), h: block.block.height() };
+        }
+
+        let cords = calculateCords(getBlockInfo(block1), getBlockInfo(block2)),
             [x1, y1, x2, y2] = cords.pos,
             direction = cords.dir;
 
@@ -149,7 +145,7 @@ class ConnectionManager {
                 selected = true;
 
             // Calculate the new coordinates
-            cords = this.calculateConnections(block1, block2),
+            cords = calculateCords(getBlockInfo(block1), getBlockInfo(block2)),
                 [x1, y1, x2, y2] = cords.pos,
                 direction = cords.dir;
 
@@ -205,74 +201,8 @@ class ConnectionManager {
         }
     }
 
-    private calculateDistance(a: ICords, b: ICords): number {
-        return Math.sqrt(Math.pow(a.x - b.x, 2) + Math.pow(a.y - b.y, 2));
-    }
-
-    private calculateConnections(block1: BaseBlock, block2: BaseBlock): { pos: [number, number, number, number], dir: 1 | 2 | 3 | 4 } {
-
-        // Get the coordinates of the two blocks
-        const b1: ICords = block1.block.getPosition(),
-            b2: ICords = block2.block.getPosition();
-
-        // Get the width and height of the two blocks
-        const b1w: number = block1.block.width(),
-            b1h: number = block1.block.height(),
-            b2w: number = block2.block.width(),
-            b2h: number  = block2.block.height();
-
-        // Block 1 Face Left middle
-        const b1Left: ICords = { x: b1.x, y: b1.y + b1h / 2 },
-            b1Right: ICords = { x: b1.x + b1w, y: b1.y + b1h / 2 },
-            b1Top: ICords = { x: b1.x + b1w / 2, y: b1.y },
-            b1Bottom: ICords = { x: b1.x + b1w / 2, y: b1.y + b1h };
-
-        const b1LeftDist: number = this.calculateDistance(b1Left, b2),
-            b1RightDist: number = this.calculateDistance(b1Right, b2),
-            b1TopDist: number = this.calculateDistance(b1Top, b2),
-            b1BottomDist: number = this.calculateDistance(b1Bottom, b2);
-
-        // Calculate the closest point to the block2
-        const closest: number = Math.min(b1LeftDist, b1RightDist, b1TopDist, b1BottomDist),
-            desiredFlow = VisualConstants.flowDirection;
-
-        let face = 0;
-
-        if(closest === b1LeftDist) face = 1;
-        else if(closest === b1RightDist) face = 2;
-        else if(closest === b1TopDist) face = 3;
-        else if(closest === b1BottomDist) face = 4;
-        
-        // If flow 
-        face = desiredFlow === 0 ? face : desiredFlow;
-
-        switch(face) {
-            case 1: return { 
-                pos: [b1.x, b1.y + b1h / 2, b2.x + b2w, b2.y + b2h / 2], 
-                dir: 1 // Left
-            };
-    
-            case 2: return { 
-                pos: [b1.x + b1w, b1.y + b1h / 2, b2.x, b2.y + b2h / 2],
-                dir: 2 // Right
-            };
-    
-            case 3: return { 
-                pos: [b1.x + b1w / 2, b1.y, b2.x + b2w / 2, b2.y + b2h],
-                dir: 3 // Top
-            };
-    
-            case 4: return { 
-                pos: [b1.x + b1w / 2, b1.y + b1h, b2.x + b2w / 2, b2.y],
-                dir: 4 // Bottom
-            };
-        }
-    };
-
     addBlock(block: BaseBlock): void {
         this.blocks.push(block);
-
-        this.bookKeeper.trackBlock(block);
 
         block.block.on('click', () => {
             this.clickHandler(block);

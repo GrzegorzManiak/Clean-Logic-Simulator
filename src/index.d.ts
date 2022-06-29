@@ -1,3 +1,6 @@
+import BaseBlock from "./blocks/baseBlock";
+import ConnectionManager from "./connectionManager/main";
+
 export namespace BlockList {
     export type TBaseLogic = 'AND' | 'OR' | 'XOR' | 'NAND' | 'NOR' | 'XNOR';
     export type TTemplateLogic = 'NOT';
@@ -74,5 +77,29 @@ export namespace Constants {
         promptBorderRadius: number;
         fontFamily: string;
         fontColor: string;
+    }
+}
+
+export namespace BlockTypes {
+    export type TBaseBlockRef = {
+        get: () => BaseBlock
+    }
+
+    export type TSelectedRef = TBaseBlockRef & {
+        del: () => void;
+    }
+
+    export interface ICords {
+        x: number;
+        y: number;
+    }
+
+    export type IBlockInfo = ICords &{
+        w: number; h: number;
+    }
+
+    export interface TConnection {
+        pos: [number, number, number, number],
+        dir: 1 | 2 | 3 | 4
     }
 }
