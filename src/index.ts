@@ -3,7 +3,7 @@ import ConnectionManager from './connectionManager/main';
 import constructGrid from './stageManager/grid';
 import movementManager from './stageManager/scrollManager';
 import BlockBar from './ui/blockBar';
-import BlockRegistry from './blocks/register';
+import BlockRegistry from './PlaceableObject/register';
 import addBoxSelection from './stageManager/dragSelect/main';
 import Global from './global';
 

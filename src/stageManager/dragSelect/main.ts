@@ -67,12 +67,12 @@ import { BlockTypes } from "../../index.d";
 //                 blocks.forEach(block => {
 
 //                     // Get the block
-//                     const baseBlock = block.getter();
+//                     const PlaceableObject = block.getter();
 
 //                     // Change the block position  
-//                     baseBlock.block.position({
-//                         x: mousePos.x + baseBlock.dragOffset[0],
-//                         y: mousePos.y + baseBlock.dragOffset[1]
+//                     PlaceableObject.block.position({
+//                         x: mousePos.x + PlaceableObject.dragOffset[0],
+//                         y: mousePos.y + PlaceableObject.dragOffset[1]
 //                     });
 //                 });
 //             });
@@ -92,17 +92,17 @@ import { BlockTypes } from "../../index.d";
 //                 blocks.forEach(block => {
                     
 //                     // Get the block
-//                     const baseBlock = block.getter();
+//                     const PlaceableObject = block.getter();
     
 //                     // Trigger renender of all 
-//                     baseBlock.block.fire('dragmove');
+//                     PlaceableObject.block.fire('dragmove');
     
 //                     // Set the block to not selected
-//                     baseBlock.deselectBlock();
+//                     PlaceableObject.deselectBlock();
     
 //                     // Snap the block to the grid
 //                     // (Snap to grid checks if the block wants to snap to the grid)
-//                     baseBlock.snapToGrid();
+//                     PlaceableObject.snapToGrid();
 //                 });
 
 //                 // Remove the listeners  

@@ -1,8 +1,8 @@
 import konva from 'konva';
-import BaseBlock from '../blocks/baseBlock';
+import PlaceableObject from '../placeableObject/main';
 import { VisualConstants } from '../consts';
 
-function constructBezier(points: [number, number, number, number], selected: boolean, block: BaseBlock, direction: 1 | 2 | 3 | 4): konva.Group {
+function constructBezier(points: [number, number, number, number], selected: boolean, block: PlaceableObject, direction: 1 | 2 | 3 | 4): konva.Group {
     const [x1, y1, x2, y2] = points;
 
     // Variable to store data for the bezier curve

@@ -7,11 +7,11 @@ import { CanvasTypes } from '../index.d';
 import { v4 as uuidv4 } from 'uuid';
 
 export interface ILineRef {
-    block: BaseBlock,
+    block: PlaceableObject,
     removeConnection: () => void,
 }
 
-class BaseBlock {
+class PlaceableObject {
     public block: konva.Rect;
     public dragOffset: [number, number] = [0, 0];
     
@@ -103,7 +103,7 @@ class BaseBlock {
     // connections from this block. Block -> Child
     public child: Array<ILineRef> = [];
     public addChild(child: ILineRef): void { this.child.push(child); }
-    public getChild(block: BaseBlock): ILineRef {
+    public getChild(block: PlaceableObject): ILineRef {
         for (let i = 0; i < this.child.length; i++) {
             if (this.child[i].block.uuid === block.uuid)
                 return this.child[i];
@@ -115,7 +115,7 @@ class BaseBlock {
     // to this block. Parent -> Block
     public parent: Array<ILineRef> = [];
     public addParent(parent: ILineRef): void { this.parent.push(parent); }
-    public getParent(block: BaseBlock): ILineRef {
+    public getParent(block: PlaceableObject): ILineRef {
         for (let i = 0; i < this.parent.length; i++) {
             if (this.parent[i].block.uuid === block.uuid)
                 return this.parent[i];
@@ -125,7 +125,7 @@ class BaseBlock {
 
     // This function checks if a block is a parent of the block
     // that is being passed in
-    public isConnectedTo(block: BaseBlock): boolean {
+    public isConnectedTo(block: PlaceableObject): boolean {
         const blockID = block.uuid;
 
         // Check if the block is a child of this block
@@ -163,4 +163,4 @@ class BaseBlock {
     }
 }
 
-export default BaseBlock;
+export default PlaceableObject;

@@ -1,6 +1,6 @@
 import konva from 'konva';
-import BaseBlock from '../blocks/baseBlock';
-import BlockRegister from '../blocks/register';
+import PlaceableObject from '../placeableObject/main';
+import BlockRegister from '../PlaceableObject/register';
 import ConnectionManager from '../connectionManager/main';
 
 import { ThemeConstants, VisualConstants } from '../consts';
@@ -119,7 +119,7 @@ export class BlockBar {
             return;
 
         // Spawn the block at the correct position
-        const placed = new BaseBlock(this.connectionManager, this.stage, this.blockLayer, block, [rec.x(), rec.y()]);
+        const placed = new PlaceableObject(this.connectionManager, this.stage, this.blockLayer, block, [rec.x(), rec.y()]);
         
         placed.startMove();
     }

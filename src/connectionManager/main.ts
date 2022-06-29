@@ -1,8 +1,8 @@
 import konva from 'konva';
 import Global from '../global';
-import BaseBlock from "../blocks/baseBlock";
-import constructArrow from './arrow';
-import constructBezier from './bezier';
+import PlaceableObject from "../placeableObject/main";
+import constructArrow from './constructArrow';
+import constructBezier from './constructBezier';
 import calculateCords from './calculateCords';
 import { BlockTypes } from '../index.d';
 
@@ -10,18 +10,18 @@ class ConnectionManager {
     dragSelect: boolean = true;
     clickSelect: boolean = true;
     canvas: konva.Stage;
-    blocks: BaseBlock[] = [];
+    blocks: PlaceableObject[] = [];
     connectionLayer: konva.Layer;
     global: Global;
 
     conections: Map<string, {
-        block1: BaseBlock,
-        block2: BaseBlock,
+        block1: PlaceableObject,
+        block2: PlaceableObject,
         removeConnection: () => void
     }> = new Map();
 
-    public selectedBlock1: BaseBlock;
-    public selectedBlock2: BaseBlock;
+    public selectedBlock1: PlaceableObject;
+    public selectedBlock2: PlaceableObject;
 
     constructor(canvas: konva.Stage, global: Global) {
         this.connectionLayer = new konva.Layer();
@@ -30,7 +30,7 @@ class ConnectionManager {
         this.global = global;
     }
 
-    public getBlock(uuid: string): BaseBlock {
+    public getBlock(uuid: string): PlaceableObject {
         return this.blocks.find(block => block.uuid === uuid);
     }
 
@@ -46,7 +46,7 @@ class ConnectionManager {
         });
     }
 
-    private clickHandler(block: BaseBlock): void {
+    private clickHandler(block: PlaceableObject): void {
         if (this.selectedBlock1 === undefined) {
             // Set the first selected block
             this.selectedBlock1 = block;
@@ -121,8 +121,8 @@ class ConnectionManager {
         this.selectedBlock2 = undefined;
     }
 
-    private drawConnection(block1: BaseBlock, block2: BaseBlock): () => void {
-        const getBlockInfo = (block: BaseBlock): BlockTypes.IBlockInfo => {
+    private drawConnection(block1: PlaceableObject, block2: PlaceableObject): () => void {
+        const getBlockInfo = (block: PlaceableObject): BlockTypes.IBlockInfo => {
             return { x: block.block.position().x, y: block.block.position().y, w: block.block.width(), h: block.block.height() };
         }
 
@@ -201,7 +201,7 @@ class ConnectionManager {
         }
     }
 
-    addBlock(block: BaseBlock): void {
+    addBlock(block: PlaceableObject): void {
         this.blocks.push(block);
 
         block.block.on('click', () => {

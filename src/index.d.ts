@@ -1,4 +1,4 @@
-import BaseBlock from "./blocks/baseBlock";
+import PlaceableObject from "./placeableObject/main";
 import ConnectionManager from "./connectionManager/main";
 
 export namespace BlockList {
@@ -81,11 +81,11 @@ export namespace Constants {
 }
 
 export namespace BlockTypes {
-    export type TBaseBlockRef = {
-        get: () => BaseBlock
+    export type TPlaceableObjectRef = {
+        get: () => PlaceableObject
     }
 
-    export type TSelectedRef = TBaseBlockRef & {
+    export type TSelectedRef = TPlaceableObjectRef & {
         del: () => void;
     }
 
