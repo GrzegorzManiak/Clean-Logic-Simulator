@@ -1,119 +1,11 @@
 import Konva from "konva";
-import ConnectionManager from '../../connectionManager/main';
-import trackMouse from './trackMouse';
 import Global from "../../global";
+import trackMouse from './trackMouse';
+import moveObjects from './moveObjects';
+import PlaceableObject from "../../placeableObject/main";
+import ConnectionManager from '../../connectionManager/main';
 
 import { SelectionConstants } from '../../consts';
-import { BlockTypes } from "../../index.d";
-
-//TODO: Split the addBoxSelection function into multiple different functions
-//     to make it easier to read and understand
-
-//     // Stage on mouse up
-//     stage.on('mouseup', () => {    
-
-//         // Make the selection box invisible
-//         selectionBox.opacity(0);
-
-//         // Create the drag box, this will be used
-//         // to move the blocks around
-//         dragBox.x(selectionBox.x());
-//         dragBox.y(selectionBox.y());
-//         dragBox.width(selectionBox.width());
-//         dragBox.height(selectionBox.height());
-
-
-//         // Get the blocks in the selection box
-//         const blocks = connectionManager.bookKeeper.findInSelection(
-//             selectionBox.x(),
-//             selectionBox.y(),
-//             selectionBox.width() + selectionBox.x(),  
-//             selectionBox.height() + selectionBox.y()
-//         );
-
-//         // Do nothing if there are no blocks in the selection box
-//         if(blocks.length < 1)
-//             return;
-
-//         // loop through the blocks
-//         blocks.forEach(block => 
-//             // Set the block to selected
-//             block.getter().selectBlock());
-
-//         // When the user engages the drag box
-//         dragBox.on('mousedown', () => {
-//             allreadySelected = true;
-
-//             // Allow the draging of the selection box
-//             dragBox.draggable(true);
-            
-//             // Get the mouse position
-//             const mousePos = stage.getPointerPosition();
-
-//             // loop through the blocks
-//             blocks.forEach(block =>
-//                 // Set the blocks selection offset
-//                 block.getter().dragOffset = [block.x - mousePos.x, block.y - mousePos.y]);
-  
-//             // Move all the selected blocks to that of the selection box
-//             dragBox.on('dragmove', () => {
-//                 // Get the mouse position
-//                 const mousePos = stage.getPointerPosition();
-
-//                 // Set the global var that the user is moving the selection box
-//                 connectionManager.global.movingBlockSelection = true;
-
-//                 // Move all the selected blocks
-//                 blocks.forEach(block => {
-
-//                     // Get the block
-//                     const PlaceableObject = block.getter();
-
-//                     // Change the block position  
-//                     PlaceableObject.block.position({
-//                         x: mousePos.x + PlaceableObject.dragOffset[0],
-//                         y: mousePos.y + PlaceableObject.dragOffset[1]
-//                     });
-//                 });
-//             });
-
-
-//             // When the user releases the drag box
-//             dragBox.on('dragend', () => {
-//                 allreadySelected = false;
-                
-//                 // Remove the drag box
-//                 dragBox.draggable(false);
-
-//                 // Set the global 
-//                 connectionManager.global.movingBlockSelection = false;
-                
-//                 // Loop through the blocks
-//                 blocks.forEach(block => {
-                    
-//                     // Get the block
-//                     const PlaceableObject = block.getter();
-    
-//                     // Trigger renender of all 
-//                     PlaceableObject.block.fire('dragmove');
-    
-//                     // Set the block to not selected
-//                     PlaceableObject.deselectBlock();
-    
-//                     // Snap the block to the grid
-//                     // (Snap to grid checks if the block wants to snap to the grid)
-//                     PlaceableObject.snapToGrid();
-//                 });
-
-//                 // Remove the listeners  
-//                 dragBox.off('dragend');
-//                 dragBox.off('dragmove');
-//                 dragBox.off('mousedown');
-//             });
-//         });
-//     });
-// }
-
 
 class Selection {
     private static instance: Selection;
@@ -123,8 +15,9 @@ class Selection {
 
 
     public static stage: Konva.Stage;
-    public static uiLayer: Konva.Layer;
+    public static layer: Konva.Layer;
     public static globals: Global;
+    public static connectionManager: ConnectionManager;
 
 
     // Boolean that determines if the visibleBox can be instantiated
@@ -147,23 +40,30 @@ class Selection {
     public static getLastPoint = () => Selection.lastPoint;
     private static setLastPoint = (value: { x: number, y: number }) => Selection.lastPoint = value;  
 
+    // { x, y }, { x, y }, Final size of the selection box
+    private static selectionSize: [{ x: number, y: number }, { x: number, y: number }] = [{ x: 0, y: 0 }, { x: 0, y: 0 }];
+    public static getSelectionSize = () => Selection.selectionSize;
+    private static setSelectionSize = (value: [{ x: number, y: number }, { x: number, y: number }]) => Selection.selectionSize = value;
+
     // Array to store the blocks that are currently selected
-    private static selectedBlocks: Array<BlockTypes.TSelectedRef> = [];
+    private static selectedBlocks: Array<PlaceableObject> = [];
     public static getSelectedBlocks = () => Selection.selectedBlocks;
+    private static setSelectedBlocks = (value: Array<PlaceableObject>) => Selection.selectedBlocks = value;
     public static clearSelectedBlocks = () => { Selection.selectedBlocks = [] };
 
-    public constructor(stage: Konva.Stage, uiLayer: Konva.Layer, globals: Global) { 
+    public constructor(stage: Konva.Stage, layer: Konva.Layer, globals: Global, connectionManager: ConnectionManager) { 
         if(Selection.instance)
             throw new Error('Selection class can only be instanciated once');
         
         Selection.instance = this;
         Selection.stage = stage;
-        Selection.uiLayer = uiLayer;
+        Selection.layer = layer;
         Selection.globals = globals;
+        Selection.connectionManager = connectionManager;
 
         // Add the boxes to the stage
-        uiLayer.add(Selection.visibleBox);
-        uiLayer.add(Selection.draggableBox);
+        layer.add(Selection.visibleBox);
+        layer.add(Selection.draggableBox);
 
         Selection.hookOntoMouse();
     }
@@ -182,7 +82,7 @@ class Selection {
         // This is when the user clicks on the stage
         Selection.stage.on('mousedown', () => {
             if(!Selection.canSelect || this.instantiateDrag() === false)
-                return;
+                return this.resetSelection();
 
             // Set the visible boxes opacity to the global opacity
             Selection.visibleBox.opacity(SelectionConstants.transparency);
@@ -194,37 +94,45 @@ class Selection {
 
         // this is when the users moves the mouse
         Selection.stage.on('mousemove', () => {
+            if(Selection.canSelect === false)
+                return this.resetSelection();
+
             if(this.getMovingBlockSelection() === true) 
-                return trackMouse(this.stage, Selection.visibleBox, Selection.getLastOrigin());
+                return trackMouse(this.stage, Selection.visibleBox, Selection.getLastOrigin(), Selection.getSelectionSize, Selection.setSelectionSize);
         });
 
 
         // This is when the user releases the mouse
-        Selection.stage.on('mouseup', () => {
-            if(this.getMovingBlockSelection() === false)
-                return;
+        Selection.stage.on('mouseup', () => this.instantiateMove());
 
-            // set the last point to the current mouse position
-            Selection.setLastPoint(this.stage.getPointerPosition());
-
-            // reset both boxes
-            this.resetSelection();
-
-
-        });
     }
 
-    private static instantiateMove() {
-        this.draggableBox.opacity(1);
+    private static instantiateMove(): Array<PlaceableObject> {
+        if(this.getMovingBlockSelection() === false)
+            return;
 
-        const origin = this.stage.getPointerPosition(),
-            point = this.stage.getPointerPosition();
+        Selection.setLastPoint(this.stage.getPointerPosition());
+        
+        // reset both boxes
+        this.resetSelection();
 
-        this.draggableBox.position(origin);
-        this.draggableBox.size({
-            width: point.x - origin.x,
-            height: point.y - origin.y
+        const currentSellection = Selection.connectionManager.findInCords(
+            Selection.getLastOrigin(), 
+            Selection.getLastPoint()
+        );
+
+        // Set the selected blocks to the current selection
+        Selection.setSelectedBlocks(currentSellection);
+
+        if(currentSellection?.length > 0)
+            this.draggableBox.draggable(true);
+
+        currentSellection.forEach(block => {
+            block.showGhost();
         });
+            
+        // return the current selection
+        return currentSellection;
     }
 
     private static instantiateDrag(): boolean {
@@ -265,6 +173,8 @@ class Selection {
         Selection.draggableBox.position({ x: 0, y: 0 });
         Selection.draggableBox.size({ width: 0, height: 0 });
         Selection.draggableBox.opacity(0);
+
+        Selection.draggableBox.draggable(false);
 
         Selection.setMovingBlockSelection(false);
     }

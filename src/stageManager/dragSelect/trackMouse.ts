@@ -1,6 +1,6 @@
 import Konva from 'konva';
 
-function trackMouse(stage: Konva.Stage, box: Konva.Rect, origin: { x: number, y: number }) {
+function trackMouse(stage: Konva.Stage, box: Konva.Rect, origin: { x: number, y: number }, getSize: () => [{ x: number, y: number }, { x: number, y: number }], setSize: (org: [{ x: number, y: number }, { x: number, y: number }]) => void) {
 
     // Get the mouse position
     const mousePos = stage.getPointerPosition() ?? { x: 0, y: 0};
@@ -10,7 +10,7 @@ function trackMouse(stage: Konva.Stage, box: Konva.Rect, origin: { x: number, y:
         sizeY = mousePos.y - origin.y;
 
 
-    // X, going left to right
+    // X-
     if(sizeX < 0) {
         // Move the box to the mouse
         box.x(mousePos.x);
@@ -21,16 +21,30 @@ function trackMouse(stage: Konva.Stage, box: Konva.Rect, origin: { x: number, y:
         // Set the width to the distance
         box.width(distanceX);
 
-    } else { // X, going right to left
+        // Set the new offset cords
+        const org = getSize();
+        setSize([
+            { x: mousePos.x, y: org[0].y }, 
+            { x: distanceX, y: org[1].y }
+        ]);
+
+    } else { // X+
         // Reset X
         box.x(origin.x);
 
         // Change the width
         box.width(sizeX);
+
+        // Change the size
+        const org = getSize();
+        setSize([
+            { x: origin.x, y: org[0].y },
+            { x: sizeX, y: org[1].y }
+        ]);
     }
 
 
-    // Y, going up to down
+    // Y-
     if(sizeY < 0) {
         // Move the box to the mouse
         box.y(mousePos.y);
@@ -41,12 +55,26 @@ function trackMouse(stage: Konva.Stage, box: Konva.Rect, origin: { x: number, y:
         // Set the height to the distance
         box.height(distanceY);
 
-    } else { // Y, going down to up
+        // Set the size
+        const org = getSize();
+        setSize([
+            { x: org[0].x, y: mousePos.y },
+            { x: org[1].x, y: distanceY }
+        ]);
+
+    } else { // Y+
         // Reset Y
         box.y(origin.y);
 
         // Change the height
         box.height(sizeY);
+
+        // Set the size
+        const org = getSize();
+        setSize([
+            { x: org[0].x, y: origin.y },
+            { x: org[1].x, y: sizeY }
+        ]);
     }
 }
 

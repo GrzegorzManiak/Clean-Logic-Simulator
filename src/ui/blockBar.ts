@@ -119,9 +119,7 @@ export class BlockBar {
             return;
 
         // Spawn the block at the correct position
-        const placed = new PlaceableObject(this.connectionManager, this.stage, this.blockLayer, block, [rec.x(), rec.y()]);
-        
-        placed.startMove();
+        new PlaceableObject(this.connectionManager, this.stage, this.blockLayer, block, [rec.x(), rec.y()]);
     }
 
     public addBlock(blockID: string): void {

@@ -1,10 +1,12 @@
 import konva from 'konva';
 import ConnectionManager from '../connectionManager/main';
 import ButtonPrompt from '../ui/buttonPrompt';
+import DragManager from './dragManager';
 
 import { GridConstants, VisualConstants } from '../consts';
 import { CanvasTypes } from '../index.d';
 import { v4 as uuidv4 } from 'uuid';
+import Konva from 'konva';
 
 export interface ILineRef {
     block: PlaceableObject,
@@ -13,6 +15,8 @@ export interface ILineRef {
 
 class PlaceableObject {
     public block: konva.Rect;
+    public ghost: konva.Rect;
+
     public dragOffset: [number, number] = [0, 0];
     
     readonly stage: konva.Stage;
@@ -20,6 +24,7 @@ class PlaceableObject {
     readonly cm: ConnectionManager;
     readonly blockOpts: CanvasTypes.IBlock;
     readonly uuid: string;
+    readonly dragMannager: DragManager;
 
     private selected: boolean = false;
 
@@ -48,6 +53,20 @@ class PlaceableObject {
             keyCode: 69,
             key: 'E',
         });
+
+        this.dragMannager = new DragManager(this.block);
+
+        this.dragMannager.hookOnDragStart(() => {
+            console.log('drag start')
+        })
+
+        this.dragMannager.hookOnDrag(() => {
+            console.log('dragging');
+        })
+        
+        this.dragMannager.hookOnDragEnd(() => {
+            console.log('end');
+        })
     }
 
     public selectBlock(): void {
@@ -86,17 +105,27 @@ class PlaceableObject {
             strokeWidth: block.borderWidth,
         });
 
+        this.ghost = this.block.clone();
+        this.ghost.opacity(0.5);
+
         // Add the block to the layer
         this.layer.add(this.block);     
+        this.layer.add(this.ghost);
 
-        // Draw the layer
-        this.layer.draw();
+        // Hide the ghost
+        this.hideGhost();
+    }
 
-        // Make the block snap to the grid
-        // as soon as it is added to the layer
-        this.block.on('dragend', () => {
-            this.snapToGrid();
-        });
+    public showGhost(): Konva.Rect {
+        this.ghost.show();
+        this.ghost.moveToTop();
+        this.ghost.position(this.block.position());
+
+        return this.ghost;
+    }
+
+    public hideGhost(): void {
+        this.ghost.hide();
     }
 
     // Array of blocks that are taking in
@@ -138,28 +167,21 @@ class PlaceableObject {
     }
 
 
-    public snapToGrid(): void {
+    public snapToGrid(rect: Konva.Rect = this.block): void {
         // Dose this block have snapToGrid enabled?
         if (this.blockOpts.snapToGrid === false)
             return;
 
         // Grid starts at 0,0
-        const curX = this.block.x(),
-            curY = this.block.y();
+        const curX = rect.x(),
+            curY = rect.y();
 
         const gridX = Math.round(curX / GridConstants.gridSize) * GridConstants.gridSize,
             gridY = Math.round(curY / GridConstants.gridSize) * GridConstants.gridSize;
 
         // Trigger the dragmove event
-        this.block.x(gridX);
-        this.block.y(gridY);
-
-        // Trigger the dragmove event
-        this.block.fire('dragmove');
-    }
-
-    public startMove(): void {
-        this.block.draggable(true);
+        rect.x(gridX);
+        rect.y(gridY);
     }
 }
 

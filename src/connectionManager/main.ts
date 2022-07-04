@@ -220,6 +220,20 @@ class ConnectionManager {
             this.global.hoveringOverBlock = false;
         });
     }
+
+    findInCords(xy1: BlockTypes.ICords, xy2: BlockTypes.ICords): PlaceableObject[] {
+        let blocks: PlaceableObject[] = [];
+
+        this.blocks.forEach(block => {
+            if(block.block.position().x + block.block.width() >= xy1.x &&
+                block.block.position().x <= xy2.x &&
+                block.block.position().y + block.block.height() >= xy1.y &&
+                block.block.position().y <= xy2.y)
+                blocks.push(block);
+        });
+
+        return blocks;
+    }
 }
 
 export default ConnectionManager;
