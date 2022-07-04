@@ -55,18 +55,45 @@ class PlaceableObject {
         });
 
         this.dragMannager = new DragManager(this.block);
+        this.drag();
+    }
 
+    private drag(): void { 
+        let offsetXY: { x: number, y: number } = { x: 0, y: 0 };
+
+        // -- Start
         this.dragMannager.hookOnDragStart(() => {
-            console.log('drag start')
-        })
+            // Show the ghosted block
+            this.showGhost();
 
+            // get the relative offset from the mouse
+            offsetXY = this.block.getRelativePointerPosition();
+        });
+
+        // -- Dragging
         this.dragMannager.hookOnDrag(() => {
-            console.log('dragging');
-        })
+            // Get the current possition of the mouse
+            let pos = this.stage.getRelativePointerPosition();
+
+            // Offset the position of the mouse and set the new pos
+            this.ghost.position({
+                x: pos.x - offsetXY.x,
+                y: pos.y - offsetXY.y
+            });
+        });
         
+        // -- End
         this.dragMannager.hookOnDragEnd(() => {
-            console.log('end');
-        })
+            // Set the position of the block to that of 
+            // where the ghost was
+            this.block.position(this.ghost.position());
+
+            // Hide the ghost as we dont need it anymore
+            this.hideGhost();
+
+            // snap the block to the grid
+            this.snapToGrid();
+        });
     }
 
     public selectBlock(): void {
@@ -90,8 +117,6 @@ class PlaceableObject {
         this.block.strokeWidth(0);
         this.layer.draw();
     }
-
-    public isSelected(): boolean { return this.selected; }
 
     public drawBlock(block: CanvasTypes.IBlock, cords: [number, number]): void {
         this.block = new konva.Rect({
