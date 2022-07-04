@@ -110,6 +110,9 @@ class PlaceableObject {
 
                 // Reset the selection
                 elm.resetDragSelection();
+
+                // Deselect the block
+                elm.deselectBlock();
             });
 
             // Force the connection manager to redraw the connections

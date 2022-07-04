@@ -113,7 +113,8 @@ class Selection {
             const objects = this.instantiateMove();
 
             objects.forEach((object) => {
-                object.setDragChildren(objects)
+                object.setDragChildren(objects);
+                object.selectBlock();
             });
         });
     }
