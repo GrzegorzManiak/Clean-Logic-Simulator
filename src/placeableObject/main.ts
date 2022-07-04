@@ -4,8 +4,9 @@ import ButtonPrompt from '../ui/buttonPrompt';
 import DragManager from './dragManager';
 
 import { GridConstants, VisualConstants } from '../consts';
-import { CanvasTypes } from '../index.d';
+import { CanvasTypes, BlockTypes } from '../index.d';
 import { v4 as uuidv4 } from 'uuid';
+
 import Konva from 'konva';
 
 export interface ILineRef {
@@ -17,7 +18,8 @@ class PlaceableObject {
     public block: konva.Rect;
     public ghost: konva.Rect;
 
-    public dragOffset: [number, number] = [0, 0];
+    public selectionOffset: [number, number] = [0, 0];
+    public dragOffset: BlockTypes.ICords = { x: 0, y: 0 };
     
     readonly stage: konva.Stage;
     readonly layer: konva.Layer;
@@ -25,8 +27,6 @@ class PlaceableObject {
     readonly blockOpts: CanvasTypes.IBlock;
     readonly uuid: string;
     readonly dragMannager: DragManager;
-
-    private selected: boolean = false;
 
     readonly canBeConnected: boolean = true;
     readonly canConntect: boolean = true;
@@ -58,46 +58,65 @@ class PlaceableObject {
         this.drag();
     }
 
-    private drag(): void { 
-        let offsetXY: { x: number, y: number } = { x: 0, y: 0 };
+    private dragChildren: Array<PlaceableObject> = [];
+    public setDragChildren = (children: Array<PlaceableObject>) => { this.dragChildren = children };
+    public resetDragSelection = (): void => { this.dragChildren = [] };
+    public getDragChildren = (): Array<PlaceableObject> => this.dragChildren; 
 
+    public dragEndHooks: Array<() => any> = [];
+
+    private drag(): void { 
         // -- Start
         this.dragMannager.hookOnDragStart(() => {
-            // Show the ghosted block
-            this.showGhost();
+            // Don nothing if no blocks are selected
+            if(this.getDragChildren().length === 0)
+                this.setDragChildren([this]);
+            
+            this.getDragChildren().forEach(elm => { 
+                // Show the ghosted block
+                elm.showGhost();
 
-            // get the relative offset from the mouse
-            offsetXY = this.block.getRelativePointerPosition();
+                // get the relative offset from the mouse
+                elm.dragOffset = elm.block.getRelativePointerPosition();
+            });
         });
 
         // -- Dragging
         this.dragMannager.hookOnDrag(() => {
             // Get the current possition of the mouse
-            let pos = this.stage.getRelativePointerPosition();
+            const pos = this.stage.getRelativePointerPosition();
 
-            // Offset the position of the mouse and set the new pos
-            this.ghost.position({
-                x: pos.x - offsetXY.x,
-                y: pos.y - offsetXY.y
-            });
+            this.getDragChildren().forEach(elm => {
+                // Offset the position of the mouse and set the new pos
+                elm.ghost.position({
+                    x: pos.x - elm.dragOffset.x,
+                    y: pos.y - elm.dragOffset.y
+                });
+            })
         });
         
         // -- End
         this.dragMannager.hookOnDragEnd(() => {
-            // Set the position of the block to that of 
-            // where the ghost was
-            this.block.position(this.ghost.position());
+            this.getDragChildren().forEach(elm => {
+                // Set the position of the block to that of 
+                // where the ghost was
+                elm.block.position(elm.ghost.position());
 
-            // Hide the ghost as we dont need it anymore
-            this.hideGhost();
+                // Hide the ghost as we dont need it anymore
+                elm.hideGhost();
 
-            // snap the block to the grid
-            this.snapToGrid();
+                // snap the block to the grid
+                elm.snapToGrid();
+
+                // Reset the selection
+                elm.resetDragSelection();
+            });
+
+            this.dragEndHooks.forEach(hook => hook());
         });
     }
 
     public selectBlock(): void {
-        this.selected = true;
         this.block.shadowColor(this.blockOpts.color);
         this.block.shadowBlur(10);
         this.block.shadowOffset({ x: 0, y: 0 });
@@ -108,7 +127,6 @@ class PlaceableObject {
     }
 
     public deselectBlock(): void {
-        this.selected = false;
         this.block.shadowColor('rgba(0, 0, 0, 0)');
         this.block.shadowBlur(0);
         this.block.shadowOffset({ x: 0, y: 0 });

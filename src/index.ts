@@ -34,7 +34,7 @@ const UIpromptLayer = new konva.Layer()
 export const promptLayer = UIpromptLayer;
 
 new addBoxSelection(stage, UIpromptLayer, cm.global, cm);
-addBoxSelection.setCanSelect(false);
+addBoxSelection.setCanSelect(true);
 
 stage.add(UIpromptLayer); 
 

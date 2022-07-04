@@ -79,9 +79,10 @@ class Selection {
     }
 
     private static hookOntoMouse() {
+
         // This is when the user clicks on the stage
         Selection.stage.on('mousedown', () => {
-            if(!Selection.canSelect || this.instantiateDrag() === false)
+            if(!Selection.canSelect || this.instantiateDrag() === false || this.globals.hoveringOverBlock === true)
                 return this.resetSelection();
 
             // Set the visible boxes opacity to the global opacity
@@ -97,19 +98,21 @@ class Selection {
             if(Selection.canSelect === false)
                 return this.resetSelection();
 
-            if(this.getMovingBlockSelection() === true) 
-                return trackMouse(this.stage, Selection.visibleBox, Selection.getLastOrigin(), Selection.getSelectionSize, Selection.setSelectionSize);
+            if(this.getMovingBlockSelection() === true) return trackMouse(
+                this.stage, 
+                Selection.visibleBox, 
+                Selection.getLastOrigin(), 
+                Selection.getSelectionSize, 
+                Selection.setSelectionSize
+            );
         });
 
 
         // This is when the user releases the mouse
-        Selection.stage.on('mouseup', () => this.instantiateMove());
-
+        Selection.stage.on('mouseup', () => moveObjects(this.instantiateMove()));
     }
 
     private static instantiateMove(): Array<PlaceableObject> {
-        if(this.getMovingBlockSelection() === false)
-            return;
 
         Selection.setLastPoint(this.stage.getPointerPosition());
         
@@ -124,13 +127,6 @@ class Selection {
         // Set the selected blocks to the current selection
         Selection.setSelectedBlocks(currentSellection);
 
-        if(currentSellection?.length > 0)
-            this.draggableBox.draggable(true);
-
-        currentSellection.forEach(block => {
-            block.showGhost();
-        });
-            
         // return the current selection
         return currentSellection;
     }
