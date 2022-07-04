@@ -1,4 +1,3 @@
-import PlaceableObject from "./main";
 import { CanvasTypes } from "../index.d";
 
 class BlockRegister {
