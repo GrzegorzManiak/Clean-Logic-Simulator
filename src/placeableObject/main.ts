@@ -92,7 +92,7 @@ class PlaceableObject {
                     x: pos.x - elm.dragOffset.x,
                     y: pos.y - elm.dragOffset.y
                 });
-            })
+            });
         });
         
         // -- End
@@ -112,7 +112,8 @@ class PlaceableObject {
                 elm.resetDragSelection();
             });
 
-            this.dragEndHooks.forEach(hook => hook());
+            // Force the connection manager to redraw the connections
+            this.block.fire('dragmove');
         });
     }
 

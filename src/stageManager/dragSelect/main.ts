@@ -1,7 +1,6 @@
 import Konva from "konva";
 import Global from "../../global";
 import trackMouse from './trackMouse';
-import moveObjects from './moveObjects';
 import PlaceableObject from "../../placeableObject/main";
 import ConnectionManager from '../../connectionManager/main';
 
@@ -109,7 +108,14 @@ class Selection {
 
 
         // This is when the user releases the mouse
-        Selection.stage.on('mouseup', () => moveObjects(this.instantiateMove()));
+        Selection.stage.on('mouseup', () => {
+            // get all the sellected objects
+            const objects = this.instantiateMove();
+
+            objects.forEach((object) => {
+                object.setDragChildren(objects)
+            });
+        });
     }
 
     private static instantiateMove(): Array<PlaceableObject> {
