@@ -113,10 +113,11 @@ class PlaceableObject {
 
                 // Deselect the block
                 elm.deselectBlock();
-            });
 
-            // Force the connection manager to redraw the connections
-            this.block.fire('dragmove');
+                // Force the connection manager to redraw the connections
+                elm.block.fire('dragmove');
+
+            });
         });
     }
 
