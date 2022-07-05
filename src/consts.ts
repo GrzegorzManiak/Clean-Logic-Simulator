@@ -20,6 +20,7 @@ export const GridConstants: Constants.TGridConstants = {
     maxScale: 3,
     minScale: 0.5,
     gridColor: 'rgba(0, 0, 0, 0.2)',
+    gridAccentColor: 'rgba(0, 0, 0, 0.5)',      
     gridLineWidth: 2,
     gridDashAmnt: 8
 }

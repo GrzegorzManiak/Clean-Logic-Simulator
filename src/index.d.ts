@@ -52,6 +52,7 @@ export namespace Constants {
         maxScale: number;
         minScale: number;
         gridColor: string;
+        gridAccentColor: string;
         gridLineWidth: number;
         gridDashAmnt: number;
     }

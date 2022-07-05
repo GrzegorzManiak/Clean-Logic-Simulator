@@ -116,7 +116,6 @@ class PlaceableObject {
 
                 // Force the connection manager to redraw the connections
                 elm.block.fire('dragmove');
-
             });
         });
     }
