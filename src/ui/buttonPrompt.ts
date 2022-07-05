@@ -67,7 +67,7 @@ class ButtonPrompt {
 
             this.item.off('mousemove');
 
-            promptLayer.draw();
+            promptLayer.batchDraw();
         }
 
         this.enablePrompt = (): void => {
@@ -126,7 +126,7 @@ class ButtonPrompt {
 
             // Draw the layer
             if(this.enabled === true) 
-                promptLayer.draw();
+                promptLayer.batchDraw();
             
             else this.disablePrompt();
         });

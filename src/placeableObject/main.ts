@@ -116,6 +116,7 @@ class PlaceableObject {
 
                 // Force the connection manager to redraw the connections
                 elm.block.fire('dragmove');
+
             });
         });
     }
@@ -127,7 +128,7 @@ class PlaceableObject {
         this.block.shadowOpacity(0.5);
         this.block.stroke('rgba(0, 0, 0, 0.2)');
         this.block.strokeWidth(VisualConstants.strokeWidth);
-        this.layer.draw();
+        this.layer.batchDraw();
     }
 
     public deselectBlock(): void {
@@ -137,7 +138,7 @@ class PlaceableObject {
         this.block.shadowOpacity(0);
         this.block.stroke('rgba(0, 0, 0, 0)');
         this.block.strokeWidth(0);
-        this.layer.draw();
+        this.layer.batchDraw();
     }
 
     public drawBlock(block: CanvasTypes.IBlock, cords: [number, number]): void {

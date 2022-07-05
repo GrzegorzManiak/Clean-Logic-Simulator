@@ -17,6 +17,8 @@ function checker(gridLayer: Konva.Layer, gridDetails: IGridDetails) {
             fill: GridConstants.gridColor,
         }).cache(); 
 
+        const rectGroup = new Konva.Group();
+
         let clone: Konva.Rect | null;
 
         // -- Horizontal Lines --
@@ -37,10 +39,13 @@ function checker(gridLayer: Konva.Layer, gridDetails: IGridDetails) {
                     });
 
                     // Add the clone to the layer
-                    gridLayer.add(clone);
+                    rectGroup.add(clone);
                 }
             }
         }
+
+        // Add the group to the layer
+        gridLayer.add(rectGroup);
     }
 }
 

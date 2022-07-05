@@ -105,18 +105,75 @@ function reDraw() {
     stage.width(window.innerWidth);
     stage.height(window.innerHeight);
     
-    stage.draw();
+    stage.batchDraw();
 }
 
 // Add a window resize listener
 window.addEventListener('resize', () => reDraw());
 
+
+// FPS counter Konva text
+const fpsText = new konva.Text({
+    x: 10,
+    y: 10,
+    text: 'FPS: 0',
+    fontSize: 12,
+    fontFamily: 'Calibri',
+    fill: 'white',
+    padding: 5,
+});
+
+fpsText.moveToTop();
+UIpromptLayer.add(fpsText);
+
 stage.on('movementManager', () => {
+    fpsText.moveToTop();
+
     grid.remove();
     grid = constructGrid(stage);
+    stage.add(grid);
 
     blockBar.render();
 
-    stage.add(grid);
-    stage.draw();
+    stage.batchDraw();
 });
+
+const targetFPS = 30,
+    layers = [layer, grid, cm.connectionLayer];
+
+// Async FPS counter based on the stage
+new konva.Animation(frame => {
+
+    if (frame.timeDiff > targetFPS) {
+        
+        // time for frame is too big, decrease quality
+        layers.forEach(x => {
+            // Get the canvas element
+            const xCanvas = x.getCanvas(),
+                xPxRatio = xCanvas.getPixelRatio();
+
+            // Calculate the new pixel ratio
+            const newPxRatio = Math.max(1, Math.floor(xPxRatio - (frame.timeDiff - targetFPS) / targetFPS));
+
+            // Set the new pixel ratio
+            xCanvas.setPixelRatio(newPxRatio);
+        });
+        
+    } else {
+
+        // time for frame is too small, increase quality
+        layers.forEach(x => {
+            // Get the canvas element
+            const xCanvas = x.getCanvas(),
+                xPxRatio = xCanvas.getPixelRatio();
+
+            // Calculate the new pixel ratio
+            const newPxRatio = Math.min(2, Math.ceil(xPxRatio + (targetFPS - frame.timeDiff) / targetFPS));
+
+            // Set the new pixel ratio
+            xCanvas.setPixelRatio(newPxRatio);
+        });
+    }
+
+    fpsText.text(`FPS: ${frame.timeDiff}`);
+}, layers).start(); 

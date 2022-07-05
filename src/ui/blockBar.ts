@@ -107,7 +107,7 @@ export class BlockBar {
             this.layer.add(rec);
         });
 
-        this.layer.draw();
+        this.layer.batchDraw();
     }
 
     public onUIdrag(blockID: string, rec: konva.Rect): void {

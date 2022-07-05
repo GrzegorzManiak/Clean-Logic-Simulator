@@ -49,7 +49,7 @@ function constructGrid(stage: Konva.Stage, style: 1 | 2 = 2): Konva.Layer {
     }
 
     gridLayer.cache();
-    gridLayer.draw();
+    gridLayer.batchDraw();
 
     return gridLayer;
 }
