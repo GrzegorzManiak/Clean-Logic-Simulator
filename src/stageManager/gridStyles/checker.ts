@@ -9,8 +9,15 @@ function checker(gridLayer: Konva.Layer, gridDetails: IGridDetails) {
     // it will be too small to see, but we still need to render it
     // causing a performance hit.
     if(getScale() > 0.5) {
+        const rect = new Konva.Rect({
+            x: gridDetails.stepSize + gridDetails.gridOffsetX, 
+            y: gridDetails.stepSize + gridDetails.gridOffsetY,
+            width: gridDetails.stepSize,
+            height: gridDetails.stepSize,
+            fill: GridConstants.gridColor,
+        }).cache(); 
 
-        // Add a checkerboard pattern to the gridLayer
+        let clone: Konva.Rect | null;
 
         // -- Horizontal Lines --
         for (let i = 0; i < gridDetails.horizontalLines; i++) {
@@ -23,15 +30,14 @@ function checker(gridLayer: Konva.Layer, gridDetails: IGridDetails) {
 
                 // Only draw every other square
                 if((i + j) % 2 === 0) {
-                    const rect = new Konva.Rect({
+                    // Clone the cached rect
+                    clone = rect.clone({    
                         x: point,
                         y: startPoint,
-                        width: gridDetails.stepSize,
-                        height: gridDetails.stepSize,
-                        fill: GridConstants.gridColor,
                     });
 
-                    gridLayer.add(rect);
+                    // Add the clone to the layer
+                    gridLayer.add(clone);
                 }
             }
         }
