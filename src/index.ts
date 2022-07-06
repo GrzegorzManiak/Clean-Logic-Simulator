@@ -6,6 +6,7 @@ import BlockBar from './ui/blockBar';
 import BlockRegistry from './PlaceableObject/register';
 import addBoxSelection from './stageManager/dragSelect/main';
 import Global from './global';
+import Konva from 'konva';
 
 // first we need to create a stage
 let stage = new konva.Stage({
@@ -111,24 +112,7 @@ function reDraw() {
 // Add a window resize listener
 window.addEventListener('resize', () => reDraw());
 
-
-// FPS counter Konva text
-const fpsText = new konva.Text({
-    x: 10,
-    y: 10,
-    text: 'FPS: 0',
-    fontSize: 12,
-    fontFamily: 'Calibri',
-    fill: 'white',
-    padding: 5,
-});
-
-fpsText.moveToTop();
-UIpromptLayer.add(fpsText);
-
 stage.on('movementManager', () => {
-    fpsText.moveToTop();
-
     grid.remove();
     grid = constructGrid(stage);
     stage.add(grid);
@@ -139,12 +123,14 @@ stage.on('movementManager', () => {
 });
 
 const targetFPS = 30,
-    layers = [layer, grid, cm.connectionLayer];
+    layers = [grid, cm.connectionLayer];
+
+const pxrStep = 0.2;
 
 // Async FPS counter based on the stage
 new konva.Animation(frame => {
 
-    if (frame.timeDiff > targetFPS) {
+    if (frame.frameRate > targetFPS) {
         
         // time for frame is too big, decrease quality
         layers.forEach(x => {
@@ -153,7 +139,7 @@ new konva.Animation(frame => {
                 xPxRatio = xCanvas.getPixelRatio();
 
             // Calculate the new pixel ratio
-            const newPxRatio = Math.max(1, Math.floor(xPxRatio - (frame.timeDiff - targetFPS) / targetFPS));
+            const newPxRatio = Math.max(10, xPxRatio + pxrStep);
 
             // Set the new pixel ratio
             xCanvas.setPixelRatio(newPxRatio);
@@ -168,12 +154,10 @@ new konva.Animation(frame => {
                 xPxRatio = xCanvas.getPixelRatio();
 
             // Calculate the new pixel ratio
-            const newPxRatio = Math.min(2, Math.ceil(xPxRatio + (targetFPS - frame.timeDiff) / targetFPS));
+            const newPxRatio = Math.min(10, xPxRatio - pxrStep);
 
             // Set the new pixel ratio
             xCanvas.setPixelRatio(newPxRatio);
         });
     }
-
-    fpsText.text(`FPS: ${frame.timeDiff}`);
-}, layers).start(); 
+}, [layer]).start(); 
