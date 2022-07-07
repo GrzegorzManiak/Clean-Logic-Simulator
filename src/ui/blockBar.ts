@@ -4,7 +4,7 @@ import BlockRegister from '../PlaceableObject/register';
 import ConnectionManager from '../connectionManager/main';
 
 import { ThemeConstants, VisualConstants } from '../consts';
-import { CanvasTypes } from '../index.d';
+import { CanvasTypes } from '../types';
 
 export class BlockBar {
     private stage: konva.Stage;

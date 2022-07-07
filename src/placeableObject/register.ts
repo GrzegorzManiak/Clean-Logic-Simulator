@@ -1,4 +1,4 @@
-import { CanvasTypes } from "../index.d";
+import { CanvasTypes } from "../types";
 
 class BlockRegister {
     private static _blockList: { [key: string]: CanvasTypes.IBlock } = {};

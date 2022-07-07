@@ -4,7 +4,7 @@ import PlaceableObject from "../placeableObject/main";
 import constructArrow from './constructArrow';
 import constructBezier from './constructBezier';
 import calculateCords from './calculateCords';
-import { BlockTypes } from '../index.d';
+import { BlockTypes } from '../types';
 
 class ConnectionManager {
     dragSelect: boolean = true;

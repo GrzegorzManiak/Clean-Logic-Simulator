@@ -1,5 +1,5 @@
 import { VisualConstants } from '../consts';
-import { BlockTypes } from '../index.d';
+import { BlockTypes } from '../types';
 
 function calculateDistance(a: BlockTypes.ICords, b: BlockTypes.ICords): number {
     return Math.sqrt(Math.pow(a.x - b.x, 2) + Math.pow(a.y - b.y, 2));

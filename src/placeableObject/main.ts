@@ -4,7 +4,7 @@ import ButtonPrompt from '../ui/buttonPrompt';
 import DragManager from './dragManager';
 
 import { GridConstants, VisualConstants } from '../consts';
-import { CanvasTypes, BlockTypes } from '../index.d';
+import { CanvasTypes, BlockTypes } from '../types';
 import { v4 as uuidv4 } from 'uuid';
 
 import Konva from 'konva';

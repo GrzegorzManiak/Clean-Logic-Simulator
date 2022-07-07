@@ -1,4 +1,4 @@
-import { Constants } from "./index.d";
+import { Constants } from "./types";
 
 export const VisualConstants: Constants.TVisualConstants = {
     arrowWidth: 10,
