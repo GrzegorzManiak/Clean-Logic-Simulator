@@ -7,6 +7,7 @@ import BlockRegistry from './PlaceableObject/register';
 import addBoxSelection from './stageManager/dragSelect/main';
 import Global from './global';
 import Konva from 'konva';
+import PixelRatio from './stageManager/pixelRatio';
 
 // first we need to create a stage
 let stage = new konva.Stage({
@@ -38,6 +39,8 @@ new addBoxSelection(stage, UIpromptLayer, cm.global, cm);
 addBoxSelection.setCanSelect(true);
 
 stage.add(UIpromptLayer); 
+
+
 
 // Manage movement
 movementManager(stage, [grid, cm.connectionLayer, layer]);
@@ -121,43 +124,3 @@ stage.on('movementManager', () => {
 
     stage.batchDraw();
 });
-
-const targetFPS = 30,
-    layers = [grid, cm.connectionLayer];
-
-const pxrStep = 0.2;
-
-// Async FPS counter based on the stage
-new konva.Animation(frame => {
-
-    if (frame.frameRate > targetFPS) {
-        
-        // time for frame is too big, decrease quality
-        layers.forEach(x => {
-            // Get the canvas element
-            const xCanvas = x.getCanvas(),
-                xPxRatio = xCanvas.getPixelRatio();
-
-            // Calculate the new pixel ratio
-            const newPxRatio = Math.max(10, xPxRatio + pxrStep);
-
-            // Set the new pixel ratio
-            xCanvas.setPixelRatio(newPxRatio);
-        });
-        
-    } else {
-
-        // time for frame is too small, increase quality
-        layers.forEach(x => {
-            // Get the canvas element
-            const xCanvas = x.getCanvas(),
-                xPxRatio = xCanvas.getPixelRatio();
-
-            // Calculate the new pixel ratio
-            const newPxRatio = Math.min(10, xPxRatio - pxrStep);
-
-            // Set the new pixel ratio
-            xCanvas.setPixelRatio(newPxRatio);
-        });
-    }
-}, [layer]).start(); 
