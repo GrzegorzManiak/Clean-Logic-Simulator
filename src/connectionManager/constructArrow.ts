@@ -1,5 +1,5 @@
 import konva from 'konva';
-import { VisualConstants } from '../consts';
+import { VisualConstants } from '../options';
 
 function constructArrow(pos: [number, number], direction: 1 | 2 | 3 | 4): konva.Group  {
     let [x, y] = pos,

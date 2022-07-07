@@ -1,4 +1,4 @@
-import { VisualConstants } from '../consts';
+import { VisualConstants } from '../options';
 import { BlockTypes } from '../types';
 
 function calculateDistance(a: BlockTypes.ICords, b: BlockTypes.ICords): number {

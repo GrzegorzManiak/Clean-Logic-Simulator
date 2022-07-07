@@ -1,6 +1,6 @@
 import konva from 'konva';
 import { promptLayer } from '../';
-import { ThemeConstants, VisualConstants } from '../consts';
+import { ThemeConstants, VisualConstants } from '../options';
 
 export interface IButtonPrompt {
     key: string;

@@ -1,4 +1,4 @@
-import { GridConstants } from "../../consts";
+import { GridConstants } from "../../options";
 import { getScale } from "../scrollManager";
 import { IGridDetails } from "../grid";
 

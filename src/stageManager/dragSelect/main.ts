@@ -4,7 +4,7 @@ import trackMouse from './trackMouse';
 import PlaceableObject from "../../placeableObject/main";
 import ConnectionManager from '../../connectionManager/main';
 
-import { SelectionConstants } from '../../consts';
+import { SelectionConstants } from '../../options';
 
 class Selection {
     private static instance: Selection;

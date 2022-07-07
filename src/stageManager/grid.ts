@@ -1,5 +1,5 @@
 import Konva from "konva";
-import { GridConstants } from "../consts";
+import { GridConstants } from "../options";
 import { getPos, getScale } from "./scrollManager";
 
 import lines from './gridStyles/lines';

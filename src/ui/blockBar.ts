@@ -3,7 +3,7 @@ import PlaceableObject from '../placeableObject/main';
 import BlockRegister from '../PlaceableObject/register';
 import ConnectionManager from '../connectionManager/main';
 
-import { ThemeConstants, VisualConstants } from '../consts';
+import { ThemeConstants, VisualConstants } from '../options';
 import { CanvasTypes } from '../types';
 
 export class BlockBar {

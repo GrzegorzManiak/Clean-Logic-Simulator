@@ -1,5 +1,4 @@
 import PlaceableObject from "./placeableObject/main";
-import ConnectionManager from "./connectionManager/main";
 
 export namespace BlockList {
     export type TBaseLogic = 'AND' | 'OR' | 'XOR' | 'NAND' | 'NOR' | 'XNOR';

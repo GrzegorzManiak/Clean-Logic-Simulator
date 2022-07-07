@@ -1,6 +1,6 @@
 import konva from 'konva';
 import PlaceableObject from '../placeableObject/main';
-import { VisualConstants } from '../consts';
+import { VisualConstants } from '../options';
 
 function constructBezier(points: [number, number, number, number], selected: boolean, block: PlaceableObject, direction: 1 | 2 | 3 | 4): konva.Group {
     const [x1, y1, x2, y2] = points;

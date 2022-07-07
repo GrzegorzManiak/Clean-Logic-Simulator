@@ -3,7 +3,7 @@ import ConnectionManager from '../connectionManager/main';
 import ButtonPrompt from '../ui/buttonPrompt';
 import DragManager from './dragManager';
 
-import { GridConstants, VisualConstants } from '../consts';
+import { GridConstants, VisualConstants } from '../options';
 import { CanvasTypes, BlockTypes } from '../types';
 import { v4 as uuidv4 } from 'uuid';
 
