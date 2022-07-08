@@ -97,7 +97,6 @@ class Selection {
 
         // this is when the users moves the mouse
         Selection.stage.on('mousemove', () => {
-            console.log(this.globals.hoveringOverBlock)
             if(Selection.canSelect === false)
                 return this.resetSelection();
 

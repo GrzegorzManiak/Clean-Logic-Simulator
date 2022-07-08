@@ -53,11 +53,6 @@ class PlaceableObject {
 
         this.dragMannager = new DragManager(this.block);
         this.drag();
-
-
-        this.ghost.on('mouseover', () => {
-            console.log('mouseover');
-        })
     }
 
     private dragChildren: Array<PlaceableObject> = [];

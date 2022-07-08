@@ -219,7 +219,6 @@ class ConnectionManager {
         // Add a listener to the block
         // when the user hovers over it
         block.block.on('mouseover', () => {
-            console.log('Hovering over block');
             this.global.hoveringOverBlock = true;
         });
 
