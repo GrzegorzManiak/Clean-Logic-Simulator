@@ -1,9 +1,9 @@
 import Konva from 'Konva';
 import Global from '../global';
-import constructArrow from './constructArrow';
-import calculateCords from './calculateCords';
-import constructBezier from './constructBezier';
-import PlaceableObject from '../placeableObject/main';
+import constructArrow from './src/constructArrow';
+import calculateCords from './src/calculateCords';
+import constructBezier from './src/constructBezier';
+import PlaceableObject from '../interactableObject';
 
 import { BlockTypes } from '../types';
 

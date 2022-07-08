@@ -1,6 +1,6 @@
-import { GridConstants } from "../../options";
-import { getScale } from "../scrollManager";
-import { IGridDetails } from "../grid";
+import { GridConstants } from "../../../options";
+import { getScale } from "../../scrollManager";
+import { IGridDetails } from '..';
 
 import Konva from "Konva";
 

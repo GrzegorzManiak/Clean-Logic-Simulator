@@ -1,9 +1,9 @@
 import Konva from 'Konva';
-import ConnectionManager from './connectionManager/main';
-import constructGrid from './stageManager/grid';
+import ConnectionManager from './connectionManager';
+import constructGrid from './stageManager/gridManager';
 import movementManager from './stageManager/scrollManager';
-import DragSelect from './stageManager/dragSelect/main';
-import Register from './blocks/register';
+import DragSelect from './stageManager/selectionBox';
+import Register from './blockRegister';
 
 // first we need to create a stage
 let stage = new Konva.Stage({

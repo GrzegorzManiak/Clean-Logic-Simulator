@@ -1,8 +1,8 @@
 import Konva from "Konva";
 import Global from "../../global";
-import trackMouse from './trackMouse';
-import PlaceableObject from "../../placeableObject/main";
-import ConnectionManager from '../../connectionManager/main';
+import trackMouse from './src/trackMouse';
+import PlaceableObject from "../../interactableObject";
+import ConnectionManager from '../../connectionManager';
 
 import { SelectionConstants } from '../../options';
 

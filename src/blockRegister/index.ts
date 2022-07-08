@@ -1,5 +1,5 @@
-import BlockRegistry from '../PlaceableObject/register';
-import PlaceableObject from '../placeableObject/main';
+import BlockRegistry from '../interactableObject/src/register';
+import PlaceableObject from '../interactableObject';
 import Konva from 'Konva';
 
 function register(layer: Konva.Layer, stage: Konva.Stage) { 

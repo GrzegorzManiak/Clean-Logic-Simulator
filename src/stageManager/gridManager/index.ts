@@ -1,9 +1,9 @@
-import Konva from "Konva";
-import { GridConstants } from "../options";
-import { getPos, getScale } from "./scrollManager";
+import Konva from 'Konva';
+import { GridConstants } from '../../options';
+import { getPos, getScale } from '../scrollManager';
 
-import lines from './gridStyles/lines';
-import checker from './gridStyles/checker';
+import lines from './src/lines';
+import checker from './src/checker';
 
 export type IGridDetails = {
     horizontalLines: number,

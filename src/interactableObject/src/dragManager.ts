@@ -1,4 +1,4 @@
-import Konva from "Konva";
+import Konva from 'Konva';
 
 // We need a custom drag manager as the 'draggable' functiionality provided
 // by Konva does not provide the correct behaviour for our purposes.

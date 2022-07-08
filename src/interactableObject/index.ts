@@ -1,6 +1,6 @@
 import Konva from 'Konva';
-import ConnectionManager from '../connectionManager/main';
-import DragManager from './dragManager';
+import ConnectionManager from '../connectionManager';
+import DragManager from './src/dragManager';
 
 import { GridConstants, VisualConstants } from '../options';
 import { CanvasTypes, BlockTypes } from '../types';

@@ -1,4 +1,4 @@
-import PlaceableObject from "./placeableObject/main";
+import PlaceableObject from "./interactableObject";
 
 export namespace BlockList {
     export type TBaseLogic = 'AND' | 'OR' | 'XOR' | 'NAND' | 'NOR' | 'XNOR';

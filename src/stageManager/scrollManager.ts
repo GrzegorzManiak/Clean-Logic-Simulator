@@ -1,5 +1,5 @@
-import Konva from "Konva";
-import { GridConstants } from "../options";
+import Konva from 'Konva';
+import { GridConstants } from '../options';
 
 let scale = 1,
     pos = { x: 0, y: 0 };
