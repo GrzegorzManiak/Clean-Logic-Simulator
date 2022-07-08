@@ -1,4 +1,4 @@
-import Konva from 'konva';
+import Konva from 'Konva';
 
 function trackMouse(stage: Konva.Stage, box: Konva.Rect, origin: { x: number, y: number }, getSize: () => [{ x: number, y: number }, { x: number, y: number }], setSize: (org: [{ x: number, y: number }, { x: number, y: number }]) => void) {
 

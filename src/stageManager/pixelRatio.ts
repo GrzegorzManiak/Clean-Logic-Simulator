@@ -1,4 +1,4 @@
-import Konva from 'konva';
+import Konva from 'Konva';
 
 // Singelton class for managing the pixel ratio
 export class PixelRatio {   

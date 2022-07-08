@@ -1,4 +1,4 @@
-import konva from 'konva';
+import Konva from 'Konva';
 import { ThemeConstants, VisualConstants } from '../options';
 import Selection from '../stageManager/dragSelect/main';
 
@@ -11,14 +11,14 @@ export interface IButtonPrompt {
 class ButtonPrompt {
     callback: () => void;
     prompt: IButtonPrompt;
-    promptLayer: konva.Layer;
-    item: konva.Group | konva.Rect;
+    promptLayer: Konva.Layer;
+    item: Konva.Group | Konva.Rect;
 
-    constructor(item: konva.Group | konva.Rect, callback: () => void, input: IButtonPrompt) {
+    constructor(item: Konva.Group | Konva.Rect, callback: () => void, input: IButtonPrompt) {
         this.callback = callback;
         this.item = item;
         this.prompt = input;
-        this.promptLayer = Selection.layer;
+        this.promptLayer = Selection.getInstance(item.getStage()).layer;
         this.enabled = true;
 
         this.render();
@@ -31,7 +31,7 @@ class ButtonPrompt {
     
     private render(): void {
         // Create a rectangle
-        const rectFunc = () => new konva.Rect({
+        const rectFunc = () => new Konva.Rect({
             fill: ThemeConstants.promptColor,
             stroke: 'rgba(0, 0, 0, 0.2)',
 
@@ -40,7 +40,7 @@ class ButtonPrompt {
         });
 
         // Create the key text
-        const buttonKeyFunc = () => new konva.Text({
+        const buttonKeyFunc = () => new Konva.Text({
             text: this.prompt.key,
             fontStyle: 'bold',
             fill: ThemeConstants.fontColor,
@@ -49,7 +49,7 @@ class ButtonPrompt {
         });
 
         // Create the text
-        const buttonTextFunc = () => new konva.Text({
+        const buttonTextFunc = () => new Konva.Text({
             text: this.prompt.text,
             fill: ThemeConstants.fontColor,
             fontSize: ThemeConstants.fontSecondarySize,

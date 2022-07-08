@@ -43,18 +43,22 @@ class PlaceableObject {
         // Calculate the uuid
         this.uuid = uuidv4().toString();
 
-        // Add the prompt
-        const prompt = new ButtonPrompt(this.block, () => {
-        }, {
-            text: 'Use',
-            // e key code
-            keyCode: 69,
-            key: 'E',
-        });
+        // // Add the prompt
+        // const prompt = new ButtonPrompt(this.block, () => {
+        // }, {
+        //     text: 'Use',
+        //     // e key code
+        //     keyCode: 69,
+        //     key: 'E',
+        // });
 
         this.dragMannager = new DragManager(this.block);
         this.drag();
-        this.hideGhost();
+
+
+        this.ghost.on('mouseover', () => {
+            console.log('mouseover');
+        })
     }
 
     private dragChildren: Array<PlaceableObject> = [];

@@ -1,4 +1,4 @@
-import konva from 'konva';
+import Konva from 'Konva';
 import ConnectionManager from './connectionManager/main';
 import constructGrid from './stageManager/grid';
 import movementManager from './stageManager/scrollManager';
@@ -6,7 +6,7 @@ import DragSelect from './stageManager/dragSelect/main';
 import Register from './blocks/register';
 
 // first we need to create a stage
-let stage = new konva.Stage({
+let stage = new Konva.Stage({
     container: 'canvas',   // id of container <div>
     width: window.innerWidth,
     height: window.innerHeight,
@@ -19,7 +19,7 @@ let grid = constructGrid(stage);
 const cm = ConnectionManager.getInstance(stage);
 
 // then create the main layer
-const layer = new konva.Layer();
+const layer = new Konva.Layer();
 
 DragSelect.getInstance(stage);
 DragSelect.setCanSelect(true);

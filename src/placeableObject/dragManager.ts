@@ -1,4 +1,4 @@
-import Konva from "konva";
+import Konva from "Konva";
 
 // We need a custom drag manager as the 'draggable' functiionality provided
 // by Konva does not provide the correct behaviour for our purposes.
@@ -25,7 +25,7 @@ class DragManager {
     public getDragging(): boolean { return this.dragging; }
     private setDragging(dragging: boolean): void { this.dragging = dragging; }
 
-    constructor(draggableObject: Konva.Rect) {
+    public constructor(draggableObject: Konva.Rect) {
         this.stage = draggableObject.getStage();
         this.draggableObject = draggableObject;
         this.attatchHooks();

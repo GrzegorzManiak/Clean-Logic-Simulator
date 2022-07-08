@@ -1,9 +1,10 @@
-import konva from 'konva';
+import Konva from 'Konva';
 import Global from '../global';
-import PlaceableObject from "../placeableObject/main";
 import constructArrow from './constructArrow';
-import constructBezier from './constructBezier';
 import calculateCords from './calculateCords';
+import constructBezier from './constructBezier';
+import PlaceableObject from '../placeableObject/main';
+
 import { BlockTypes } from '../types';
 
 class ConnectionManager {
@@ -12,8 +13,8 @@ class ConnectionManager {
     public dragSelect: boolean = true;
     public clickSelect: boolean = true;
 
-    public readonly stage: konva.Stage;
-    public readonly connectionLayer: konva.Layer;
+    public readonly stage: Konva.Stage;
+    public readonly connectionLayer: Konva.Layer;
     public readonly global: Global = Global.getInstance();
 
     public blocks: PlaceableObject[] = [];
@@ -27,14 +28,14 @@ class ConnectionManager {
     public selectedBlock1: PlaceableObject;
     public selectedBlock2: PlaceableObject;
 
-    private constructor(stage: konva.Stage) {
-        this.connectionLayer = new konva.Layer();
+    private constructor(stage: Konva.Stage) {
+        this.connectionLayer = new Konva.Layer();
         this.connectionLayer.listening(false);  
         this.stage = stage;
         this.stage.add(this.connectionLayer);
     }
 
-    public static getInstance(stage: konva.Stage): ConnectionManager {
+    public static getInstance(stage: Konva.Stage): ConnectionManager {
         if(!ConnectionManager.instance)
             ConnectionManager.instance = new ConnectionManager(stage);
         
@@ -190,7 +191,6 @@ class ConnectionManager {
         // Draw a line between the two blocks on  update
         block1.block.on('dragmove', reRender);
         block2.block.on('dragmove', reRender);
-
         
         // We cant directly just use 'block.off' as we need
         // that event lister for other things.
@@ -204,9 +204,6 @@ class ConnectionManager {
 
             clickable = false;
             block1.connectionFace = 0;
-
-            block1.block.off('dragmove', reRender);
-            block2.block.off('dragmove', reRender);
 
             this.connectionLayer.batchDraw();
         }

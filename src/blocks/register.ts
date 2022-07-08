@@ -1,6 +1,6 @@
 import BlockRegistry from '../PlaceableObject/register';
 import PlaceableObject from '../placeableObject/main';
-import Konva from 'konva';
+import Konva from 'Konva';
 
 function register(layer: Konva.Layer, stage: Konva.Stage) { 
     BlockRegistry.registerBlock({
@@ -58,7 +58,7 @@ function register(layer: Konva.Layer, stage: Konva.Stage) {
         snapToGrid: true
     });
 
-    // new PlaceableObject(stage, layer, BlockRegistry.getBlock('NOT'), [300, 0]);
+    new PlaceableObject(stage, layer, BlockRegistry.getBlock('NOT'), [300, 0]);
 }
 
 export default register;

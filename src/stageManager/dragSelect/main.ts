@@ -1,4 +1,4 @@
-import Konva from "konva";
+import Konva from "Konva";
 import Global from "../../global";
 import trackMouse from './trackMouse';
 import PlaceableObject from "../../placeableObject/main";
@@ -13,7 +13,7 @@ class Selection {
     private static draggableBox: Konva.Rect = Selection.createBox();
 
     public static stage: Konva.Stage;
-    public static layer: Konva.Layer;
+    public layer: Konva.Layer;
     public static globals: Global;
     public static connectionManager: ConnectionManager;
 
@@ -50,22 +50,22 @@ class Selection {
 
     private constructor(stage: Konva.Stage) { 
         
-        Selection.instance = this;
         Selection.stage = stage;
-        Selection.layer = new Konva.Layer();
         Selection.globals = Global.getInstance();
         Selection.connectionManager = ConnectionManager.getInstance(stage);
 
-        // Add the boxes to the stage
-        Selection.layer.add(Selection.visibleBox);
-        Selection.layer.add(Selection.draggableBox);
+        this.layer = new Konva.Layer();
 
-        stage.add(Selection.layer);
+        // Add the boxes to the stage
+        this.layer.add(Selection.visibleBox);
+        this.layer.add(Selection.draggableBox);
+
+        stage.add(this.layer);
 
         Selection.hookOntoMouse();
     }
 
-    public static getInstance(stage: Konva.Stage) {
+    public static getInstance(stage: Konva.Stage): Selection {
         if(!Selection.instance) new Selection(stage);
         return Selection.instance;
     }
@@ -97,7 +97,7 @@ class Selection {
 
         // this is when the users moves the mouse
         Selection.stage.on('mousemove', () => {
-            console.log(this.globals)
+            console.log(this.globals.hoveringOverBlock)
             if(Selection.canSelect === false)
                 return this.resetSelection();
 

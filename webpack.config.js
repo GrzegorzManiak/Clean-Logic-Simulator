@@ -1,8 +1,11 @@
-const path = require('path');
+const CompressionPlugin = require("compression-webpack-plugin");
+const WebpackBundleAnalyzer = require("webpack-bundle-analyzer");
+const path = require("path");
 
 module.exports = {
     watch: true,
     entry: './src/index.ts',
+    plugins: [new CompressionPlugin(), new WebpackBundleAnalyzer.BundleAnalyzerPlugin()],
     module: {
         rules: [
             {

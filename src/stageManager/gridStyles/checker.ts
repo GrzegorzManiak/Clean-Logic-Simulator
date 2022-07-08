@@ -2,7 +2,7 @@ import { GridConstants } from "../../options";
 import { getScale } from "../scrollManager";
 import { IGridDetails } from "../grid";
 
-import Konva from "konva";
+import Konva from "Konva";
 
 function checker(gridLayer: Konva.Layer, gridDetails: IGridDetails) {
     // Only render the grid if we are zoomed in enough, otherwise

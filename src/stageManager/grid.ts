@@ -1,4 +1,4 @@
-import Konva from "konva";
+import Konva from "Konva";
 import { GridConstants } from "../options";
 import { getPos, getScale } from "./scrollManager";
 
