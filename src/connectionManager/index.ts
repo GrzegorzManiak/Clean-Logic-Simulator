@@ -3,7 +3,7 @@ import Global from '../global';
 import constructArrow from './src/constructArrow';
 import calculateCords from './src/calculateCords';
 import constructBezier from './src/constructBezier';
-import PlaceableObject from '../interactableObject';
+import intractableObject from '../interactableObject';
 
 import { Basic } from '../types';
 
@@ -16,24 +16,24 @@ class ConnectionManager {
 
 
     // TODO: Refactor how connections are stored
-    public conections: Map<string, { block1: PlaceableObject, block2: PlaceableObject, removeConnection: () => void }> = new Map();
+    public conections: Map<string, { block1: intractableObject, block2: intractableObject, removeConnection: () => void }> = new Map();
 
 
     // -- All the block that are currently being managed 
     //    by the connection manager.
-    private blocks: Array<PlaceableObject> = [];
-    public getBlocks = (): Array<PlaceableObject> => this.blocks;
+    private blocks: Array<intractableObject> = [];
+    public getBlocks = (): Array<intractableObject> => this.blocks;
 
 
     // -- Block that is first selected by the user
-    private selectedParent: PlaceableObject;
-    public getSelectedParent = (): PlaceableObject | undefined => this.selectedParent;
-    private setSelectedParent = (value: PlaceableObject): void => { this.selectedParent = value };
+    private selectedParent: intractableObject;
+    public getSelectedParent = (): intractableObject | undefined => this.selectedParent;
+    private setSelectedParent = (value: intractableObject): void => { this.selectedParent = value };
 
     // -- Block that is second selected by the user
-    private selectedChild: PlaceableObject;
-    public getSelectedChild = (): PlaceableObject | undefined => this.selectedChild;
-    private setSelectedChild = (value: PlaceableObject): void => { this.selectedChild = value };
+    private selectedChild: intractableObject;
+    public getSelectedChild = (): intractableObject | undefined => this.selectedChild;
+    private setSelectedChild = (value: intractableObject): void => { this.selectedChild = value };
 
 
     public static getInstance(stage: Konva.Stage): ConnectionManager {
@@ -82,7 +82,7 @@ class ConnectionManager {
      * 
      * @param {string} uuid The uuid of the block to return.
      */
-    public getBlock(uuid: string): PlaceableObject {
+    public getBlock(uuid: string): intractableObject {
         return this.blocks.find(block => block.uuid === uuid);
     }
 
@@ -93,8 +93,8 @@ class ConnectionManager {
      * Clears any ongoing selection, deselecting both the parent and child block (if any).
     */
     public clearSelection(): void {
-        const parent: PlaceableObject = this.getSelectedParent(),
-            child: PlaceableObject = this.getSelectedChild();
+        const parent: intractableObject = this.getSelectedParent(),
+            child: intractableObject = this.getSelectedChild();
 
         // -- If blocks exist, deselect them
         if(parent) parent.deselectBlock();
@@ -109,12 +109,12 @@ class ConnectionManager {
     /**
      * @name addBlock
      * 
-     * Adds a block to the connection manager, allowing the PlaceableObject to 
+     * Adds a block to the connection manager, allowing the intractableObject to 
      * accept connections, connect to other blocks allowing.
      * 
-     * @param {PlaceableObject} object The block to add to the connection manager.
+     * @param {intractableObject} object The block to add to the connection manager.
      */
-    public addBlock(object: PlaceableObject): void {
+    public addBlock(object: intractableObject): void {
         // -- Add the block to the list of blocks
         // TODO: Refactor how connections are stored
         this.blocks.push(object);
@@ -135,15 +135,15 @@ class ConnectionManager {
      * @param xy1 The first point of the rectangle
      * @param xy2 The second point of the rectangle
      * 
-     * @returns Array<PlaceableObject> The blocks that are located within the given cords.
+     * @returns Array<intractableObject> The blocks that are located within the given cords.
      */
-    public findInCords(xy1: Basic.ICords, xy2: Basic.ICords): Array<PlaceableObject> {
+    public findInCords(xy1: Basic.ICords, xy2: Basic.ICords): Array<intractableObject> {
         // -- variables to store the blocks that are found
-        let blocks: Array<PlaceableObject> = [];
+        let blocks: Array<intractableObject> = [];
 
         // -- Loop through all the blocks and check if they are in the cords
         this.blocks.forEach(block => {
-            
+
             // -- Basic collision detection
             if(block.block.position().x + block.block.width() >= xy1.x &&
                 block.block.position().x <= xy2.x &&
@@ -159,7 +159,7 @@ class ConnectionManager {
     }
     
     
-    private clickHandler(block: PlaceableObject): void {
+    private clickHandler(block: intractableObject): void {
         /**
          * This function is called when the user clicks on a block.
          * 
@@ -187,8 +187,8 @@ class ConnectionManager {
 
         // Since we now know that both blocks are selected,
         // we can declare them here to make it easier to read.
-        const parent: PlaceableObject = this.getSelectedParent(),
-            child: PlaceableObject = this.getSelectedChild();
+        const parent: intractableObject = this.getSelectedParent(),
+            child: intractableObject = this.getSelectedChild();
 
 
         // Make sure that the user has two unique blocks selected
@@ -236,12 +236,12 @@ class ConnectionManager {
     }
 
 
-    private getBlockInfo(block: PlaceableObject): Basic.IBlockInfo {
+    private getBlockInfo(block: intractableObject): Basic.IBlockInfo {
         return { x: block.block.position().x, y: block.block.position().y, w: block.block.width(), h: block.block.height() };
     }
 
 
-    private drawConnection(block1: PlaceableObject, block2: PlaceableObject): Basic.TVisualConnectionInfo {
+    private drawConnection(block1: intractableObject, block2: intractableObject): Basic.TVisualConnectionInfo {
         /**
          * This function is responsible for drawing the connection between two blocks.
          * It calculates the connection points and draws the line between them + the arrow.

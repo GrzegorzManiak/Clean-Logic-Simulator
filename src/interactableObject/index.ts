@@ -6,11 +6,11 @@ import { GridConstants, VisualConstants } from '../options';
 import { CanvasTypes, Basic } from '../types';
 
 export interface ILineRef {
-    block: PlaceableObject,
+    block: intractableObject,
     removeConnection: () => void,
 }
 
-class PlaceableObject {
+class intractableObject {
     public block: Konva.Rect;
     public ghost: Konva.Rect;
 
@@ -53,10 +53,10 @@ class PlaceableObject {
         this.drag();
     }
 
-    private dragChildren: Array<PlaceableObject> = [];
-    public setDragChildren = (children: Array<PlaceableObject>) => { this.dragChildren = children };
+    private dragChildren: Array<intractableObject> = [];
+    public setDragChildren = (children: Array<intractableObject>) => { this.dragChildren = children };
     public resetDragSelection = (): void => { this.dragChildren = [] };
-    public getDragChildren = (): Array<PlaceableObject> => this.dragChildren; 
+    public getDragChildren = (): Array<intractableObject> => this.dragChildren; 
 
     public dragEndHooks: Array<() => any> = [];
 
@@ -175,7 +175,7 @@ class PlaceableObject {
     // connections from this block. Block -> Child
     public child: Array<ILineRef> = [];
     public addChild(child: ILineRef): void { this.child.push(child); }
-    public getChild(block: PlaceableObject): ILineRef {
+    public getChild(block: intractableObject): ILineRef {
         for (let i = 0; i < this.child.length; i++) {
             if (this.child[i].block.uuid === block.uuid)
                 return this.child[i];
@@ -187,7 +187,7 @@ class PlaceableObject {
     // to this block. Parent -> Block
     public parent: Array<ILineRef> = [];
     public addParent(parent: ILineRef): void { this.parent.push(parent); }
-    public getParent(block: PlaceableObject): ILineRef {
+    public getParent(block: intractableObject): ILineRef {
         for (let i = 0; i < this.parent.length; i++) {
             if (this.parent[i].block.uuid === block.uuid)
                 return this.parent[i];
@@ -197,7 +197,7 @@ class PlaceableObject {
 
     // This function checks if a block is a parent of the block
     // that is being passed in
-    public isConnectedTo(block: PlaceableObject): boolean {
+    public isConnectedTo(block: intractableObject): boolean {
         const blockID = block.uuid;
 
         // Check if the block is a child of this block
@@ -228,4 +228,4 @@ class PlaceableObject {
     }
 }
 
-export default PlaceableObject;
+export default intractableObject;

@@ -1,7 +1,7 @@
 import Konva from "Konva";
 import Global from "../../global";
 import trackMouse from './src/trackMouse';
-import PlaceableObject from "../../interactableObject";
+import intractableObject from "../../interactableObject";
 import ConnectionManager from '../../connectionManager';
 
 import { SelectionConstants } from '../../options';
@@ -43,9 +43,9 @@ class Selection {
     private static setSelectionSize = (value: [{ x: number, y: number }, { x: number, y: number }]) => Selection.selectionSize = value;
 
     // Array to store the blocks that are currently selected
-    private static selectedBlocks: Array<PlaceableObject> = [];
+    private static selectedBlocks: Array<intractableObject> = [];
     public static getSelectedBlocks = () => Selection.selectedBlocks;
-    private static setSelectedBlocks = (value: Array<PlaceableObject>) => Selection.selectedBlocks = value;
+    private static setSelectedBlocks = (value: Array<intractableObject>) => Selection.selectedBlocks = value;
     public static clearSelectedBlocks = () => { Selection.selectedBlocks = [] };
 
     private constructor(stage: Konva.Stage) { 
@@ -122,7 +122,7 @@ class Selection {
         });
     }
 
-    private static instantiateMove(): Array<PlaceableObject> {
+    private static instantiateMove(): Array<intractableObject> {
 
         Selection.setLastPoint(this.stage.getPointerPosition());
         

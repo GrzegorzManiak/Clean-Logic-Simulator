@@ -1,4 +1,4 @@
-import PlaceableObject from "./interactableObject";
+import intractableObject from "./interactableObject";
 
 export namespace BlockList {
     export type TBaseLogic = 'AND' | 'OR' | 'XOR' | 'NAND' | 'NOR' | 'XNOR';
@@ -81,11 +81,11 @@ export namespace Constants {
 }
 
 export namespace Basic {
-    export type TPlaceableObjectRef = {
-        get: () => PlaceableObject
+    export type TintractableObjectRef = {
+        get: () => intractableObject
     }
 
-    export type TSelectedRef = TPlaceableObjectRef & {
+    export type TSelectedRef = TintractableObjectRef & {
         del: () => void;
     }
 
@@ -106,7 +106,7 @@ export namespace Basic {
     export interface TVisualConnectionInfo {
         reRender: () => void;
         remove: () => void;
-        parent: PlaceableObject;
-        child: PlaceableObject;
+        parent: intractableObject;
+        child: intractableObject;
     }
 }
