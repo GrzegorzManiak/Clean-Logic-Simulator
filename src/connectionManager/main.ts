@@ -7,14 +7,18 @@ import calculateCords from './calculateCords';
 import { BlockTypes } from '../types';
 
 class ConnectionManager {
-    dragSelect: boolean = true;
-    clickSelect: boolean = true;
-    canvas: konva.Stage;
-    blocks: PlaceableObject[] = [];
-    connectionLayer: konva.Layer;
-    global: Global;
+    private static instance: ConnectionManager;
 
-    conections: Map<string, {
+    public dragSelect: boolean = true;
+    public clickSelect: boolean = true;
+
+    public readonly stage: konva.Stage;
+    public readonly connectionLayer: konva.Layer;
+    public readonly global: Global = Global.getInstance();
+
+    public blocks: PlaceableObject[] = [];
+
+    public conections: Map<string, {
         block1: PlaceableObject,
         block2: PlaceableObject,
         removeConnection: () => void
@@ -23,11 +27,18 @@ class ConnectionManager {
     public selectedBlock1: PlaceableObject;
     public selectedBlock2: PlaceableObject;
 
-    constructor(canvas: konva.Stage, global: Global) {
+    private constructor(stage: konva.Stage) {
         this.connectionLayer = new konva.Layer();
-        this.canvas = canvas;
+        this.connectionLayer.listening(false);  
+        this.stage = stage;
+        this.stage.add(this.connectionLayer);
+    }
 
-        this.global = global;
+    public static getInstance(stage: konva.Stage): ConnectionManager {
+        if(!ConnectionManager.instance)
+            ConnectionManager.instance = new ConnectionManager(stage);
+        
+        return ConnectionManager.instance;
     }
 
     public getBlock(uuid: string): PlaceableObject {
@@ -167,7 +178,7 @@ class ConnectionManager {
             // Add the new arrow back
             this.connectionLayer.add(arrow);
 
-            // Re-render the canvas
+            // Re-render the stage
             this.connectionLayer.batchDraw();
 
             // Set the connection face
@@ -211,6 +222,7 @@ class ConnectionManager {
         // Add a listener to the block
         // when the user hovers over it
         block.block.on('mouseover', () => {
+            console.log('Hovering over block');
             this.global.hoveringOverBlock = true;
         });
 

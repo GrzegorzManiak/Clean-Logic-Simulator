@@ -48,6 +48,7 @@ function constructGrid(stage: Konva.Stage, style: 1 | 2 = 2): Konva.Layer {
         case 2: checker(gridLayer, gridDetails); break;
     }
 
+    stage.add(gridLayer);
     gridLayer.cache();
     gridLayer.batchDraw();
 

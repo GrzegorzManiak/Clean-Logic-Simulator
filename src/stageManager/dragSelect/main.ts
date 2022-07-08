@@ -12,12 +12,10 @@ class Selection {
     private static visibleBox: Konva.Rect = Selection.createBox();
     private static draggableBox: Konva.Rect = Selection.createBox();
 
-
     public static stage: Konva.Stage;
     public static layer: Konva.Layer;
     public static globals: Global;
     public static connectionManager: ConnectionManager;
-
 
     // Boolean that determines if the visibleBox can be instantiated
     private static canSelect: boolean = false;
@@ -50,21 +48,26 @@ class Selection {
     private static setSelectedBlocks = (value: Array<PlaceableObject>) => Selection.selectedBlocks = value;
     public static clearSelectedBlocks = () => { Selection.selectedBlocks = [] };
 
-    public constructor(stage: Konva.Stage, layer: Konva.Layer, globals: Global, connectionManager: ConnectionManager) { 
-        if(Selection.instance)
-            throw new Error('Selection class can only be instanciated once');
+    private constructor(stage: Konva.Stage) { 
         
         Selection.instance = this;
         Selection.stage = stage;
-        Selection.layer = layer;
-        Selection.globals = globals;
-        Selection.connectionManager = connectionManager;
+        Selection.layer = new Konva.Layer();
+        Selection.globals = Global.getInstance();
+        Selection.connectionManager = ConnectionManager.getInstance(stage);
 
         // Add the boxes to the stage
-        layer.add(Selection.visibleBox);
-        layer.add(Selection.draggableBox);
+        Selection.layer.add(Selection.visibleBox);
+        Selection.layer.add(Selection.draggableBox);
+
+        stage.add(Selection.layer);
 
         Selection.hookOntoMouse();
+    }
+
+    public static getInstance(stage: Konva.Stage) {
+        if(!Selection.instance) new Selection(stage);
+        return Selection.instance;
     }
 
     private static createBox(): Konva.Rect {
@@ -81,7 +84,7 @@ class Selection {
 
         // This is when the user clicks on the stage
         Selection.stage.on('mousedown', () => {
-            if(!Selection.canSelect || this.instantiateDrag() === false || this.globals.hoveringOverBlock === true)
+            if(Selection.canSelect === false || this.instantiateDrag() === false || this.globals.hoveringOverBlock === true)
                 return this.resetSelection();
 
             // Set the visible boxes opacity to the global opacity
@@ -94,6 +97,7 @@ class Selection {
 
         // this is when the users moves the mouse
         Selection.stage.on('mousemove', () => {
+            console.log(this.globals)
             if(Selection.canSelect === false)
                 return this.resetSelection();
 

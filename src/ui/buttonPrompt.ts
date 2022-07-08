@@ -1,6 +1,6 @@
 import konva from 'konva';
-import { promptLayer } from '../';
 import { ThemeConstants, VisualConstants } from '../options';
+import Selection from '../stageManager/dragSelect/main';
 
 export interface IButtonPrompt {
     key: string;
@@ -11,13 +11,14 @@ export interface IButtonPrompt {
 class ButtonPrompt {
     callback: () => void;
     prompt: IButtonPrompt;
+    promptLayer: konva.Layer;
     item: konva.Group | konva.Rect;
 
     constructor(item: konva.Group | konva.Rect, callback: () => void, input: IButtonPrompt) {
         this.callback = callback;
         this.item = item;
         this.prompt = input;
-
+        this.promptLayer = Selection.layer;
         this.enabled = true;
 
         this.render();
@@ -67,7 +68,7 @@ class ButtonPrompt {
 
             this.item.off('mousemove');
 
-            promptLayer.batchDraw();
+            this.promptLayer.batchDraw();
         }
 
         this.enablePrompt = (): void => {
@@ -82,7 +83,7 @@ class ButtonPrompt {
             const setXY = () => {
                 // Position the rectangle right beneath the cursor
                 // Get the cursor position
-                const cursorPos = promptLayer.getStage().getPointerPosition();
+                const cursorPos = this.promptLayer.getStage().getPointerPosition();
 
                 const x = cursorPos.x,
                     y = cursorPos.y;
@@ -108,9 +109,9 @@ class ButtonPrompt {
             setXY();
 
             // Add the text and rectangle to the layer
-            promptLayer.add(rect);
-            promptLayer.add(text);
-            promptLayer.add(key);
+            this.promptLayer.add(rect);
+            this.promptLayer.add(text);
+            this.promptLayer.add(key);
 
             // Track mouse movement
             document.addEventListener('mousemove', () => setXY());
@@ -126,7 +127,7 @@ class ButtonPrompt {
 
             // Draw the layer
             if(this.enabled === true) 
-                promptLayer.batchDraw();
+                this.promptLayer.batchDraw();
             
             else this.disablePrompt();
         });

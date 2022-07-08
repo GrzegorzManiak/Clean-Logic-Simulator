@@ -14,23 +14,25 @@ export class BlockBar {
     public connectionManager: ConnectionManager;
     public blockLayer: konva.Layer;
     
-    constructor(stage: konva.Stage, connectionManager: ConnectionManager, layer: konva.Layer) {
-        this.connectionManager = connectionManager;
+    constructor(stage: konva.Stage, layer: konva.Layer) {
+        this.connectionManager = ConnectionManager.getInstance(stage);
         this.blockLayer = layer;
 
         this.stage = stage;
         this.layer = new konva.Layer();
-        this.stage.add(this.layer);
         
-        // Make this layer immune to canvas scaling and moving
-
+        stage.add(this.layer);
+        
         layer.scaleX(stage.scaleX() * stage.width() / this.layer.getWidth());
-        layer.scaleY(stage.scaleY() * stage.height() / this.layer.getHeight()); 
+        layer.scaleY(stage.scaleY() * stage.height() / this.layer.getHeight())
 
-        // loop through all the blocks and add them to the block bar
-        BlockRegister.getBlockList().forEach((block) => {
-            this.addBlock(block.id);
-        });
+        this.reset();
+    }
+
+    public reset(): void {
+                
+        console.log(BlockRegister.getBlockList())
+
     }
     
     public render(): void {
@@ -119,7 +121,7 @@ export class BlockBar {
             return;
 
         // Spawn the block at the correct position
-        new PlaceableObject(this.connectionManager, this.stage, this.blockLayer, block, [rec.x(), rec.y()]);
+        new PlaceableObject(this.stage, this.blockLayer, block, [rec.x(), rec.y()]);
     }
 
     public addBlock(blockID: string): void {

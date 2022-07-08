@@ -1,4 +1,4 @@
-import konva from 'konva';
+import Konva from 'Konva';
 import ConnectionManager from '../connectionManager/main';
 import ButtonPrompt from '../ui/buttonPrompt';
 import DragManager from './dragManager';
@@ -7,22 +7,20 @@ import { GridConstants, VisualConstants } from '../options';
 import { CanvasTypes, BlockTypes } from '../types';
 import { v4 as uuidv4 } from 'uuid';
 
-import Konva from 'konva';
-
 export interface ILineRef {
     block: PlaceableObject,
     removeConnection: () => void,
 }
 
 class PlaceableObject {
-    public block: konva.Rect;
-    public ghost: konva.Rect;
+    public block: Konva.Rect;
+    public ghost: Konva.Rect;
 
     public selectionOffset: [number, number] = [0, 0];
     public dragOffset: BlockTypes.ICords = { x: 0, y: 0 };
     
-    readonly stage: konva.Stage;
-    readonly layer: konva.Layer;
+    readonly stage: Konva.Stage;
+    readonly layer: Konva.Layer;
     readonly cm: ConnectionManager;
     readonly blockOpts: CanvasTypes.IBlock;
     readonly uuid: string;
@@ -33,12 +31,12 @@ class PlaceableObject {
 
     public connectionFace: 0 | 1 | 2 | 3 | 4 = 0;
     
-    constructor(connectionManager: ConnectionManager, stage: konva.Stage, layer: konva.Layer, block: CanvasTypes.IBlock, cords: [number, number]) {
+    constructor(stage: Konva.Stage, layer: Konva.Layer, block: CanvasTypes.IBlock, cords: [number, number]) {
         this.stage = stage;
         this.layer = layer;
         this.blockOpts = block;
         this.drawBlock(block, cords);
-        this.cm = connectionManager;
+        this.cm = ConnectionManager.getInstance(stage);
         this.cm.addBlock(this);
         this.snapToGrid();
 
@@ -56,6 +54,7 @@ class PlaceableObject {
 
         this.dragMannager = new DragManager(this.block);
         this.drag();
+        this.hideGhost();
     }
 
     private dragChildren: Array<PlaceableObject> = [];
@@ -142,7 +141,7 @@ class PlaceableObject {
     }
 
     public drawBlock(block: CanvasTypes.IBlock, cords: [number, number]): void {
-        this.block = new konva.Rect({
+        this.block = new Konva.Rect({
             cornerRadius: block.borderRadius,
             x: cords[0],
             y: cords[1],
