@@ -15,7 +15,7 @@ export type IGridDetails = {
     gridHeight: number,
 }
 
-function constructGrid(stage: Konva.Stage, style: 1 | 2 = 2): Konva.Layer {
+function constructGrid(stage: Konva.Stage, style: 1 | 2 = 1): Konva.Layer {
     const stepSize = GridConstants.gridSize * getScale(),
         gridLayer = new Konva.Layer();
 
