@@ -80,7 +80,7 @@ export namespace Constants {
     }
 }
 
-export namespace BlockTypes {
+export namespace Basic {
     export type TPlaceableObjectRef = {
         get: () => PlaceableObject
     }
@@ -101,5 +101,12 @@ export namespace BlockTypes {
     export interface TConnection {
         pos: [number, number, number, number],
         dir: 1 | 2 | 3 | 4
+    }
+
+    export interface TVisualConnectionInfo {
+        reRender: () => void;
+        remove: () => void;
+        parent: PlaceableObject;
+        child: PlaceableObject;
     }
 }

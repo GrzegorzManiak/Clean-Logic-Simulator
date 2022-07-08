@@ -5,48 +5,64 @@ import calculateCords from './src/calculateCords';
 import constructBezier from './src/constructBezier';
 import PlaceableObject from '../interactableObject';
 
-import { BlockTypes } from '../types';
+import { Basic } from '../types';
 
 class ConnectionManager {
     private static instance: ConnectionManager;
 
-    public dragSelect: boolean = true;
-    public clickSelect: boolean = true;
-
     public readonly stage: Konva.Stage;
-    public readonly connectionLayer: Konva.Layer;
     public readonly global: Global = Global.getInstance();
+    public readonly connectionLayer: Konva.Layer = new Konva.Layer();
 
-    public blocks: PlaceableObject[] = [];
 
-    public conections: Map<string, {
-        block1: PlaceableObject,
-        block2: PlaceableObject,
-        removeConnection: () => void
-    }> = new Map();
+    // TODO: Refactor how connections are stored
+    public conections: Map<string, { block1: PlaceableObject, block2: PlaceableObject, removeConnection: () => void }> = new Map();
 
-    public selectedBlock1: PlaceableObject;
-    public selectedBlock2: PlaceableObject;
 
-    private constructor(stage: Konva.Stage) {
-        this.connectionLayer = new Konva.Layer();
-        this.connectionLayer.listening(false);  
-        this.stage = stage;
-        this.stage.add(this.connectionLayer);
-    }
+    // -- All the block that are currently being managed 
+    //    by the connection manager.
+    private blocks: Array<PlaceableObject> = [];
+    public getBlocks = (): Array<PlaceableObject> => this.blocks;
+
+
+    // -- Block that is first selected by the user
+    private selectedParent: PlaceableObject;
+    public getSelectedParent = (): PlaceableObject | undefined => this.selectedParent;
+    private setSelectedParent = (value: PlaceableObject): void => { this.selectedParent = value };
+
+    // -- Block that is second selected by the user
+    private selectedChild: PlaceableObject;
+    public getSelectedChild = (): PlaceableObject | undefined => this.selectedChild;
+    private setSelectedChild = (value: PlaceableObject): void => { this.selectedChild = value };
+
 
     public static getInstance(stage: Konva.Stage): ConnectionManager {
-        if(!ConnectionManager.instance)
-            ConnectionManager.instance = new ConnectionManager(stage);
-        
+        if(!ConnectionManager.instance) ConnectionManager.instance = new ConnectionManager(stage);
         return ConnectionManager.instance;
     }
 
-    public getBlock(uuid: string): PlaceableObject {
-        return this.blocks.find(block => block.uuid === uuid);
+    private constructor(stage: Konva.Stage) {
+        this.stage = stage;
+
+        // Make sure the connection layer isint listening
+        // as its so much faster with listening off
+        this.connectionLayer.listening(false);  
+
+        // Add the connection layer to the stage
+        this.stage.add(this.connectionLayer);
     }
 
-    public snapToGrid(force: boolean = true): void {
+
+    /**
+     * @name snapAllToGrid
+     * 
+     * Snaps all blocks that are manged by the connection manager
+     * to the grid, each block can decide if it should snap to the grid
+     * or not.
+     * 
+     * @param {boolean} force Optional, if true, all blocks will snap to the grid, no matter what the block decides.
+     */
+    public snapAllToGrid(force: boolean = true): void {
         this.blocks.forEach(block => {
             // If force is true, make sure the block
             // is allowed to snap to the grid
@@ -58,192 +74,256 @@ class ConnectionManager {
         });
     }
 
+
+    /**
+     * @name getBlock()
+     * 
+     * Returns the block with the given uuid.
+     * 
+     * @param {string} uuid The uuid of the block to return.
+     */
+    public getBlock(uuid: string): PlaceableObject {
+        return this.blocks.find(block => block.uuid === uuid);
+    }
+
+
+    /**
+     * @name clearSelection
+     * 
+     * Clears any ongoing selection, deselecting both the parent and child block (if any).
+    */
+    public clearSelection(): void {
+        const parent: PlaceableObject = this.getSelectedParent(),
+            child: PlaceableObject = this.getSelectedChild();
+
+        // -- If blocks exist, deselect them
+        if(parent) parent.deselectBlock();
+        if(child) child.deselectBlock();
+
+        // -- Reset the selected blocks
+        this.setSelectedParent(undefined);
+        this.setSelectedChild(undefined);
+    }
+
+
+    /**
+     * @name addBlock
+     * 
+     * Adds a block to the connection manager, allowing the PlaceableObject to 
+     * accept connections, connect to other blocks allowing.
+     * 
+     * @param {PlaceableObject} object The block to add to the connection manager.
+     */
+    public addBlock(object: PlaceableObject): void {
+        // -- Add the block to the list of blocks
+        // TODO: Refactor how connections are stored
+        this.blocks.push(object);
+
+        // -- Add a click handler to the block
+        object.block.on('click', () => this.clickHandler(object));
+
+        // -- Set a global varibale depending if its being hoverd over
+        object.block.on('mouseover', () => { this.global.hoveringOverBlock = true });
+        object.block.on('mouseout', () => { this.global.hoveringOverBlock = false });
+    }
+
+    /**
+     * @name findInCords
+     * 
+     * Finds the block that is located within the given cords.
+     * 
+     * @param xy1 The first point of the rectangle
+     * @param xy2 The second point of the rectangle
+     * 
+     * @returns Array<PlaceableObject> The blocks that are located within the given cords.
+     */
+    public findInCords(xy1: Basic.ICords, xy2: Basic.ICords): Array<PlaceableObject> {
+        // -- variables to store the blocks that are found
+        let blocks: Array<PlaceableObject> = [];
+
+        // -- Loop through all the blocks and check if they are in the cords
+        this.blocks.forEach(block => {
+            
+            // -- Basic collision detection
+            if(block.block.position().x + block.block.width() >= xy1.x &&
+                block.block.position().x <= xy2.x &&
+                block.block.position().y + block.block.height() >= xy1.y &&
+                block.block.position().y <= xy2.y)
+
+            // -- if the block is in the cords, add it to the list
+            blocks.push(block);
+        });
+
+        // -- Return the list of blocks
+        return blocks;
+    }
+    
+    
     private clickHandler(block: PlaceableObject): void {
-        if (this.selectedBlock1 === undefined) {
+        /**
+         * This function is called when the user clicks on a block.
+         * 
+         * It checks if a user has previously selected a block, if so,
+         * it will connect the two blocks, if the two blocks are already
+         * connected, it will disconnect them.
+         * 
+         * It also checks if the blocks are compatible.
+         */
+        
+        // -- First block is selected, remember it and return.
+        if (this.getSelectedParent() === undefined) {
             // Set the first selected block
-            this.selectedBlock1 = block;
+            this.setSelectedParent(block);
             
             // Visualize the connection
             return block.selectBlock();
         }
 
-        else if (this.selectedBlock2 === undefined)
+        // -- Second block is selected, proceed to connect.
+        else if (this.getSelectedChild() === undefined) {
             // Set the second selected block
-            this.selectedBlock2 = block;
+            this.setSelectedChild(block);
+        }
+
+        // Since we now know that both blocks are selected,
+        // we can declare them here to make it easier to read.
+        const parent: PlaceableObject = this.getSelectedParent(),
+            child: PlaceableObject = this.getSelectedChild();
 
 
-        // Check if the blocks are the same
-        if(this.selectedBlock1.uuid === this.selectedBlock2.uuid)
-            return this.deselectAll();
+        // Make sure that the user has two unique blocks selected
+        if(parent.uuid === child.uuid) return this.clearSelection();
 
 
-
-        // check if Block 1 can have connections
-        if(this.selectedBlock1.canConntect === false)
-            return this.deselectAll();
-
-        // check if Block 2 can have connections
-        if(this.selectedBlock2.canBeConnected === false)
-            return this.deselectAll();
+        // Make sure that the both block actually intake connections
+        if(parent.canConntect === false ?? child.canConntect === false)
+            return this.clearSelection();
 
 
         // Check if the blocks are already connected
-        const UUID_12 = this.selectedBlock1.uuid + this.selectedBlock2.uuid,
-            UUID_21 = this.selectedBlock2.uuid + this.selectedBlock1.uuid;
+        // TODO: Refactor this (Will be done when time comes to emulate sm logic)
+        const UUID_ParentChild = `${parent.uuid}${child.uuid}`,
+            UUID_ChildParent = `${child.uuid}${parent.uuid}`;
 
             
-        if(this.conections.has(UUID_12)) {
-            this.conections.get(UUID_12).removeConnection();
-            this.conections.delete(UUID_12);
-            return this.deselectAll();
+        // -- Is the parent coneted to the child? If so, disconnect them.
+        if(this.conections.has(UUID_ParentChild)) {
+            this.conections.get(UUID_ParentChild)?.removeConnection();
+            this.conections.delete(UUID_ParentChild);
+
+            return this.clearSelection();
         }
             
-        else if(this.conections.has(UUID_21)) {
-            this.conections.get(UUID_21).removeConnection();
-            this.conections.delete(UUID_21);
-            return this.deselectAll();
+        // -- Is the child coneted to the parent? If so, disconnect them.
+        if(this.conections.has(UUID_ChildParent)) {
+            this.conections.get(UUID_ChildParent)?.removeConnection();
+            this.conections.delete(UUID_ChildParent);
+
+            return this.clearSelection();
         }
-
-
-        // Create a new connection
-        const removeConnection 
-            = this.drawConnection(this.selectedBlock1, this.selectedBlock2);
 
 
         // Add the connection to the map
-        this.conections.set(UUID_12, {
-            block1: this.selectedBlock1,
-            block2: this.selectedBlock2,
-            removeConnection
+        // TODO: Refactor this (Will be done when time comes to emulate sm logic)
+        this.conections.set(UUID_ParentChild, {
+            block1: parent, block2: child,
+            removeConnection: this.drawConnection(parent, child).remove
         });
 
 
         // Remove the selected blocks
-        this.deselectAll();
+        this.clearSelection();
     }
 
-    private deselectAll(): void {
-        if(this.selectedBlock1 !== undefined)
-            this.selectedBlock1.deselectBlock();
 
-        if(this.selectedBlock2 !== undefined)
-            this.selectedBlock2.deselectBlock();
-
-        this.selectedBlock1 = undefined;
-        this.selectedBlock2 = undefined;
+    private getBlockInfo(block: PlaceableObject): Basic.IBlockInfo {
+        return { x: block.block.position().x, y: block.block.position().y, w: block.block.width(), h: block.block.height() };
     }
 
-    private drawConnection(block1: PlaceableObject, block2: PlaceableObject): () => void {
-        const getBlockInfo = (block: PlaceableObject): BlockTypes.IBlockInfo => {
-            return { x: block.block.position().x, y: block.block.position().y, w: block.block.width(), h: block.block.height() };
-        }
 
-        let cords = calculateCords(getBlockInfo(block1), getBlockInfo(block2)),
-            [x1, y1, x2, y2] = cords.pos,
+    private drawConnection(block1: PlaceableObject, block2: PlaceableObject): Basic.TVisualConnectionInfo {
+        /**
+         * This function is responsible for drawing the connection between two blocks.
+         * It calculates the connection points and draws the line between them + the arrow.
+         * 
+         * This function is only resonsible for drawing the connection, it does not 
+         * handle any logic.
+         */
+
+        let cords = calculateCords(this.getBlockInfo(block1), this.getBlockInfo(block2)),
             direction = cords.dir;
 
-        let line = constructBezier([x1, y1, x2, y2], true, block1, direction),
-            arrow = constructArrow([x2, y2], direction);
-
+        let line = constructBezier(cords.pos, true, block1, direction),
+            arrow = constructArrow([cords.pos[2], cords.pos[3]], direction);
 
         const reRender = () => {
             let selected = false;
-
-            // Check if the block is currently selected
-            if(block1.uuid === this.selectedBlock1?.uuid || block1.uuid === this.selectedBlock2?.uuid)
-                selected = true;
-
-            if(block2.uuid === this.selectedBlock1?.uuid || block2.uuid === this.selectedBlock2?.uuid)
-                selected = true;
-
-            // Calculate the new coordinates
-            cords = calculateCords(getBlockInfo(block1), getBlockInfo(block2)),
-                [x1, y1, x2, y2] = cords.pos,
+            
+            const parent = this.getSelectedParent(),
+                child = this.getSelectedChild();
+                
+            // -- Check if the block being selected is the current parent or child
+            if(block1.uuid === parent?.uuid || block1.uuid === child?.uuid) selected = true;
+            if(block2.uuid === parent?.uuid || block2.uuid === child?.uuid) selected = true;
+            
+            // -- Calculate the new coordinates for the block, and what face should be connected to
+            cords = calculateCords(this.getBlockInfo(block1), this.getBlockInfo(block2)),
                 direction = cords.dir;
 
-            // Remove the old line
+            // -- Remove the old line, calculate the new line and add it back
             line.remove();
-            
-            // Construct a new line
-            line = constructBezier([x1, y1, x2, y2], selected, block1, direction);
-
-            // Add the new line back
+            line = constructBezier(cords.pos, selected, block1, direction);
             this.connectionLayer.add(line);
 
-            // Remove the old arrow
+            // -- Remove the old arrow, calculate the new arrow and add it back
             arrow.remove();
-
-            // Construct a new arrow
-            arrow = constructArrow([x2, y2], direction);
-
-            // Add the new arrow back
+            arrow = constructArrow([cords.pos[2], cords.pos[3]], direction);
             this.connectionLayer.add(arrow);
 
-            // Re-render the stage
+            // -- Update the connection layer
             this.connectionLayer.batchDraw();
-
-            // Set the connection face
-            block1.connectionFace = direction;
         }   
 
         reRender();
-        
-        // Draw a line between the two blocks on  update
+
         block1.block.on('dragmove', reRender);
         block2.block.on('dragmove', reRender);
         
         // We cant directly just use 'block.off' as we need
         // that event lister for other things.
         let clickable = true;
-        block2.block.on('click', () => clickable === true ? reRender() : null);
 
-        // Return a function to remove the connection
-        return () => {
-            line.remove();
-            arrow.remove();
 
-            clickable = false;
-            block1.connectionFace = 0;
-
-            block1.block.off('dragmove', reRender);
-            block2.block.off('dragmove', reRender);
-
-            this.connectionLayer.batchDraw();
-        }
-    }
-
-    addBlock(block: PlaceableObject): void {
-        this.blocks.push(block);
-
-        block.block.on('click', () => {
-            this.clickHandler(block);
+        block2.block.on('click', () => {
+            if(clickable === true) reRender();
         });
 
-        // Add a listener to the block
-        // when the user hovers over it
-        block.block.on('mouseover', () => {
-            this.global.hoveringOverBlock = true;
-        });
+        
+        // -- Finally, return.
+        return {
+            remove: (): void => {
+                // -- Remove the line and the arrow
+                line.remove();
+                arrow.remove();
 
-        // Add a listener to the block
-        // when the user stops hovering over it
-        block.block.on('mouseout', () => {
-            this.global.hoveringOverBlock = false;
-        });
-    }
+                // -- Disable the click event
+                clickable = false;
 
-    findInCords(xy1: BlockTypes.ICords, xy2: BlockTypes.ICords): PlaceableObject[] {
-        let blocks: PlaceableObject[] = [];
+                // -- Stop listening for drag events
+                block1.block.off('dragmove', reRender);
+                block2.block.off('dragmove', reRender);
 
-        this.blocks.forEach(block => {
-            if(block.block.position().x + block.block.width() >= xy1.x &&
-                block.block.position().x <= xy2.x &&
-                block.block.position().y + block.block.height() >= xy1.y &&
-                block.block.position().y <= xy2.y)
-                blocks.push(block);
-        });
+                // -- Remove the connection from the map
+                this.conections.delete(`${block1.uuid}${block2.uuid}`);
 
-        return blocks;
+                // -- Redraw the connection layer
+                this.connectionLayer.batchDraw();
+            },
+
+            reRender,
+            parent: block1,
+            child: block2
+        };
     }
 }
 

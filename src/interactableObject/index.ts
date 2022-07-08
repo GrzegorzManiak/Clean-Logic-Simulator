@@ -3,7 +3,7 @@ import ConnectionManager from '../connectionManager';
 import DragManager from './src/dragManager';
 
 import { GridConstants, VisualConstants } from '../options';
-import { CanvasTypes, BlockTypes } from '../types';
+import { CanvasTypes, Basic } from '../types';
 
 export interface ILineRef {
     block: PlaceableObject,
@@ -15,7 +15,7 @@ class PlaceableObject {
     public ghost: Konva.Rect;
 
     public selectionOffset: [number, number] = [0, 0];
-    public dragOffset: BlockTypes.ICords = { x: 0, y: 0 };
+    public dragOffset: Basic.ICords = { x: 0, y: 0 };
     
     readonly stage: Konva.Stage;
     readonly layer: Konva.Layer;
@@ -26,8 +26,6 @@ class PlaceableObject {
 
     readonly canBeConnected: boolean = true;
     readonly canConntect: boolean = true;
-
-    public connectionFace: 0 | 1 | 2 | 3 | 4 = 0;
     
     constructor(stage: Konva.Stage, layer: Konva.Layer, block: CanvasTypes.IBlock, cords: [number, number]) {
         this.stage = stage;

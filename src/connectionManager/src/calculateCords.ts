@@ -1,16 +1,16 @@
 import { VisualConstants } from '../../options';
-import { BlockTypes } from '../../types';
+import { Basic } from '../../types';
 
-function calculateDistance(a: BlockTypes.ICords, b: BlockTypes.ICords): number {
+function calculateDistance(a: Basic.ICords, b: Basic.ICords): number {
     return Math.sqrt(Math.pow(a.x - b.x, 2) + Math.pow(a.y - b.y, 2));
 }
 
-function calculateConnections(block1: BlockTypes.IBlockInfo, block2: BlockTypes.IBlockInfo): BlockTypes.TConnection {
+function calculateConnections(block1: Basic.IBlockInfo, block2: Basic.IBlockInfo): Basic.TConnection {
 
-    const b1Left: BlockTypes.ICords = { x: block1.x, y: block1.y + block1.h / 2 },
-        b1Right: BlockTypes.ICords = { x: block1.x + block1.w, y: block1.y + block1.h / 2 },
-        b1Top: BlockTypes.ICords = { x: block1.x + block1.w / 2, y: block1.y },
-        b1Bottom: BlockTypes.ICords = { x: block1.x + block1.w / 2, y: block1.y + block1.h };
+    const b1Left: Basic.ICords = { x: block1.x, y: block1.y + block1.h / 2 },
+        b1Right: Basic.ICords = { x: block1.x + block1.w, y: block1.y + block1.h / 2 },
+        b1Top: Basic.ICords = { x: block1.x + block1.w / 2, y: block1.y },
+        b1Bottom: Basic.ICords = { x: block1.x + block1.w / 2, y: block1.y + block1.h };
 
     const b2Center = { x: block2.x + block2.w / 2, y: block2.y + block2.h / 2 };
 
