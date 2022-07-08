@@ -72,14 +72,14 @@ class intractableObject {
                 elm.showGhost();
 
                 // get the relative offset from the mouse
-                elm.dragOffset = elm.block.getRelativePointerPosition();
+                elm.dragOffset = elm.block.getRelativePointerPosition()
             });
         });
 
         // -- Dragging
         this.dragMannager.hookOnDrag(() => {
             // Get the current possition of the mouse
-            const pos = this.stage.getRelativePointerPosition();
+            const pos = this.layer.getRelativePointerPosition();
 
             this.getDragChildren().forEach(elm => {
                 // Offset the position of the mouse and set the new pos
@@ -159,12 +159,12 @@ class intractableObject {
         this.hideGhost();
     }
 
-    public showGhost(): Konva.Rect {
+    public showGhost(): void {
         this.ghost.show();
         this.ghost.moveToTop();
-        this.ghost.position(this.block.position());
 
-        return this.ghost;
+        const blockPos = this.block.position();
+        this.ghost.position(blockPos);
     }
 
     public hideGhost(): void {
