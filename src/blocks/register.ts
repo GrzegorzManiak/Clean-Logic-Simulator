@@ -15,7 +15,7 @@ function register(layer: Konva.Layer, stage: Konva.Stage) {
         snapToGrid: true
     });
 
-    // new PlaceableObject(stage, layer, BlockRegistry.getBlock('AND'), [0, 0]);   
+    new PlaceableObject(stage, layer, BlockRegistry.getBlock('AND'), [0, 0]);   
     
 
     BlockRegistry.registerBlock({
@@ -30,7 +30,7 @@ function register(layer: Konva.Layer, stage: Konva.Stage) {
         snapToGrid: true
     });
 
-    // new PlaceableObject(stage, layer, BlockRegistry.getBlock('XOR'), [100, 0]);
+    new PlaceableObject(stage, layer, BlockRegistry.getBlock('XOR'), [100, 0]);
 
     BlockRegistry.registerBlock({
         id: 'OR',
@@ -44,7 +44,7 @@ function register(layer: Konva.Layer, stage: Konva.Stage) {
         snapToGrid: true
     });
 
-    // new PlaceableObject(stage, layer, BlockRegistry.getBlock('OR'), [200, 0]);
+    new PlaceableObject(stage, layer, BlockRegistry.getBlock('OR'), [200, 0]);
 
     BlockRegistry.registerBlock({
         id: 'NOT',

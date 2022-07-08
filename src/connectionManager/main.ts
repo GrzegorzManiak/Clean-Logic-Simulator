@@ -205,6 +205,9 @@ class ConnectionManager {
             clickable = false;
             block1.connectionFace = 0;
 
+            block1.block.off('dragmove', reRender);
+            block2.block.off('dragmove', reRender);
+
             this.connectionLayer.batchDraw();
         }
     }
