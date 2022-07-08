@@ -1,11 +1,9 @@
 import Konva from 'Konva';
 import ConnectionManager from '../connectionManager/main';
-import ButtonPrompt from '../ui/buttonPrompt';
 import DragManager from './dragManager';
 
 import { GridConstants, VisualConstants } from '../options';
 import { CanvasTypes, BlockTypes } from '../types';
-import { v4 as uuidv4 } from 'uuid';
 
 export interface ILineRef {
     block: PlaceableObject,
@@ -40,8 +38,9 @@ class PlaceableObject {
         this.cm.addBlock(this);
         this.snapToGrid();
 
-        // Calculate the uuid
-        this.uuid = uuidv4().toString();
+        // Calculate the uuid, completely random string modified by microseconds
+        // used to identify the block
+        this.uuid = `${Math.random().toString(36).substring(2, 15)}-${Date.now()}`;
 
         // // Add the prompt
         // const prompt = new ButtonPrompt(this.block, () => {
