@@ -7,12 +7,12 @@ function calculateDistance(a: Basic.ICords, b: Basic.ICords): number {
 
 function calculateConnections(block1: Basic.IBlockInfo, block2: Basic.IBlockInfo): Basic.TConnection {
 
-    const b1Left: Basic.ICords = { x: block1.x, y: block1.y + block1.h / 2 },
-        b1Right: Basic.ICords = { x: block1.x + block1.w, y: block1.y + block1.h / 2 },
-        b1Top: Basic.ICords = { x: block1.x + block1.w / 2, y: block1.y },
-        b1Bottom: Basic.ICords = { x: block1.x + block1.w / 2, y: block1.y + block1.h };
+    const b1Left: Basic.ICords = { x: block1.x, y: block1.y + block1.height / 2 },
+        b1Right: Basic.ICords = { x: block1.x + block1.width, y: block1.y + block1.height / 2 },
+        b1Top: Basic.ICords = { x: block1.x + block1.width / 2, y: block1.y },
+        b1Bottom: Basic.ICords = { x: block1.x + block1.width / 2, y: block1.y + block1.height };
 
-    const b2Center = { x: block2.x + block2.w / 2, y: block2.y + block2.h / 2 };
+    const b2Center = { x: block2.x + block2.width / 2, y: block2.y + block2.height / 2 };
 
     const b1LeftDist: number = calculateDistance(b1Left, b2Center),
         b1RightDist: number = calculateDistance(b1Right, b2Center),
@@ -35,27 +35,27 @@ function calculateConnections(block1: Basic.IBlockInfo, block2: Basic.IBlockInfo
 
     switch(face) {
         case 1: return { 
-            pos: [block1.x, block1.y + block1.h / 2, block2.x + block2.w, block2.y + block2.h / 2],
+            pos: [block1.x, block1.y + block1.height / 2, block2.x + block2.width, block2.y + block2.height / 2],
             dir: 1 // Left
         };
 
         case 2: return { 
-            pos: [block1.x + block1.w, block1.y + block1.h / 2, block2.x, block2.y + block2.h / 2],
+            pos: [block1.x + block1.width, block1.y + block1.height / 2, block2.x, block2.y + block2.height / 2],
             dir: 2 // Right
         };
 
         case 3: return { 
-            pos: [block1.x + block1.w / 2, block1.y, block2.x + block2.w / 2, block2.y + block2.h],
+            pos: [block1.x + block1.width / 2, block1.y, block2.x + block2.width / 2, block2.y + block2.height],
             dir: 3 // Top
         };
 
         case 4: return { 
-            pos: [block1.x + block1.w / 2, block1.y + block1.h, block2.x + block2.w / 2, block2.y],
+            pos: [block1.x + block1.width / 2, block1.y + block1.height, block2.x + block2.width / 2, block2.y],
             dir: 4 // Bottom
         };
 
         default: return {
-            pos: [block1.x + block1.w, block1.y + block1.h / 2, block2.x, block2.y + block2.h / 2],
+            pos: [block1.x + block1.width, block1.y + block1.height / 2, block2.x, block2.y + block2.height / 2],
             dir: 2 // Right
         }
     }

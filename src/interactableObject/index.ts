@@ -1,6 +1,7 @@
 import Konva from 'Konva';
 import ConnectionManager from '../connectionManager';
 import DragManager from './src/dragManager';
+import Global from '../global';
 
 import { GridConstants, VisualConstants } from '../options';
 import { CanvasTypes, Basic } from '../types';
@@ -10,6 +11,7 @@ export interface ILineRef {
     removeConnection: () => void,
 }
 
+// TODO: Needs a refactor
 class intractableObject {
     public block: Konva.Rect;
     public ghost: Konva.Rect;
@@ -23,9 +25,10 @@ class intractableObject {
     readonly blockOpts: CanvasTypes.IBlock;
     readonly uuid: string;
     readonly dragMannager: DragManager;
-
     readonly canBeConnected: boolean = true;
     readonly canConntect: boolean = true;
+
+    public static readonly Globals: Global = Global.getInstance();
     
     constructor(stage: Konva.Stage, layer: Konva.Layer, block: CanvasTypes.IBlock, cords: [number, number]) {
         this.stage = stage;
@@ -62,8 +65,11 @@ class intractableObject {
                 elm.showGhost();
 
                 // get the relative offset from the mouse
-                elm.dragOffset = elm.block.getRelativePointerPosition()
+                elm.dragOffset = elm.block.getRelativePointerPosition();
             });
+
+            // -- Global drag end state
+            intractableObject.Globals.movingBlock = true;
         });
 
         // -- Dragging
@@ -101,8 +107,10 @@ class intractableObject {
 
                 // Force the connection manager to redraw the connections
                 elm.block.fire('dragmove');
-
             });
+
+            // -- Global drag end state
+            intractableObject.Globals.movingBlock = false;
         });
     }
 

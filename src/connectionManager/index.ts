@@ -250,7 +250,7 @@ class ConnectionManager {
 
 
     private getBlockInfo(block: intractableObject): Basic.IBlockInfo {
-        return { x: block.block.position().x, y: block.block.position().y, w: block.block.width(), h: block.block.height() };
+        return { x: block.block.position().x, y: block.block.position().y, width: block.block.width(), height: block.block.height() };
     }
 
 

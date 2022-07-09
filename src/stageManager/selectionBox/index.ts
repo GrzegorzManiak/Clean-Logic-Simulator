@@ -89,7 +89,7 @@ class Selection {
             // -- If the user is not hovering over a block, and thers blocks selected,
             if (this.globals.hoveringOverBlock === false && Selection.getSelectedBlocks().length > 0)
                 this.cancleSelection();
-                
+
             if(Selection.canSelect === false || this.instantiateDrag() === false || this.globals.hoveringOverBlock === true)
                 return this.resetSelection();
 
@@ -98,6 +98,9 @@ class Selection {
 
             // Allow the user to drag the visible box
             Selection.setMovingBlockSelection(true);
+
+            // -- set the global state to true
+            this.globals.movingBlockSelection = true;
         });
 
 
@@ -127,6 +130,12 @@ class Selection {
                 object.setDragChildren(objects);
                 object.selectBlock();
             });
+
+            // Set movingBlockSelection to false
+            Selection.setMovingBlockSelection(false);
+
+            // -- set the global state to false
+            this.globals.movingBlockSelection = false;
         });
     }
 

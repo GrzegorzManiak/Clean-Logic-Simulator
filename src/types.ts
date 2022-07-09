@@ -1,3 +1,4 @@
+import Konva from "Konva";
 import intractableObject from "./interactableObject";
 
 export namespace BlockList {
@@ -89,14 +90,17 @@ export namespace Basic {
         del: () => void;
     }
 
+    export interface ISize {
+        width: number;
+        height: number;
+    }
+
     export interface ICords {
         x: number;
         y: number;
     }
 
-    export type IBlockInfo = ICords &{
-        w: number; h: number;
-    }
+    export type IBlockInfo = ICords & ISize;
 
     export interface TConnection {
         pos: [number, number, number, number],
@@ -109,4 +113,43 @@ export namespace Basic {
         parent: intractableObject;
         child: intractableObject;
     }
+
+    export type TCursorSegment = { 
+        size: ISize, 
+        offset: ICords,
+        path: string 
+    }
+
+    export interface ICursorGraphics {
+        top: TCursorSegment
+        bottom: TCursorSegment
+        left: TCursorSegment
+        right: TCursorSegment
+    }
+
+    export interface ICursorImages { 
+        top: HTMLImageElement,
+        bottom: HTMLImageElement,
+        left: HTMLImageElement,
+        right: HTMLImageElement,
+    }
+
+    export interface ICursorKonva {
+        top: Konva.Image,
+        bottom: Konva.Image,
+        left: Konva.Image,
+        right: Konva.Image,
+    }
+
+    export interface ICursorOptions {
+        scale: number;
+        rotation: number;
+
+        distance: number;
+        selectionDistance: number;
+        draggingDistance: number;
+        hoveringDistance: number;
+    }
+
+    export type TSides = 'top' | 'bottom' | 'left' | 'right';
 }
