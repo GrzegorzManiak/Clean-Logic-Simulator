@@ -1,8 +1,11 @@
 import BlockRegistry from '../interactableObject/src/register';
 import intractableObject from '../interactableObject';
+import ConnectionManager from '../connectionManager';
 import Konva from 'Konva';
 
-function register(layer: Konva.Layer, stage: Konva.Stage) { 
+function register(stage: Konva.Stage) { 
+    const layer = ConnectionManager.getInstance(stage).layer;
+    
     BlockRegistry.registerBlock({
         id: 'AND',
         size: {

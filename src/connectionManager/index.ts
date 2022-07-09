@@ -11,6 +11,7 @@ class ConnectionManager {
     private static instance: ConnectionManager;
 
     public readonly stage: Konva.Stage;
+    public readonly layer: Konva.Layer = new Konva.Layer();
     public readonly global: Global = Global.getInstance();
     public readonly connectionLayer: Konva.Layer = new Konva.Layer();
 
@@ -50,6 +51,18 @@ class ConnectionManager {
 
         // Add the connection layer to the stage
         this.stage.add(this.connectionLayer);
+
+        // Add the layer to the stage
+        this.stage.add(this.layer);
+
+        // -- Dom click event listener to clear the selection
+        document.addEventListener('click', () => {
+            // -- Check if the user is hovering over a block
+            if(this.global.hoveringOverBlock === true) return;
+
+            // -- Clear any ongoing selection
+            this.clearSelection();
+        });
     }
 
 

@@ -9,15 +9,14 @@ import { SelectionConstants } from '../../options';
 class Selection {
     private static instance: Selection;
 
-    private static visibleBox: Konva.Rect = Selection.createBox();
-    private static draggableBox: Konva.Rect = Selection.createBox();
+    private readonly box: Konva.Rect;
 
-    public static stage: Konva.Stage;
-    public layer: Konva.Layer;
-    public static globals: Global;
-    public static connectionManager: ConnectionManager;
+    public readonly stage: Konva.Stage;
+    public readonly layer: Konva.Layer = new Konva.Layer();
+    public readonly globals: Global = Global.getInstance();
+    public readonly connectionManager: ConnectionManager;
 
-    // Boolean that determines if the visibleBox can be instantiated
+    // Boolean that determines if the box can be instantiated
     private static canSelect: boolean = false;
     public static getCanSelect = () => Selection.canSelect;
     public static setCanSelect = (value: boolean) => Selection.canSelect = value;
@@ -49,20 +48,12 @@ class Selection {
     public static clearSelectedBlocks = () => { Selection.selectedBlocks = [] };
 
     private constructor(stage: Konva.Stage) { 
-        
-        Selection.stage = stage;
-        Selection.globals = Global.getInstance();
-        Selection.connectionManager = ConnectionManager.getInstance(stage);
-
-        this.layer = new Konva.Layer();
-
-        // Add the boxes to the stage
-        this.layer.add(Selection.visibleBox);
-        this.layer.add(Selection.draggableBox);
-
+        this.stage = stage;
+        this.connectionManager = ConnectionManager.getInstance(stage);
+        this.box = this.createBox();
+        this.layer.add(this.box);
         stage.add(this.layer);
-
-        Selection.hookOntoMouse();
+        this.hookOntoMouse();
     }
 
     public static getInstance(stage: Konva.Stage): Selection {
@@ -70,7 +61,18 @@ class Selection {
         return Selection.instance;
     }
 
-    private static createBox(): Konva.Rect {
+    private cancleSelection() {
+        const selected = Selection.getSelectedBlocks();
+
+        selected.forEach((object) => {
+            object.deselectBlock();
+            object.resetDragSelection();
+        });
+
+        Selection.clearSelectedBlocks();
+    }
+
+    private createBox(): Konva.Rect {
         return new Konva.Rect({
             fill: SelectionConstants.color,
             stroke: SelectionConstants.borderColor,
@@ -80,30 +82,36 @@ class Selection {
         });
     }
 
-    private static hookOntoMouse() {
+    private hookOntoMouse() {
 
         // This is when the user clicks on the stage
-        Selection.stage.on('mousedown', () => {
+        this.stage.on('mousedown', () => {
+            // -- If the user is not hovering over a block, and thers blocks selected,
+            if (this.globals.hoveringOverBlock === false && Selection.getSelectedBlocks().length > 0)
+                this.cancleSelection();
+                
             if(Selection.canSelect === false || this.instantiateDrag() === false || this.globals.hoveringOverBlock === true)
                 return this.resetSelection();
 
             // Set the visible boxes opacity to the global opacity
-            Selection.visibleBox.opacity(SelectionConstants.transparency);
+            this.box.opacity(SelectionConstants.transparency);
 
             // Allow the user to drag the visible box
-            this.setMovingBlockSelection(true);
+            Selection.setMovingBlockSelection(true);
         });
 
 
         // this is when the users moves the mouse
-        Selection.stage.on('mousemove', () => {
+        this.stage.on('mousemove', () => {
             if(Selection.canSelect === false)
                 return this.resetSelection();
 
-            if(this.getMovingBlockSelection() === true) return trackMouse(
+            if(Selection.getMovingBlockSelection() === true) return trackMouse(
                 this.stage, 
-                Selection.visibleBox, 
+                this.box, 
+
                 Selection.getLastOrigin(), 
+
                 Selection.getSelectionSize, 
                 Selection.setSelectionSize
             );
@@ -111,7 +119,7 @@ class Selection {
 
 
         // This is when the user releases the mouse
-        Selection.stage.on('mouseup', () => {
+        this.stage.on('mouseup', () => {
             // get all the sellected objects
             const objects = this.instantiateMove();
 
@@ -122,14 +130,14 @@ class Selection {
         });
     }
 
-    private static instantiateMove(): Array<intractableObject> {
+    private instantiateMove(): Array<intractableObject> {
 
         Selection.setLastPoint(this.stage.getPointerPosition());
         
         // reset both boxes
         this.resetSelection();
 
-        const currentSellection = Selection.connectionManager.findInCords(
+        const currentSellection = this.connectionManager.findInCords(
             Selection.getLastOrigin(), 
             Selection.getLastPoint()
         );
@@ -141,13 +149,13 @@ class Selection {
         return currentSellection;
     }
 
-    private static instantiateDrag(): boolean {
+    private instantiateDrag(): boolean {
         // Is the user hovering over a block?
         // or is the user moving the selection box?
         // or are we even allowed to select?
-        if (Selection.globals.hoveringOverBlock === true
-            || this.getMovingBlockSelection() === true
-            || this.getCanSelect() === false) {
+        if (this.globals.hoveringOverBlock === true
+            || Selection.getMovingBlockSelection() === true
+            || Selection.getCanSelect() === false) {
 
             // set both boxes to invisible
             this.resetSelection();
@@ -157,12 +165,12 @@ class Selection {
         }
 
         // Get the mouse position
-        const mousePos = Selection.stage.getPointerPosition();
+        const mousePos = this.stage.getPointerPosition();
 
         // Set the visible box to the mouse position
         // reset the width and height to 0
-        Selection.visibleBox.position(mousePos);
-        Selection.visibleBox.size({ width: 0, height: 0 });
+        this.box.position(mousePos);
+        this.box.size({ width: 0, height: 0 });
         
         // Set the lastOrigin to the mouse position
         Selection.setLastOrigin(mousePos);
@@ -171,16 +179,10 @@ class Selection {
         return true;
     }
 
-    private static resetSelection() {
-        Selection.visibleBox.position({ x: 0, y: 0 });
-        Selection.visibleBox.size({ width: 0, height: 0 });
-        Selection.visibleBox.opacity(0);
-
-        Selection.draggableBox.position({ x: 0, y: 0 });
-        Selection.draggableBox.size({ width: 0, height: 0 });
-        Selection.draggableBox.opacity(0);
-
-        Selection.draggableBox.draggable(false);
+    private resetSelection() {
+        this.box.position({ x: 0, y: 0 });
+        this.box.size({ width: 0, height: 0 });
+        this.box.opacity(0);
 
         Selection.setMovingBlockSelection(false);
     }

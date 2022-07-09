@@ -18,18 +18,13 @@ let grid = constructGrid(stage);
 // Instantiate the connection manager
 const cm = ConnectionManager.getInstance(stage);
 
-// then create the main layer
-const layer = new Konva.Layer();
-
 DragSelect.getInstance(stage);
 DragSelect.setCanSelect(true);
 
-stage.add(layer);
-
 // Manage movement
-movementManager(stage, [grid, cm.connectionLayer, layer]);
+movementManager(stage, [grid, cm.connectionLayer, cm.layer]);
 
-Register(layer, stage);
+Register(stage);
 
 function reDraw() {
     grid.remove();

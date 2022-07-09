@@ -39,16 +39,6 @@ class intractableObject {
         // Calculate the uuid, completely random string modified by microseconds
         // used to identify the block
         this.uuid = `${Math.random().toString(36).substring(2, 15)}-${Date.now()}`;
-
-        // // Add the prompt
-        // const prompt = new ButtonPrompt(this.block, () => {
-        // }, {
-        //     text: 'Use',
-        //     // e key code
-        //     keyCode: 69,
-        //     key: 'E',
-        // });
-
         this.dragMannager = new DragManager(this.block);
         this.drag();
     }
