@@ -38,7 +38,7 @@ class intractableObject {
 
         // Calculate the uuid, completely random string modified by microseconds
         // used to identify the block
-        this.uuid = `${Math.random().toString(36).substring(2, 15)}-${Date.now()}`;
+        this.uuid = `${Math.random().toString(36).substring(2, 15)}-${Date.now()}-${block.id}`;
         this.dragMannager = new DragManager(this.block);
         this.drag();
     }
