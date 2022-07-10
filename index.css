@@ -1,8 +1,23 @@
 
+/* 
+    Design and colors inspired by:
+    https://material.io/design/color/dark-theme.html
+ */
+
 :root {
     --color-primary: rgb(29, 29, 29);
     --color-accent: rgb(0, 140, 255);
     --color-font: rgb(255, 255, 255);
+
+    --ui-max-width: 800px; 
+    --ui-max-height: 1000px;
+
+    --ui-panel-background: #121212;
+
+    --ui-panel-col-left: #1d1d1d;
+    --ui-panel-col-right: #121212;
+
+    --ui-panel-border-radius: 0.5rem;
 }
 
 html {
@@ -14,6 +29,7 @@ html {
     align-items: center;
     justify-content: center;
 
+    overflow: hidden;
     width: 100vw;
     max-width: 100vw;
 
@@ -36,6 +52,7 @@ html {
 }
 
 #cursor {
+    z-index: 1000;
     position: absolute;
 }
 
@@ -47,4 +64,92 @@ html {
 #cursor img {
     transition: all 0.15s ease-in-out;
     position: absolute;
+}
+
+/* 
+    Main UI Styles
+ */
+
+.full-panel {
+    max-width: var(--ui-max-width);
+    max-height: var(--ui-max-height);
+    width: 90vw;
+    height: 90vh;
+    background-color: var(--color-primary);
+    border-radius: var(--ui-panel-border-radius);
+    opacity: 1;
+}
+
+.blur {
+    width: 100vw;
+    height: 100vh;
+    position: absolute;
+    z-index: 100;
+    background-color: rgba(0, 0, 0, 0.5);
+}
+
+.flex-center {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+
+/* 
+    Settings UI Styles
+ */
+
+#settings {
+    display: flex;
+    flex-direction: row;    
+    background-color: var(--ui-panel-col-right);
+}
+
+#settings > .left-panel, #settings > .right-panel {
+    border-radius: var(--ui-panel-border-radius);
+    z-index: inherit;
+    height: 100%;
+}
+
+#settings > .left-panel {
+    background-color: var(--ui-panel-col-left);
+    width: 30%;
+
+    /* Scroll */
+    overflow-y: auto;
+    direction: rtl; 
+}       
+
+#settings > .right-panel {
+    background-color: var(--ui-panel-col-right);
+    width: 70%;
+}
+
+.settings-option {
+    margin: 0.5rem;
+    background-color: var(--ui-panel-background);
+    border-radius: var(--ui-panel-border-radius);
+}
+
+.settings-option > h2 {
+    font-size: 1rem;
+    font-weight: 500;
+    margin: 0;
+    padding: 0.5rem;
+    color: var(--color-font);
+}
+
+::-webkit-scrollbar {
+    width: 1rem;
+    background-color: var(--ui-panel-col-right);
+    border-radius: var(--ui-panel-border-radius);
+}
+
+::-webkit-scrollbar-track {
+    border-radius: var(--ui-panel-border-radius);
+}
+
+::-webkit-scrollbar-thumb {
+    background: var(--color-accent);
+    border-radius: var(--ui-panel-border-radius);
 }

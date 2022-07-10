@@ -6,12 +6,16 @@ import DragSelect from './stageManager/selectionBox';
 import Register from './blockRegister';
 import Cursor from './stageManager/cursor';
 
+import SettingUI from './userInterface/settings';
+
 // first we need to create a stage
 let stage = new Konva.Stage({
     container: 'canvas',   // id of container <div>
     width: window.innerWidth,
     height: window.innerHeight,
 });
+
+SettingUI.getInstance(stage);
 
 // -- initialize the grid
 let grid = constructGrid(stage);
