@@ -1,7 +1,7 @@
 import SettingsClass from "..";
 import { UIelements } from "../../../types";
 
-const options: Array<UIelements.ISettings | undefined> = [
+const options: Array<UIelements.ISettings> = [
     {
         name: 'Font Size',
         description: 'Change the size of the font.',

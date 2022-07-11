@@ -161,64 +161,18 @@ class Settings {
         this.add('Developer', ['fal', 'icon', 'fa-code'], false, this.bf);
     }
 
-    public createToggleElement(active: boolean, id: string, callback: (x: boolean) => void): [HTMLDivElement, HTMLInputElement] {
-        const input = document.createElement('input'),
-            label = document.createElement('label'),
-            parent = document.createElement('div');
-
-        // -- Set the Input -- //
-        input.type = 'checkbox';
-        input.id = id + '-toggle';
-        input.classList.add('toggle');
-        input.checked = active;
-
-        // -- Add the event listener -- //
-        input.addEventListener('change', () => {
-            callback(input.checked);
-        });
-
-        // -- Set the label -- //
-        label.setAttribute('for', input.id);
-        label.classList.add('toggle');
-
-        // -- Append the elements to the main element -- //
-        parent.appendChild(input);
-        parent.appendChild(label);
-
-        // -- Return the main element -- //
-        return [parent, input];
-    }
-
-    public createSliderElement(min: number, max: number, value: number, id: string, callback: (x: number) => void): [HTMLDivElement, HTMLInputElement] {
-        const input = document.createElement('input'),
-            label = document.createElement('label'),
-            parent = document.createElement('div');
-
-        // -- Set the Input -- //
-        input.type = 'range';
-        input.min = min.toString();
-        input.max = max.toString();
-        input.value = value.toString();
-        input.id = id + '-slider';
-        input.classList.add('slider');
-
-        // -- Add the event listener -- //
-        input.addEventListener('change', () => {
-            callback(parseInt(input.value));
-        });
-
-        // -- Set the label -- //
-        label.setAttribute('for', input.id);
-        label.classList.add('slider');
-
-        // -- Append the elements to the main element -- //
-        parent.appendChild(input);
-        parent.appendChild(label);
-
-        // -- Return the main element -- //
-        return [parent, input];
-    }
-
+    /**
+     * @name createNumberElement
+     * 
+     * @description Creates a number input element
+     * 
+     * @param min The minimum value of the number
+     * @param max The maximum value of the number
+     * @param value The current value of the number
+     * @param id The base of the id for the input elm
+     * @param callback The callback function to call when the value changes
+     * @returns [HTMLDivElement, HTMLInputElement] The paremt element and the input element
+     */
     createNumberElement(min: number, max: number, value: number, id: string, callback: (x: number) => void): [HTMLDivElement, HTMLInputElement] {
         const input = document.createElement('input'),
             label = document.createElement('label'),
@@ -254,20 +208,130 @@ class Settings {
         return [parent, input];
     }
 
-    public static getLocalBoolean(key: string, def: boolean): boolean {
+
+    /**
+     * @name createToggleElement
+     * 
+     * @description Creates a toggle element
+     * 
+     * @param value If the element is active or not
+     * @param id The base of the id for the input elm
+     * @param callback The callback function to call when the value changes
+     * @returns [HTMLDivElement, HTMLInputElement] The paremt element and the input element
+     */
+    public createToggleElement(value: boolean, id: string, callback: (x: boolean) => void): [HTMLDivElement, HTMLInputElement] {
+        const input = document.createElement('input'),
+            label = document.createElement('label'),
+            parent = document.createElement('div');
+
+        // -- Set the Input -- //
+        input.type = 'checkbox';
+        input.id = id + '-toggle';
+        input.classList.add('toggle');
+        input.checked = value;
+
+        // -- Add the event listener -- //
+        input.addEventListener('change', () => {
+            callback(input.checked);
+        });
+
+        // -- Set the label -- //
+        label.setAttribute('for', input.id);
+        label.classList.add('toggle');
+
+        // -- Append the elements to the main element -- //
+        parent.appendChild(input);
+        parent.appendChild(label);
+
+        // -- Return the main element -- //
+        return [parent, input];
+    }
+
+
+    /**
+     * @name createSliderElement
+     * 
+     * @description Creates a slider element
+     * 
+     * @param min The minimum value of the slider
+     * @param max The maximum value of the slider
+     * @param value The current value of the slider
+     * @param id The base of the id for the input elm
+     * @param callback The callback function to call when the value changes
+     * @returns [HTMLDivElement, HTMLInputElement] The paremt element and the input element
+     */
+    public createSliderElement(min: number, max: number, value: number, id: string, callback: (x: number) => void): [HTMLDivElement, HTMLInputElement] {
+        const input = document.createElement('input'),
+            label = document.createElement('label'),
+            parent = document.createElement('div');
+
+        // -- Set the Input -- //
+        input.type = 'range';
+        input.min = min.toString();
+        input.max = max.toString();
+        input.value = value.toString();
+        input.id = id + '-slider';
+        input.classList.add('slider');
+
+        // -- Add the event listener -- //
+        input.addEventListener('change', () => {
+            callback(parseInt(input.value));
+        });
+
+        // -- Set the label -- //
+        label.setAttribute('for', input.id);
+        label.classList.add('slider');
+
+        // -- Append the elements to the main element -- //
+        parent.appendChild(input);
+        parent.appendChild(label);
+
+        // -- Return the main element -- //
+        return [parent, input];
+    }
+
+
+    /**
+     * @name getLocalBoolean 
+     * 
+     * @description This function will get the value of a local storage item and return it as a boolean
+     * 
+     * @param {string} name The name of the item to get
+     * @param {boolean} defaultValue The default value to return if the item is not found
+     * @returns {boolean} The value of the item
+     */
+    public static getLocalBoolean(key: string, defaultValue: boolean): boolean {
         const value = localStorage.getItem(key);
         if (value === null) {
-            localStorage.setItem(key, def.toString());
-            return def;
+            localStorage.setItem(key, defaultValue.toString());
+            return defaultValue;
         }
         return value === 'true';
     }
 
-    public static setLocalBoolean(key: string, value: boolean) {
+    /**
+     * @name setLocalBoolean
+     * 
+     * @description This function will set the value of a local storage item
+     * 
+     * @param {string} name The name of the item to set
+     * @param {boolean} value The value to set the item to
+     * @returns {void}
+     */
+    public static setLocalBoolean(key: string, value: boolean): void {
         localStorage.setItem(key, value.toString());
     }
 
 
+    /**
+     * @name getLocalNumber
+     * 
+     * @description This function will get the value of a local storage item and return it as a number
+     * 
+     * @param {string} name The name of the item to get
+     * @param {number} defaultValue The default value to return if the item is not found
+     * @returns {number} The value of the item
+     */
     public static getLocalNumber(key: string, def: number): number {
         const value = localStorage.getItem(key);
         if (value === null) {
@@ -277,7 +341,16 @@ class Settings {
         return parseInt(value);
     }
 
-    public static setLocalNumber(key: string, value: number) {
+    /**
+     * @name setLocalNumber
+     * 
+     * @description This function will set the value of a local storage item
+     * 
+     * @param {string} name The name of the item to set
+     * @param {number} value The value to set the item to
+     * @returns {void}
+     */
+    public static setLocalNumber(key: string, value: number): void {
         localStorage.setItem(key, value.toString());
     }
 }
