@@ -120,14 +120,14 @@ html {
     border-radius: var(--ui-panel-border-radius);
     z-index: inherit;
     height: 100%;
+
+    /* Scroll */
+    overflow-y: auto;
 }
 
 #settings > .left-panel {
     background-color: var(--ui-panel-col-left);
     width: 40%;
-
-    /* Scroll */
-    overflow-y: auto;
     direction: rtl; 
 }       
 
