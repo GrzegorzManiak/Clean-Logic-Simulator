@@ -175,6 +175,14 @@ class Settings {
 
         optionList.forEach(e => {
 
+            // e === undefined is a break
+            if(e === undefined) {
+                const separator = document.createElement('hr');
+                separator.className = 'settings-separator';
+                parent.page.appendChild(separator);
+                return;
+            }
+
             // -- Main div of the option
             const option: HTMLDivElement = document.createElement('div');
             option.className = 'option flex-left';
