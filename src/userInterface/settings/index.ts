@@ -90,11 +90,24 @@ class Settings {
         // -- Deactivate any other buttons -- //
         Settings.elements.forEach(e => {
             e.button.classList.remove('active');
+
+            // -- Change the Icon -- //
+            const svg = 
+                e.button.getElementsByTagName('svg')[0];
+            if(svg.classList) svg.classList.add('fal');
+
             e.visability(false);
         });
 
         // -- Activate the button -- //
         btn.button.classList.add('active');
+
+        // -- Change the icon -- //
+        const svg = 
+            btn.button.getElementsByTagName('svg')[0];
+        
+        if(svg.classList) svg.classList.add('fa-solid');
+
         btn.visability(true);
     }
 
@@ -157,6 +170,8 @@ class Settings {
         });
 
         visability(active);
+
+        if(active === true) option.classList.add('active');
     }
 
     private appendOptions() {

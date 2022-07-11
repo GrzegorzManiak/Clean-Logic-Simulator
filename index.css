@@ -22,7 +22,7 @@
     --ui-panel-col-right: #121212;
 
     --ui-panel-border-radius: 0.5rem;
-    --ui-button-color: #3d3d3d;
+    --ui-button-color: var(--color-accent);
     --ui-button-color-hover: #2c2c2c;
 
     --font-scale: 1;
