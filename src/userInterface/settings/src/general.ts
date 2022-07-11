@@ -8,10 +8,10 @@ const options: Array<UIelements.ISettings | undefined> = [
         type: 'slider',
         value: () => SettingsClass.getLocalNumber('settings.gen.fontScale', 50),
         default: 100,
-        min: 1,
+        min: 50,
         max: 200,
         onChange: (value: number) => {
-            if (value < 1) value = 1;
+            if (value < 50) value = 50;
             if (value > 200) value = 200;
             SettingsClass.setLocalNumber('settings.gen.fontScale', value);
 
