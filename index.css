@@ -72,9 +72,10 @@ html {
     position: absolute;
 }
 
+
 /* 
     Main UI Styles
- */
+*/
 
 .full-panel {
     max-width: var(--ui-max-width);
@@ -107,133 +108,8 @@ html {
 
 
 /* 
-    Settings UI Styles
- */
-
-#settings {
-    display: flex;
-    flex-direction: row;    
-    background-color: var(--ui-panel-col-right);
-}
-
-#settings > .left-panel, #settings > .right-panel {
-    border-radius: var(--ui-panel-border-radius);
-    z-index: inherit;
-    height: 100%;
-
-    /* Scroll */
-    overflow-y: auto;
-}
-
-#settings > .left-panel {
-    background-color: var(--ui-panel-col-left);
-    width: 40%;
-    direction: rtl; 
-}       
-
-#settings > .right-panel {
-    background-color: var(--ui-panel-col-right);
-    width: 60%;
-}
-
-#settings .page-title {
-    font-size: 1.5rem;
-    font-weight: 400;
-    letter-spacing: 0.4rem;
-    color: var(--color-font-accent);
-    text-align: center;
-    widows: 100%;
-    margin: 1rem;
-}
-
-/* Main setting parent */
-.settings-option {
-    padding: 1rem;
-    flex-direction: row-reverse;
-    align-items: center;
-    margin: 0.5rem;
-    border-radius: var(--ui-panel-border-radius);
-    transition: background-color 0.15s ease-in-out;
-}
-
-/* Setting lable */
-.settings-option > h2 {
-    font-size: 1rem;
-    font-weight: 500;
-    margin: 0;
-    color: var(--color-font-deselected);
-}
-
-/* FontAwesome Icons */
-.settings-option > .icon {
-    width: 1.5rem;
-    /* Margin left and right */
-    margin: 0 1rem 0 0;
-    color: var(--color-font-deselected);
-    font-size: 1.25rem;
-}
-
-/* Hover anims */
-.settings-option:hover {
-    background-color: var(--ui-button-color-hover);
-}
-
-.settings-option.active {
-    background-color: var(--ui-button-color);
-}
-
-.settings-option.active > * {
-    color: var(--color-font-selected);  
-}
-
-
-/* 
-    setting items
- */
-.option {
-    display: flex;
-    padding: 1rem;
-    flex-direction: column;
-    align-items: flex-start;
-    justify-content: space-between;
-}
-
-.option > .top {
-    width: 100%;
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-    justify-content: space-between;
-}
-
-.option > .bottom {
-    width: 100%;
-}
-
-.option .right {
-    margin-left: 1rem;
-}
-
-.option .left > h2 {
-    color: var(--color-font);
-    font-size: 1.2rem;
-    font-weight: 600;
-    margin: 0;
-}
-.option .left > p {
-    font-size: 1rem;
-    font-weight: 300;
-    margin: 0;
-    color: var(--color-font-accent);
-}
-
-.settings-separator {
-    height: 2px;
-    border-radius: 1rem;
-    border: 0;
-    background-color: var(--ui-button-color);
-    margin: 0 1rem 0 1rem;
-}
+    Scrollbar
+*/
 
 ::-webkit-scrollbar {
     width: 1rem;
@@ -249,6 +125,11 @@ html {
     background: var(--color-accent);
     border-radius: var(--ui-panel-border-radius);
 }
+
+
+/* 
+    Misc
+*/
 
 .invisible {
     display: none;

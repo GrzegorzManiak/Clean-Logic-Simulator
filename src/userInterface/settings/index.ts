@@ -51,6 +51,29 @@ class Settings {
 
         // -- Append the main div to the stage
         this.stage.content.appendChild(this.bluryDiv);    
+
+        // -- Open and close the settings -- //
+        this.openClose();
+    }
+
+    public open: boolean = false;
+
+    private openClose() {
+        // Quick and dirty way to open and close the settings
+        // This will be replaced with a proper escape menu later
+        
+        // add a event listner to the document to see when the user
+        // presses esc
+        document.addEventListener('keydown', (e) => {
+            // if the user presses esc, close the settings
+            if (e.keyCode === 27) {
+                if(this.open === true) this.open = false;
+                else this.open = true;
+
+                this.bluryDiv.classList.toggle('invisible');
+                this.settingsDiv.classList.toggle('invisible');
+            }
+        });
     }
 
     public static getInstance(stage: Konva.Stage): Settings {
