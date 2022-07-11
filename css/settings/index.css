@@ -12,7 +12,7 @@
 /* TOGGLE START */
 
 input[type=checkbox].toggle {
-	height: 0;
+	display: none;
 	width: 0;
 	visibility: hidden;
 }
@@ -67,7 +67,7 @@ input[type=range].slider {
 	background: var(--ui-panel-col-left);
 	border-radius: var(--input-border-radius);
 	transition: all 0.2s ease-in-out;
-	margin-top: 0.5rem;
+	margin-top: 1rem;
 	cursor: none;
 }
 
@@ -214,6 +214,9 @@ input[type=tel].number:focus {
 
 /* Spacing */
 #settings > .right-panel .option > .top > .right {
+	display: flex;
+	height: 100%;
+	flex-direction: column;
 	margin-left: 1rem;
 }
 
@@ -252,7 +255,7 @@ hr.settings-separator {
     border-radius: 1rem;
     border: 0;
     background-color: var(--ui-button-color);
-    margin: 0 1rem 0 1rem;
+    margin: 1rem;
 }
 
 /* MAIN END */
