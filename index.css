@@ -190,7 +190,7 @@ html {
 /* 
     setting items
  */
-.settings-option-right {
+.option {
     display: flex;
     padding: 1rem;
     flex-direction: column;
@@ -198,7 +198,7 @@ html {
     justify-content: space-between;
 }
 
-.settings-option-right > .top {
+.option > .top {
     width: 100%;
     display: flex;
     flex-direction: row;
@@ -206,21 +206,21 @@ html {
     justify-content: space-between;
 }
 
-.settings-option-right > .bottom {
+.option > .bottom {
     width: 100%;
 }
 
-.settings-option-right .right {
+.option .right {
     margin-left: 1rem;
 }
 
-.settings-option-right .left > h2 {
+.option .left > h2 {
     color: var(--color-font);
     font-size: 1.2rem;
     font-weight: 600;
     margin: 0;
 }
-.settings-option-right .left > p {
+.option .left > p {
     font-size: 1rem;
     font-weight: 300;
     margin: 0;

@@ -7,15 +7,11 @@ import General from './src/general';
 class Settings {
     private static instance: Settings;
     public readonly stage: Konva.Stage;
-
     public readonly bluryDiv: HTMLDivElement = document.createElement('div');
     public readonly settingsDiv: HTMLDivElement = document.createElement('div'); 
-
     public readonly leftPanel: HTMLDivElement = document.createElement('div');
     public readonly leftPanelSettings: HTMLDivElement = document.createElement('div');
-
     public readonly rightPanel: HTMLDivElement = document.createElement('div');
-
     public elements: Array<UIelements.TSettingsButton> = [];
 
     private constructor(stage: Konva.Stage) {
@@ -74,9 +70,10 @@ class Settings {
         btn.visability(true);
     }
 
-    public add(name: string, classes: Array<string>, active: boolean, callback: (visable: boolean) => void) {
+    private add(name: string, classes: Array<string>, active: boolean) {
         // -- Create a new div -- //
         const option = document.createElement('div'),
+            page = document.createElement('div'),
             fontAwesome = document.createElement('i'),
             label = document.createElement('h2');
 
@@ -97,13 +94,23 @@ class Settings {
         // -- Append the main element to the left panel
         this.leftPanelSettings.appendChild(option);
 
+        // -- Function to change the visability of the page -- //
+        const visable = (visability: boolean) => {
+            if (visability === true) page.classList.remove('invisible');
+            else page.classList.add('invisible');
+        }
+
+        // -- Append the page to the right panel
+        this.rightPanel.appendChild(page);
+
         // -- Create a reference to the button -- //
         const group = {
             name: name,
-            visability: callback,
+            visability: visable,
             button: option,
             icon: fontAwesome,
             label: label,
+            page: page
         }
 
         // -- Add to the list of elements -- //
@@ -118,47 +125,135 @@ class Settings {
     }
 
     private appendOptions() {
+        // -- General settings
+        this.add('General', ['fal', 'icon', 'fa-gear'], true);
         General(this);
         
-        this.OptConnections();
-        this.OptColors();
-        this.OptGrid();
-        this.OptCursor();
-        this.OptExport();
-        this.OptDeveloper();
-        this.OptExperimental();
+        // -- Conections menu
+        this.add('Connections', ['fal', 'icon', 'fa-link'], false);
+
+        // -- Color settings
+        this.add('Color', ['fal', 'icon', 'fa-paint-brush'], false);
+
+        // -- Grid settings
+        this.add('Grid', ['fal', 'icon', 'fa-grid-2'], false);
+
+        // -- Cursor settings
+        this.add('Cursor', ['fal', 'icon', 'fa-mouse-pointer'], false);
+        
+        // -- Export settings
+        this.add('Export', ['fal', 'icon', 'fa-file-export'], false);
+
+        // -- Developer settings
+        this.add('Developer', ['fal', 'icon', 'fa-code'], false);
+
+        // -- Experimental settings
+        this.add('Experimental', ['fal', 'icon', 'fa-flask'], false);
     }
 
-    bf = (a: boolean) => {};
 
-    // -- All the different groupss of options -- //
+    public addOptions(optionList: Array<UIelements.ISettings>, category: string) {
+        // -- Try and find the category -- //
+        const parent = this.elements.find(f => f.name.toLowerCase() === category.toLowerCase());
 
-    private OptConnections() {
-        this.add('Conections', ['fal', 'icon', 'fa-code-branch'], false, this.bf);
-    }     
+        if(!parent)
+            throw new Error('Could not find the parent category');
 
-    private OptColors() {
-        this.add('Colors', ['fal', 'icon', 'fa-brush'], false, this.bf);
-    }
+        optionList.forEach(e => {
 
-    private OptGrid() {
-        this.add('Grid', ['fal', 'icon', 'fa-grid-2'], false, this.bf);
-    }
+            // -- Main div of the option
+            const option: HTMLDivElement = document.createElement('div');
+            option.className = 'option flex-left';
 
-    private OptCursor() {
-        this.add('Cursor', ['fal', 'icon', 'fa-mouse'], false, this.bf);
-    }
+            // -- Left, Right, top and Bottom areas -- //
+            const left: HTMLDivElement = document.createElement('div'),
+                right: HTMLDivElement = document.createElement('div'),
+                top: HTMLDivElement = document.createElement('div'),
+                bottom: HTMLDivElement = document.createElement('div');
 
-    private OptExport() {
-        this.add('Export', ['fal', 'icon', 'fa-upload'], false, this.bf);
-    }
+            left.className = 'left';
+            right.className = 'right';
+            top.className = 'top';
+            bottom.className = 'bottom';
 
-    private OptExperimental() {
-        this.add('Experimental', ['fal', 'icon', 'fa-flask'], false, this.bf);
-    }
+            // -- Add the lable and description -- //
+            const label: HTMLHeadingElement = document.createElement('h2'),
+                description: HTMLParagraphElement = document.createElement('p');
 
-    private OptDeveloper() {
-        this.add('Developer', ['fal', 'icon', 'fa-code'], false, this.bf);
+            label.innerHTML = e.name;
+            description.innerHTML = e.description;
+
+            // -- Append the elements to the main div -- //
+            top.appendChild(left);
+            top.appendChild(right);
+
+            option.appendChild(top);
+            option.appendChild(bottom);
+
+            // The options is structured as follows:
+            // -- Left -- // -- Right -- // < -- Top Ellement
+            // ------- Bottom ---------- // < -- Bottom Element
+
+            // -- Append the text elements to the left-- //
+            left.appendChild(label);
+            left.appendChild(description);
+
+            // -- Generate an ID for the option with math -- //
+            const ID = 'option-' + Math.floor(Math.random() * 1000000).toString();
+       
+            // -- Set the ID of the option -- //
+            option.id = ID;
+
+            // -- Set the input method of the option -- //
+            switch(e.type) {
+
+                // -- Checkbox -- //
+                case 'toggle':
+                    // -- Create the input element
+                    const [toggleParent] =  
+                        this.createToggleElement(e.value(), option.id, e.onChange); 
+
+                    // -- Append the elements to the option element
+                    right.appendChild(toggleParent);
+                break;
+
+
+                // -- Number -- //
+                case 'number': 
+                    // -- Create the input element 
+                    const [number] = 
+                        this.createNumberElement(e.min, e.max, e.value(), option.id, e.onChange);
+                    
+                    // -- Append the elements to the option element
+                    right.appendChild(number);
+                break;
+
+
+                // -- Slider -- //
+                case 'slider':
+                    // -- Create the input Elements
+                    const [slider, sliderInput] =
+                        this.createSliderElement(e.min, e.max, e.value(), option.id, e.onChange);
+
+                    const [num, numInput] = 
+                        this.createNumberElement(e.min, e.max, e.value(), option.id, e.onChange);
+
+                    // -- Append the elements to the option element
+                    bottom.appendChild(slider);
+                    right.appendChild(num);
+
+                    // -- Add a listener to both so that they update together -- //
+                    slider.addEventListener('input', 
+                        () => { numInput.value = sliderInput.value; });
+
+                    num.addEventListener('input',
+                        () => { sliderInput.value = numInput.value; });
+                break;
+            }
+
+            // -- Append the option to the parent -- //
+            parent.page.appendChild(option);
+        });
     }
 
     /**

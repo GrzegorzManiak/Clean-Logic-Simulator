@@ -161,6 +161,7 @@ export namespace UIelements {
         button: HTMLDivElement,
         icon: HTMLElement,
         label: HTMLHeadElement,
+        page: HTMLDivElement,
     }
 
     export type TInputType = 'toggle' | 'slider' | 'number';
