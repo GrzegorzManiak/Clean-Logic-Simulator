@@ -3,6 +3,7 @@ import { UIelements } from '../../types';
 
 // -- Settings pages
 import General from './src/general';
+import Experimental from './src/experimental';
 
 class Settings {
     private static instance: Settings;
@@ -155,7 +156,7 @@ class Settings {
             this.stateManager(group);
         });
 
-        if (active) this.stateManager(group);
+        visability(active);
     }
 
     private appendOptions() {
@@ -186,10 +187,11 @@ class Settings {
 
         // -- load in the options
         General(this);
+        Experimental(this);
     }
 
 
-    public addOptions(optionList: Array<UIelements.ISettings>, category: string) {
+    public addOptions(optionList: Array<UIelements.ISettings | undefined>, category: string) {
         // -- Try and find the category -- //
         const parent = Settings.getGroup(category);
 
