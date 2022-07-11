@@ -3,17 +3,20 @@ import { UIelements } from "../../../types";
 
 const options: Array<UIelements.ISettings | undefined> = [
     {
-        name: 'Font Size',
-        description: 'Change the size of the font.',
+        name: 'Font Scale',
+        description: 'Change the Scale of the font.',
         type: 'slider',
-        value: () => SettingsClass.getLocalNumber('settings.gen.fontSize', 50),
-        default: 50,
+        value: () => SettingsClass.getLocalNumber('settings.gen.fontScale', 50),
+        default: 100,
         min: 1,
-        max: 100,
+        max: 200,
         onChange: (value: number) => {
             if (value < 1) value = 1;
-            if (value > 100) value = 100;
-            SettingsClass.setLocalNumber('settings.gen.fontSize', value);
+            if (value > 200) value = 200;
+            SettingsClass.setLocalNumber('settings.gen.fontScale', value);
+
+            // Get the css root variable '--font-scale'
+            document.documentElement.style.setProperty('--font-scale', `${value / 100}`);
         },
     },
     {
