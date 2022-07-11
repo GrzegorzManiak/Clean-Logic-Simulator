@@ -7,7 +7,11 @@
 :root {
     --color-primary: rgb(29, 29, 29);
     --color-accent: rgb(0, 140, 255);
-    --color-font: rgb(255, 255, 255);
+    --color-font: rgb(209, 209, 209);
+
+    --color-font-deselected: rgb(182, 182, 182);
+    --color-font-selected: rgb(236, 236, 236);
+    --color-font-accent: rgb(238, 238, 238);
 
     --ui-max-width: 800px; 
     --ui-max-height: 1000px;
@@ -18,6 +22,8 @@
     --ui-panel-col-right: #121212;
 
     --ui-panel-border-radius: 0.5rem;
+    --ui-button-color: #3d3d3d;
+    --ui-button-color-hover: #2c2c2c;
 }
 
 html {
@@ -36,7 +42,7 @@ html {
     height: 100vh;
     max-height: 100vh;
 
-    font-family: 'Nunito', sans-serif;
+    font-family: 'Montserrat', sans-serif;
 
     position: relative;
 }
@@ -94,6 +100,11 @@ html {
     justify-content: center;
 }
 
+.flex-left {
+    display: flex;
+    justify-content: left;
+}
+
 
 /* 
     Settings UI Styles
@@ -113,7 +124,7 @@ html {
 
 #settings > .left-panel {
     background-color: var(--ui-panel-col-left);
-    width: 30%;
+    width: 40%;
 
     /* Scroll */
     overflow-y: auto;
@@ -122,21 +133,106 @@ html {
 
 #settings > .right-panel {
     background-color: var(--ui-panel-col-right);
-    width: 70%;
+    width: 60%;
 }
 
+#settings .page-title {
+    font-size: 1.5rem;
+    font-weight: 400;
+    letter-spacing: 0.4rem;
+    color: var(--color-font-accent);
+    text-align: center;
+    widows: 100%;
+    margin: 1rem;
+}
+
+/* Main setting parent */
 .settings-option {
+    padding: 1rem;
+    flex-direction: row-reverse;
+    align-items: center;
     margin: 0.5rem;
-    background-color: var(--ui-panel-background);
     border-radius: var(--ui-panel-border-radius);
+    transition: background-color 0.15s ease-in-out;
 }
 
+/* Setting lable */
 .settings-option > h2 {
     font-size: 1rem;
     font-weight: 500;
     margin: 0;
-    padding: 0.5rem;
+    color: var(--color-font-deselected);
+}
+
+/* FontAwesome Icons */
+.settings-option > .icon {
+    width: 1.5rem;
+    /* Margin left and right */
+    margin: 0 1rem 0 0;
+    color: var(--color-font-deselected);
+    font-size: 1.25rem;
+}
+
+/* Hover anims */
+.settings-option:hover {
+    background-color: var(--ui-button-color-hover);
+}
+
+.settings-option.active {
+    background-color: var(--ui-button-color);
+}
+
+.settings-option.active > * {
+    color: var(--color-font-selected);  
+}
+
+
+/* 
+    setting items
+ */
+.settings-option-right {
+    display: flex;
+    padding: 1rem;
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: space-between;
+}
+
+.settings-option-right > .top {
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.settings-option-right > .bottom {
+    width: 100%;
+}
+
+.settings-option-right .right {
+    margin-left: 1rem;
+}
+
+.settings-option-right .left > h2 {
     color: var(--color-font);
+    font-size: 1.2rem;
+    font-weight: 600;
+    margin: 0;
+}
+.settings-option-right .left > p {
+    font-size: 1rem;
+    font-weight: 300;
+    margin: 0;
+    color: var(--color-font-accent);
+}
+
+.settings-separator {
+    height: 2px;
+    border-radius: 1rem;
+    border: 0;
+    background-color: var(--ui-button-color);
+    margin: 0 1rem 0 1rem;
 }
 
 ::-webkit-scrollbar {
@@ -152,4 +248,12 @@ html {
 ::-webkit-scrollbar-thumb {
     background: var(--color-accent);
     border-radius: var(--ui-panel-border-radius);
+}
+
+.invisible {
+    display: none;
+    width: 0;
+    height: 0;
+    visibility: hidden;
+    opacity: 0;
 }

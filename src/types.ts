@@ -153,3 +153,52 @@ export namespace Basic {
 
     export type TSides = 'top' | 'bottom' | 'left' | 'right';
 }
+
+export namespace UIelements {
+    export type TSettingsButton = {
+        name: string,
+        visability: (visable: boolean) => void;
+        button: HTMLDivElement,
+        icon: HTMLElement,
+        label: HTMLHeadElement,
+    }
+
+    export type TInputType = 'toggle' | 'slider' | 'number';
+
+
+    export type IBaseSetting = {
+        name: string;
+        description: string;
+        type: TInputType;
+    }
+
+    // -- Toggle
+    type Toggle = IBaseSetting & {
+        type: 'toggle';
+        value: () => boolean;
+        default: boolean;
+        onChange: (value: boolean) => void;
+    }
+
+    // -- Slider
+    type Slider = IBaseSetting & {
+        type: 'slider';
+        value: () => number;
+        min: number;
+        max: number;
+        default: number;
+        onChange: (value: number) => void;
+    }
+
+    // -- Number
+    type Number = IBaseSetting & {
+        type: 'number';
+        value: () => number;
+        min: number;
+        max: number;
+        default: number;
+        onChange: (value: number) => void;
+    }
+
+    export type ISettings = Slider | Toggle | Number;
+}

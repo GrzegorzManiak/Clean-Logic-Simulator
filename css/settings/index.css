@@ -1,0 +1,113 @@
+:root {
+    --input-width: 3rem;
+    --input-height: 1.5rem;
+    --input-border-radius: 0.5rem;
+    --input-circle-radius: 00.5rem;
+    --input-circle-scale: 0.8;
+    --input-circle-size: calc(var(--input-height) * var(--input-circle-scale));
+    --input-center-sub: calc(var(--input-height) - var(--input-circle-size));
+    --input-center-x: calc(var(--input-center-sub) / 2);
+}
+
+/* TOGGLE START */
+
+input[type=checkbox].toggle {
+	height: 0;
+	width: 0;
+	visibility: hidden;
+}
+
+label.toggle {
+	cursor: pointer;
+	text-indent: -9999px;
+	width: var(--input-width);
+	height: var(--input-height);
+	background: var(--ui-panel-col-left);
+	display: block;
+	border-radius: var(--input-border-radius);
+	position: relative;
+    transition: all 0.2s ease-in-out;
+	cursor: none;
+}
+
+label.toggle:after {
+	content: '';
+	position: absolute;
+	top: var(--input-center-x);
+	left: var(--input-center-x);
+	width: var(--input-circle-size);
+	height: var(--input-circle-size);
+	background: #fff;
+	border-radius: var(--input-border-radius);
+	transition: 0.2s ease-in-out;
+}
+
+input.toggle:checked + label {
+	background: var(--color-accent);
+}
+
+input.toggle:checked + label:after {
+	left: calc(100% - var(--input-center-x));
+	transform: translateX(-100%);
+}
+
+label.toggle:active:after {
+	width: calc(var(--input-width) * var(--input-circle-scale));
+}
+
+/* TOGGLE END */
+
+
+/* SLIDER START */
+
+input[type=range].slider {
+	-webkit-appearance: none;
+	width: 100%;
+	height: var(--input-height);
+	background: var(--ui-panel-col-left);
+	border-radius: var(--input-border-radius);
+	transition: all 0.2s ease-in-out;
+	margin-top: 0.5rem;
+	cursor: none;
+}
+
+input[type=range].slider::-webkit-slider-thumb {
+	-webkit-appearance: none;
+	appearance: none;
+	width: var(--input-circle-size);
+	height: var(--input-circle-size);
+	border-radius: 100%;
+	background: var(--color-accent);
+	padding: var(--input-center-x);
+	cursor: none;
+	border: calc(var(--input-center-x) / 2) solid var(--ui-panel-col-left);
+	transition: all 0.2s ease-in-out;
+}
+
+/* SLIDER END */
+
+
+/* NUMBER START */
+
+input[type=tel].number {
+	width: var(--input-width);
+	height: var(--input-height);
+	background: var(--ui-panel-col-left);
+	border-radius: var(--input-border-radius);
+	border: 0;
+	transition: all 0.2s ease-in-out;
+	text-align: center;
+	color: var(--color-font);
+	font-size: 1.1rem;
+	font-weight: 500;
+	font-family: 'montserrat', sans-serif;
+	cursor: none;
+}
+
+input[type=tel].number:focus {
+	outline: none;
+	border: var(--color-accent) solid 0.2rem;
+}
+
+
+/* NUMBER END */
