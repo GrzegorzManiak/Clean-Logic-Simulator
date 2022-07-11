@@ -24,6 +24,8 @@
     --ui-panel-border-radius: 0.5rem;
     --ui-button-color: #3d3d3d;
     --ui-button-color-hover: #2c2c2c;
+
+    --font-scale: 1;
 }
 
 html {
