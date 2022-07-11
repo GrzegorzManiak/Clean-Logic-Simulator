@@ -34,6 +34,7 @@ const options: Array<UIelements.ISettings> = [
         value: () => SettingsClass.getLocalBoolean('settings.gen.experimental', false),
         onChange: (value: boolean) => {
             SettingsClass.setLocalBoolean('settings.gen.experimental', value);
+            SettingsClass.getGroup('experimental')?.buttonVisability(value);
         },
     },
     {
@@ -44,6 +45,7 @@ const options: Array<UIelements.ISettings> = [
         value: () => SettingsClass.getLocalBoolean('settings.gen.developer', false),
         onChange: (value: boolean) => {
             SettingsClass.setLocalBoolean('settings.gen.developer', value);
+            SettingsClass.getGroup('developer')?.buttonVisability(value);
         },
     },
     {

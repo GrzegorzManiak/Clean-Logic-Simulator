@@ -156,12 +156,13 @@ export namespace Basic {
 
 export namespace UIelements {
     export type TSettingsButton = {
-        name: string,
+        name: string;
         visability: (visable: boolean) => void;
-        button: HTMLDivElement,
-        icon: HTMLElement,
-        label: HTMLHeadElement,
-        page: HTMLDivElement,
+        buttonVisability: (show: boolean) => void;
+        button: HTMLDivElement;
+        icon: HTMLElement;
+        label: HTMLHeadElement;
+        page: HTMLDivElement;
     }
 
     export type TInputType = 'toggle' | 'slider' | 'number';

@@ -12,7 +12,7 @@ class Settings {
     public readonly leftPanel: HTMLDivElement = document.createElement('div');
     public readonly leftPanelSettings: HTMLDivElement = document.createElement('div');
     public readonly rightPanel: HTMLDivElement = document.createElement('div');
-    public elements: Array<UIelements.TSettingsButton> = [];
+    public static elements: Array<UIelements.TSettingsButton> = [];
 
     private constructor(stage: Konva.Stage) {
         this.stage = stage;
@@ -58,9 +58,13 @@ class Settings {
         return Settings.instance;
     }
 
+    public static getGroup(name: string): UIelements.TSettingsButton | undefined {
+        return Settings.elements.find(e => e.name.toLowerCase() === name.toLowerCase());
+    }
+
     private stateManager(btn: UIelements.TSettingsButton) {
         // -- Deactivate any other buttons -- //
-        this.elements.forEach(e => {
+        Settings.elements.forEach(e => {
             e.button.classList.remove('active');
             e.visability(false);
         });
@@ -95,9 +99,15 @@ class Settings {
         this.leftPanelSettings.appendChild(option);
 
         // -- Function to change the visability of the page -- //
-        const visable = (visability: boolean) => {
+        const visability = (visability: boolean) => {
             if (visability === true) page.classList.remove('invisible');
             else page.classList.add('invisible');
+        }
+
+        // -- Function to change the visability of the button -- //
+        const buttonVisability = (visability: boolean) => {
+            if (visability === false) option.classList.add('invisible');
+            else option.classList.remove('invisible');
         }
 
         // -- Append the page to the right panel
@@ -106,7 +116,8 @@ class Settings {
         // -- Create a reference to the button -- //
         const group = {
             name: name,
-            visability: visable,
+            visability: visability,
+            buttonVisability: buttonVisability,
             button: option,
             icon: fontAwesome,
             label: label,
@@ -114,7 +125,7 @@ class Settings {
         }
 
         // -- Add to the list of elements -- //
-        this.elements.push(group);
+        Settings.elements.push(group);
 
         // -- Add the event listener -- //
         option.addEventListener('click', () => {
@@ -127,7 +138,6 @@ class Settings {
     private appendOptions() {
         // -- General settings
         this.add('General', ['fal', 'icon', 'fa-gear'], true);
-        General(this);
         
         // -- Conections menu
         this.add('Connections', ['fal', 'icon', 'fa-link'], false);
@@ -149,12 +159,16 @@ class Settings {
 
         // -- Experimental settings
         this.add('Experimental', ['fal', 'icon', 'fa-flask'], false);
+
+
+        // -- load in the options
+        General(this);
     }
 
 
     public addOptions(optionList: Array<UIelements.ISettings>, category: string) {
         // -- Try and find the category -- //
-        const parent = this.elements.find(f => f.name.toLowerCase() === category.toLowerCase());
+        const parent = Settings.getGroup(category);
 
         if(!parent)
             throw new Error('Could not find the parent category');
@@ -215,6 +229,9 @@ class Settings {
 
                     // -- Append the elements to the option element
                     right.appendChild(toggleParent);
+
+                    // -- Fire the onChange event
+                    e.onChange(e.value());
                 break;
 
 
@@ -226,6 +243,9 @@ class Settings {
                     
                     // -- Append the elements to the option element
                     right.appendChild(number);
+
+                    // Fire the onChange event
+                    e.onChange(e.value());
                 break;
 
 
@@ -248,6 +268,9 @@ class Settings {
 
                     num.addEventListener('input',
                         () => { sliderInput.value = numInput.value; });
+
+                    // Fire onChange
+                    e.onChange(e.value());
                 break;
             }
 
