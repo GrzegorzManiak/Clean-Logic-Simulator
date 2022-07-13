@@ -4,6 +4,7 @@ import { UIelements } from '../../types';
 // -- Settings pages
 import General from './src/general';
 import Experimental from './src/experimental';
+import ScrapMechanic from './src/scrapMechanic';
 
 class Settings {
     private static instance: Settings;
@@ -196,6 +197,9 @@ class Settings {
         // -- Developer settings
         this.add('Developer', ['fal', 'icon', 'fa-code'], false);
 
+        // -- Scrap Mechanic
+        this.add('Scrap Mechanic', ['fal', 'icon', 'fa-circle-dot'], false);
+
         // -- Experimental settings
         this.add('Experimental', ['fal', 'icon', 'fa-flask'], false);
 
@@ -203,6 +207,7 @@ class Settings {
         // -- load in the options
         General(this);
         Experimental(this);
+        ScrapMechanic(this);
     }
 
 

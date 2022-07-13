@@ -6,7 +6,7 @@ const options: Array<UIelements.ISettings | undefined> = [
         name: 'Font Scale',
         description: 'Change the Scale of the font.',
         type: 'slider',
-        value: () => SettingsClass.getLocalNumber('settings.gen.fontScale', 50),
+        value: () => SettingsClass.getLocalNumber('settings.gen.fontScale', 100),
         default: 100,
         min: 50,
         max: 200,
@@ -28,6 +28,18 @@ const options: Array<UIelements.ISettings | undefined> = [
         onChange: (value: boolean) => {
             SettingsClass.setLocalBoolean('settings.gen.darkmode', value);
         },
+    },
+    undefined,
+    {
+        name: 'Scrap Mechanic Mode',
+        description: 'Enable / Disables the scrap mechanic mode.',
+        type: 'toggle',
+        default: true,
+        value: () => SettingsClass.getLocalBoolean('settings.gen.scrapMechanic', true),
+        onChange: (value: boolean) => {
+            SettingsClass.setLocalBoolean('settings.gen.scrapMechanic', value);
+            SettingsClass.getGroup('scrap mechanic')?.buttonVisability(value);
+        }
     },
     undefined,
     {
@@ -67,7 +79,7 @@ const options: Array<UIelements.ISettings | undefined> = [
         name: 'Auto Save Interval',
         description: 'Change the auto save interval (In minutes).',
         type: 'slider',
-        value: () => SettingsClass.getLocalNumber('settings.gen.autosaveInterval', 1000),
+        value: () => SettingsClass.getLocalNumber('settings.gen.autosaveInterval', 5),
         min: 1,
         max: 60,
         default: 5,
