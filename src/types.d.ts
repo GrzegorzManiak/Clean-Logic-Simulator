@@ -154,6 +154,7 @@ export namespace Basic {
     export type TSides = 'top' | 'bottom' | 'left' | 'right';
 }
 
+
 export namespace UIelements {
     export type TSettingsButton = {
         name: string;
@@ -203,4 +204,146 @@ export namespace UIelements {
     }
 
     export type ISettings = Slider | Toggle | Number;
+}
+
+
+/**
+ * @name Character
+ * 
+ * @description A collection of types that help dealing with alphanumeric characters.
+ */
+export namespace Character {
+    /**
+     * @name TAlphaLower
+     * 
+     * @description List of all characters in the alphabet, lowercase.
+     */
+    export type TAlphaLower = 'a' | 'b' | 'c' | 'd' | 'e' | 'f' | 'g' | 'h' | 'i' | 'j' | 'k' | 'l' | 'm' | 'n' | 'o' | 'p' | 'q' | 'r' | 's' | 't' | 'u' | 'v' | 'w' | 'x' | 'y' | 'z';
+
+
+    /**
+     * @name TAlphaUpper
+     * 
+     * @description List of all characters in the alphabet, uppercase.
+     */
+    export type TAlphaUpper = 'A' | 'B' | 'C' | 'D' | 'E' | 'F' | 'G' | 'H' | 'I' | 'J' | 'K' | 'L' | 'M' | 'N' | 'O' | 'P' | 'Q' | 'R' | 'S' | 'T' | 'U' | 'V' | 'W' | 'X' | 'Y' | 'Z';    
+
+
+    /**
+     * @name TAlpha
+     * 
+     * @description List of all characters in the alphabet.
+     * @see TAlphaLower
+     * @see TAlphaUpper
+     */
+    export type TAlpha = TAlphaLower | TAlphaUpper;
+
+
+    /**
+     * @name TNumericString
+     * 
+     * @description List of all numbers as strings.
+     */
+    export type TNumericString = '0' | '1' | '2' | '3' | '4' | '5' | '6' | '7' | '8' | '9';
+
+
+    /**
+     * @name TNumeric
+     * 
+     * @description List of all numbers.
+     */
+    export type TNumeric = 0 | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9;
+
+
+    /**
+     * @name TAlphaNumericString
+     * 
+     * @description List of all characters and numbers as strings.
+     * @see TAlpha
+     * @see TNumericString
+     */
+    export type TAlphaNumericString = TAlpha | TNumericString;
+
+
+    /**
+     * @name TAlphaNumeric
+     * 
+     * @description List of all characters and numbers.
+     * @see TAlpha
+     * @see TNumeric
+     */
+    export type TAlphaNumeric = TAlpha | TNumeric;
+}
+
+
+
+/**
+ * @name LocalizationTypes
+ * 
+ * @description Types and interfaces used by the localization system.
+ */
+export namespace LocalizationTypes {
+    /**
+     * @name TLetterCode
+     * 
+     * @description type for two letter language / dialect code
+     */
+    export type TLetterCode = `${Character.TAlpha}${Character.TAlpha}`;
+
+
+    /**
+     * @name TSupported
+     * 
+     * @description A type for all supported languages (not including dialects).
+     */
+    export type TSupported = 'en';
+
+
+    /**
+     * @name TResource
+     * 
+     * @description A type for the localization class to store information about supported languages.
+     */
+    export type TResource = {
+        language: TSupported;
+        dialect?: Array<string>;
+        resource: string;
+    }
+
+
+    /**
+     * @name TKeyPair
+     * 
+     * @description A localization key and its corresponding value.
+     */
+    export type TKeyPair = {
+        key: string;
+        value: string;
+    }
+
+
+    /**
+     * @name ILanguage
+     * 
+     * @description A type for the input request to change the language.
+     */
+    export type ILanguage = []
+
+
+    /**
+     * @name ILocalization
+     * 
+     * @description This is the interface for the localization object, loaded from a json file.
+     * If a dialect is provided, it will use keys from the dialect, 
+     * otherwise it will use the default keys
+     */
+    export interface ILocalization {
+        name: string;
+        code: string;
+        dialects: Array<{
+            dialect: string;
+            keys: TKeyPair
+        }>;
+        keys: TKeyPair;
+    }
 }

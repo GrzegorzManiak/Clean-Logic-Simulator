@@ -7,6 +7,7 @@ import Register from './blockRegister';
 import Cursor from './stageManager/cursor';
 
 import SettingUI from './userInterface/settings';
+import Localization from './localization';
 
 // first we need to create a stage
 let stage = new Konva.Stage({
@@ -14,6 +15,8 @@ let stage = new Konva.Stage({
     width: window.innerWidth,
     height: window.innerHeight,
 });
+
+const lang  = Localization.determineLanguage()
 
 SettingUI.getInstance(stage);
 

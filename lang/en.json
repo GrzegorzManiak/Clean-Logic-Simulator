@@ -1,0 +1,27 @@
+{
+    "name": "English",
+    "code": "en",
+    "dialects": [
+        {
+            "dialect": "uk",
+            "keys": [{
+                "key": "color",
+                "value": "colour"
+            }]
+        }
+    ],
+    "keys": [
+        { "key": "color", "value": "colour" },
+
+        { "key": "settings-general", "value": "General" },
+        { "key": "settings-connections", "value": "Connections"},
+        { "key": "settings-grid", "value": "Grid"},
+        { "key": "settings-cursor", "value": "Cursor"},
+        { "key": "settings-export", "value": "Export"},
+        { "key": "settings-developer", "value": "Developer"},
+        { "key": "settings-sm", "value": "Scrap Mechanic"},
+        { "key": "settings-experimental", "value": "Experimental"}
+
+        
+    ]
+}
