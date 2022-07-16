@@ -5,7 +5,7 @@
         {
             "dialect": "uk",
             "keys": [
-                {"key": "color", "value": "colour" },
+                { "key": "color", "value": "colour" },
                 { "key": "settings.color", "value": "Colour"}
             ]
         }
@@ -53,6 +53,6 @@
         { "key": "settings.experimental.features.wasm.mode.description", "value": "Enables / Disables the WASM Mode" },
     
         { "key": "settings.experimental.features.truthtable.export", "value": "Truth Table Export" },
-        { "key": "settings.experimental.features.truthtable.mode.description", "value": "Enables / Disables the Truth Table Mode" }
+        { "key": "settings.experimental.features.truthtable.description", "value": "Enables / Disables the Truth Table Mode" }
     ]
 }

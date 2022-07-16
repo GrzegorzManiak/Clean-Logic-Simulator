@@ -85,10 +85,10 @@ class Localization {
      * 
      * @returns Promise<void> - A promise that resolves when the resource is loaded
      */
-    public loadLocalizationResource(forceLoad = false): Promise<void> {
+    public loadLocalizationResource(active = true, forceLoad = false): Promise<void> {
         // -- Get the resource
         return new Promise((resolve, reject) => {
-            this.loadResource(Localization.getResource(Localization.getLanguage()), forceLoad)
+            this.loadResource(Localization.getResource(Localization.getLanguage()), active, forceLoad)
             .then(resource => {
                 // -- Check if the resource is already loaded
                 if (!this.resources.includes(resource))
@@ -136,8 +136,18 @@ class Localization {
         args.reduce((acc, cur, i) => acc.replace(`\${${i}}`, cur), str);
 
 
-    // -- Loads the resource from the json file
-    private async loadResource(res: LocalizationTypes.TResource, forceLoad: boolean): Promise<LocalizationTypes.ILocalization> {
+    /**
+     * @name loadResource
+     * 
+     * @description Loads the resource from the json file.
+     * 
+     * @param res: TResource - The resource to load
+     * @param active: boolean - Whether the resource should be loaded as the active localization resource
+     * @param forceLoad: boolean - Whether the resource should be loaded even if it's already loaded
+     * 
+     * @returns Promise<ILocalization> - A promise that resolves when the resource is loaded
+     */
+    public async loadResource(res: LocalizationTypes.TResource, active: boolean, forceLoad: boolean): Promise<LocalizationTypes.ILocalization> {
         // -- Attempt to load the localization file from webstorage
         let resource: string | undefined = localStorage.getItem(`lang-res-${res.language}`);
 
@@ -160,11 +170,14 @@ class Localization {
         // -- Parse the resource
         const parsedResource = JSON.parse(resource ?? '') as LocalizationTypes.ILocalization;
 
-        // -- set the active localization
-        this.activeLocalization = parsedResource;
+        if(active === true) {
+             // -- set the active localization
+            this.activeLocalization = parsedResource;
 
-        this.activeDialect = parsedResource.dialects.find(dialect =>
-            dialect.dialect === Localization.dialect)?.keys as Array<LocalizationTypes.TKeyPair> ?? [];
+            // -- set the active dialect
+            this.activeDialect = parsedResource.dialects.find(dialect =>
+                dialect.dialect === Localization.dialect)?.keys as Array<LocalizationTypes.TKeyPair> ?? [];
+        }
 
         // -- Return the resource
         return parsedResource;
