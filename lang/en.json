@@ -11,17 +11,47 @@
         }
     ],
     "keys": [
-        { "key": "color", "value": "colour" },
+        { "key": "color", "value": "color" },
 
-        { "key": "settings-general", "value": "General" },
-        { "key": "settings-connections", "value": "Connections"},
-        { "key": "settings-grid", "value": "Grid"},
-        { "key": "settings-cursor", "value": "Cursor"},
-        { "key": "settings-export", "value": "Export"},
-        { "key": "settings-developer", "value": "Developer"},
-        { "key": "settings-sm", "value": "Scrap Mechanic"},
-        { "key": "settings-experimental", "value": "Experimental"}
+        { "key": "settings.title", "value": "SETTINGS"},
 
+        { "key": "settings.general", "value": "General" },
+        { "key": "settings.connections", "value": "Connections"},
+        { "key": "settings.grid", "value": "Grid"},
+        { "key": "settings.cursor", "value": "Cursor"},
+        { "key": "settings.export", "value": "Export"},
+        { "key": "settings.developer", "value": "Developer"},
+        { "key": "settings.sm", "value": "Scrap Mechanic"},
+        { "key": "settings.experimental", "value": "Experimental"},
+
+        { "key": "settings.general.font.scale", "value": "Font Scale" },
+        { "key": "settings.general.font.scale.description", "value": "The font scale of the program" },
+    
+        { "key": "settings.general.darkmode", "value": "Darkmode" },
+        { "key": "settings.general.darkmode.description", "value": "Whether the program should use darkmode" },
+    
+        { "key": "settings.general.scrap.mechanic.mode", "value": "Scrap Mechanic Mode" },
+        { "key": "settings.general.scrap.mechanic.mode.description", "value": "Allow specific things only sm would allow" },
+    
+        { "key": "settings.general.experimental.features", "value": "Experimental Features" },
+        { "key": "settings.general.experimental.features.description", "value": "Enables / Disables the Experimental Features panel" },
         
+        { "key": "settings.general.developer.mode", "value": "Developer Mode" },
+        { "key": "settings.general.developer.mode.description", "value": "Enables / Disables Developer mode" },
+    
+        { "key": "settings.general.auto.save", "value": "Auto Save" },
+        { "key": "settings.general.auto.save.description", "value": "Enables / Disables Auto Save" },
+    
+        { "key": "settings.general.auto.save.interval", "value": "Auto Save Interval" },
+        { "key": "settings.general.auto.save.interval.description", "value": "The interval in minutes to save the program" },
+        
+        { "key": "settings.scrap.mechanic.mode.self.wired.logic", "value": "Self Wired Logic" },
+        { "key": "settings.scrap.mechanic.mode.self.wired.logic.description", "value": "Enables / Disables the Self wireing of Logic" },
+    
+        { "key": "settings.experimental.features.wasm.mode", "value": "WASM Mode" },
+        { "key": "settings.experimental.features.wasm.mode.description", "value": "Enables / Disables the WASM Mode" },
+    
+        { "key": "settings.experimental.features.truth.table.mode", "value": "Truth Table Mode" },
+        { "key": "settings.experimental.features.truth.table.mode.description", "value": "Enables / Disables the Truth Table Mode" }
     ]
 }

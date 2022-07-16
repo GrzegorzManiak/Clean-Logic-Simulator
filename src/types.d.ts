@@ -321,13 +321,12 @@ export namespace LocalizationTypes {
         value: string;
     }
 
-
     /**
-     * @name ILanguage
+     * @name TLocalizationHook
      * 
-     * @description A type for the input request to change the language.
+     * @description A function that is called when a localization is loaded.
      */
-    export type ILanguage = []
+    export type TLocalizationHook = (pair: TKeyPair) => void;
 
 
     /**
@@ -340,10 +339,10 @@ export namespace LocalizationTypes {
     export interface ILocalization {
         name: string;
         code: string;
-        dialects: Array<{
+        dialects?: Array<{
             dialect: string;
-            keys: TKeyPair
+            keys: Array<TKeyPair>;
         }>;
-        keys: TKeyPair;
+        keys: Array<TKeyPair>;
     }
 }

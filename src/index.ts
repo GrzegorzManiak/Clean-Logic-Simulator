@@ -16,9 +16,19 @@ let stage = new Konva.Stage({
     height: window.innerHeight,
 });
 
-const lang  = Localization.determineLanguage()
 
-SettingUI.getInstance(stage);
+// 
+// Functions that need to run after the localization is loaded
+// 
+(async function () {
+    const lang = Localization.getInstance();
+
+    // -- Load the localization resource
+    await lang.loadLocalizationResource();
+
+    // -- Load the settings UI
+    SettingUI.getInstance(stage);
+})();
 
 // -- initialize the grid
 let grid = constructGrid(stage);

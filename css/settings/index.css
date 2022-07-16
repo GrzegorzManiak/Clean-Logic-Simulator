@@ -148,7 +148,6 @@ input[type=tel].number:focus {
     letter-spacing: 0.4rem;
     color: var(--color-font-accent);
     text-align: center;
-    widows: 100%;
     margin: 1rem;
 }
 
