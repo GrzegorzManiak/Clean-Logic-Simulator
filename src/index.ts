@@ -23,6 +23,9 @@ let stage = new Konva.Stage({
 (async function () {
     const lang = Localization.getInstance();
 
+    let l = Localization.determineLanguage();
+    console.log(l);
+
     // -- Load the localization resource
     await lang.loadLocalizationResource();
 

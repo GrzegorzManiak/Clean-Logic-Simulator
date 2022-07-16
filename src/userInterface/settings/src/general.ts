@@ -3,8 +3,7 @@ import { UIelements } from "../../../types";
 
 const options: Array<UIelements.ISettings | undefined> = [
     {
-        name: 'Font Scale',
-        description: 'Change the Scale of the font.',
+        key: 'settings.general.font.scale',
         type: 'slider',
         value: () => SettingsClass.getLocalNumber('settings.gen.fontScale', 100),
         default: 100,
@@ -20,8 +19,7 @@ const options: Array<UIelements.ISettings | undefined> = [
         },
     },
     {
-        name: 'Dark Mode',
-        description: 'Enable / Disables the dark mode.',
+        key: 'settings.general.darkmode',
         type: 'toggle',
         default: true,
         value: () => SettingsClass.getLocalBoolean('settings.gen.darkmode', true),
@@ -31,8 +29,7 @@ const options: Array<UIelements.ISettings | undefined> = [
     },
     undefined,
     {
-        name: 'Scrap Mechanic Mode',
-        description: 'Enable / Disables the scrap mechanic mode.',
+        key: 'settings.general.scrap.mechanic.mode',
         type: 'toggle',
         default: true,
         value: () => SettingsClass.getLocalBoolean('settings.gen.scrapMechanic', true),
@@ -43,8 +40,7 @@ const options: Array<UIelements.ISettings | undefined> = [
     },
     undefined,
     {
-        name: 'Experimental Features',
-        description: 'Enable / Disables the experimental features Panel.',
+        key: 'settings.general.experimental.features',
         type: 'toggle',
         default: false,
         value: () => SettingsClass.getLocalBoolean('settings.gen.experimental', false),
@@ -54,8 +50,7 @@ const options: Array<UIelements.ISettings | undefined> = [
         },
     },
     {
-        name: 'Developer Mode',
-        description: 'Enable / Disables the developer mode.',
+        key: 'settings.general.developer.mode',
         type: 'toggle',
         default: false,
         value: () => SettingsClass.getLocalBoolean('settings.gen.developer', false),
@@ -66,8 +61,8 @@ const options: Array<UIelements.ISettings | undefined> = [
     },
     undefined,
     {
-        name: 'Auto Save',
-        description: 'Enable / Disables the auto save.',
+
+        key: 'settings.general.auto.save',
         type: 'toggle',
         default: true,
         value: () => SettingsClass.getLocalBoolean('settings.gen.autosave', true),
@@ -76,8 +71,7 @@ const options: Array<UIelements.ISettings | undefined> = [
         }
     },
     {
-        name: 'Auto Save Interval',
-        description: 'Change the auto save interval (In minutes).',
+        key: 'settings.general.auto.save.interval',
         type: 'slider',
         value: () => SettingsClass.getLocalNumber('settings.gen.autosaveInterval', 5),
         min: 1,

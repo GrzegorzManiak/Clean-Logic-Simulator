@@ -5,6 +5,7 @@ class Localization {
 
     static readonly suportedLanguages: Array<LocalizationTypes.TResource> = [
         { language: 'en', dialect: ['us', 'uk'], resource: 'http://127.0.0.1:8080/lang/en.json' },
+        { language: 'pl', dialect: [], resource: 'http://127.0.0.1:8080/lang/pl.json' },
     ]
 
     public readonly resources: Array<LocalizationTypes.ILocalization> = [];
@@ -32,10 +33,7 @@ class Localization {
     public static getDialect = (): string => Localization.dialect;
 
 
-    private constructor() {
-        // -- Set the language to the default country
-        Localization.determineLanguage();
-    }
+    private constructor() {}
     public static getInstance(): Localization {
         if (!Localization.instance) Localization.instance = new Localization();
         return Localization.instance;
@@ -92,13 +90,13 @@ class Localization {
         return this.loadResource(Localization.getResource(Localization.getLanguage()), forceLoad)
             .then(resource => {
                 // -- Check if the resource is already loaded
-                if (this.resources.includes(resource)) return;
-
-                // -- Add the resource to the list of resources
-                this.resources.push(resource);
+                if (!this.resources.includes(resource))
+                    // -- Add the resource to the list of resources
+                    this.resources.push(resource);
 
                 // -- Execute all the hooks 
                 this.executeHooks();
+            
             }).catch(error => console.error(error));
     }
 
@@ -208,8 +206,10 @@ class Localization {
         dialect = dialect.toLowerCase() as LocalizationTypes.TLetterCode;
 
         // -- If the language is not supported, default to english
-        if (!Localization.isSupported(language))
+        if (!Localization.isSupported(language)) {
+            console.warn(`Language ${language} is not supported, defaulting to english`);
             return this.getResource('en');
+        }
 
         // -- If the language is supported, we are confident to cast it as TSupported
         const resource =
@@ -224,6 +224,8 @@ class Localization {
         // -- If the language has a dialect, check if it is supported
         if (resource.dialect.includes(dialect)) 
             this.dialect = dialect;
+
+        this.language = (language as LocalizationTypes.TSupported);
         
         // -- Return the
         return resource;

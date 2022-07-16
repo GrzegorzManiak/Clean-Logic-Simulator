@@ -3,8 +3,7 @@ import { UIelements } from "../../../types";
 
 const options: Array<UIelements.ISettings | undefined> = [
     {
-        name: 'WASM Mode',
-        description: 'Enable / Disables the experimental WASM mode (Reload required).',
+        key: 'settings.experimental.features.wasm.mode',
         type: 'toggle',
         default: false,
         value: () => SettingsClass.getLocalBoolean('settings.exp.wasm', false),
@@ -13,8 +12,7 @@ const options: Array<UIelements.ISettings | undefined> = [
         }
     },
     {
-        name: 'Truthtable Export',
-        description: 'Converts your circuit into a truthtable and exports possibly simplifing your circuit.',
+        key: 'settings.experimental.features.truthtable.export',
         type: 'toggle',
         default: false,
         value: () => SettingsClass.getLocalBoolean('settings.exp.truthtable', false),

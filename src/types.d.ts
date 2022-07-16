@@ -170,8 +170,7 @@ export namespace UIelements {
 
 
     export type IBaseSetting = {
-        name: string;
-        description: string;
+        key: string;
         type: TInputType;
     }
 
@@ -296,7 +295,7 @@ export namespace LocalizationTypes {
      * 
      * @description A type for all supported languages (not including dialects).
      */
-    export type TSupported = 'en';
+    export type TSupported = 'en' | 'pl';
 
 
     /**

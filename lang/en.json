@@ -4,10 +4,10 @@
     "dialects": [
         {
             "dialect": "uk",
-            "keys": [{
-                "key": "color",
-                "value": "colour"
-            }]
+            "keys": [
+                {"key": "color", "value": "colour" },
+                { "key": "settings.color", "value": "Colour"}
+            ]
         }
     ],
     "keys": [
@@ -17,6 +17,7 @@
 
         { "key": "settings.general", "value": "General" },
         { "key": "settings.connections", "value": "Connections"},
+        { "key": "settings.color", "value": "Color"},
         { "key": "settings.grid", "value": "Grid"},
         { "key": "settings.cursor", "value": "Cursor"},
         { "key": "settings.export", "value": "Export"},
@@ -51,7 +52,7 @@
         { "key": "settings.experimental.features.wasm.mode", "value": "WASM Mode" },
         { "key": "settings.experimental.features.wasm.mode.description", "value": "Enables / Disables the WASM Mode" },
     
-        { "key": "settings.experimental.features.truth.table.mode", "value": "Truth Table Mode" },
-        { "key": "settings.experimental.features.truth.table.mode.description", "value": "Enables / Disables the Truth Table Mode" }
+        { "key": "settings.experimental.features.truthtable.export", "value": "Truth Table Export" },
+        { "key": "settings.experimental.features.truthtable.mode.description", "value": "Enables / Disables the Truth Table Mode" }
     ]
 }

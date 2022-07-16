@@ -1,4 +1,5 @@
 import Konva from 'Konva';
+import Localization from '../../localization';
 import { UIelements } from '../../types';
 
 // -- Settings pages
@@ -8,6 +9,7 @@ import ScrapMechanic from './src/scrapMechanic';
 
 class Settings {
     private static instance: Settings;
+    public readonly local = Localization.getInstance();
     public readonly stage: Konva.Stage;
     public readonly bluryDiv: HTMLDivElement = document.createElement('div');
     public readonly settingsDiv: HTMLDivElement = document.createElement('div'); 
@@ -42,7 +44,10 @@ class Settings {
         // -- Create the Title -- //
         const title = document.createElement('h1');
 
-        title.innerHTML = 'SETTINGS';
+        this.local.appendHook('settings.title', (pair) => {
+            title.innerHTML = pair.value;
+        });
+        
         title.className = 'page-title';
 
         // -- Append as first child of the left panel
@@ -112,7 +117,7 @@ class Settings {
         btn.visability(true);
     }
 
-    private add(name: string, classes: Array<string>, active: boolean) {
+    private add(name: string, localKey: string, classes: Array<string>, active: boolean) {
         // -- Create a new div -- //
         const option = document.createElement('div'),
             page = document.createElement('div'),
@@ -127,7 +132,9 @@ class Settings {
         classes.forEach(c => fontAwesome.classList.add(c));
 
         // -- Set the lable
-        label.innerHTML = name;
+        this.local.appendHook(localKey, (pair) => {
+            label.innerHTML = pair.value;
+        });
         
         // -- Append the elements to the main element
         option.appendChild(fontAwesome);
@@ -177,31 +184,31 @@ class Settings {
 
     private appendOptions() {
         // -- General settings
-        this.add('General', ['fal', 'icon', 'fa-gear'], true);
+        this.add('General', 'settings.general', ['fal', 'icon', 'fa-gear'], true);
         
         // -- Conections menu
-        this.add('Connections', ['fal', 'icon', 'fa-link'], false);
+        this.add('Connections', 'settings.connections', ['fal', 'icon', 'fa-link'], false);
 
         // -- Color settings
-        this.add('Color', ['fal', 'icon', 'fa-paint-brush'], false);
+        this.add('Color', 'settings.color', ['fal', 'icon', 'fa-paint-brush'], false);
 
         // -- Grid settings
-        this.add('Grid', ['fal', 'icon', 'fa-grid-2'], false);
+        this.add('Grid', 'settings.grid', ['fal', 'icon', 'fa-grid-2'], false);
 
         // -- Cursor settings
-        this.add('Cursor', ['fal', 'icon', 'fa-mouse-pointer'], false);
+        this.add('Cursor', 'settings.cursor', ['fal', 'icon', 'fa-mouse-pointer'], false);
         
         // -- Export settings
-        this.add('Export', ['fal', 'icon', 'fa-file-export'], false);
+        this.add('Export', 'settings.export', ['fal', 'icon', 'fa-file-export'], false);
 
         // -- Developer settings
-        this.add('Developer', ['fal', 'icon', 'fa-code'], false);
+        this.add('Developer', 'settings.developer', ['fal', 'icon', 'fa-code'], false);
 
         // -- Scrap Mechanic
-        this.add('Scrap Mechanic', ['fal', 'icon', 'fa-circle-dot'], false);
+        this.add('Scrap Mechanic', 'settings.sm', ['fal', 'icon', 'fa-circle-dot'], false);
 
         // -- Experimental settings
-        this.add('Experimental', ['fal', 'icon', 'fa-flask'], false);
+        this.add('Experimental', 'settings.export', ['fal', 'icon', 'fa-flask'], false);
 
 
         // -- load in the options
@@ -247,8 +254,14 @@ class Settings {
             const label: HTMLHeadingElement = document.createElement('h2'),
                 description: HTMLParagraphElement = document.createElement('p');
 
-            label.innerHTML = e.name;
-            description.innerHTML = e.description;
+            // -- Append hooks to the lable and description -- //
+            this.local.appendHook(e.key, (pair) => {
+                label.innerHTML = pair.value;
+            });
+
+            this.local.appendHook(e.key + '.description', (pair) => {
+                description.innerHTML = pair.value;
+            });
 
             // -- Append the elements to the main div -- //
             top.appendChild(left);

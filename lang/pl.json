@@ -1,0 +1,49 @@
+{
+    "name": "Polish",
+    "code": "pl",
+    "keys": [
+        { "key": "color", "value": "Color" },
+
+        { "key": "settings.title", "value": "USTAWIENIA"},
+
+        { "key": "settings.general", "value": "Ogólne" },
+        { "key": "settings.connections", "value": "Połączenia"},
+        { "key": "settings.color", "value": "Kolor"},
+        { "key": "settings.grid", "value": "Siatka"},
+        { "key": "settings.cursor", "value": "Kursor"},
+        { "key": "settings.export", "value": "Eksport"},
+        { "key": "settings.developer", "value": "Developer"},
+        { "key": "settings.sm", "value": "Scrap Mechanic"},
+        { "key": "settings.experimental", "value": "Eksperymentalne"},
+
+        { "key": "settings.general.font.scale", "value": "Skala czcionki" },
+        { "key": "settings.general.font.scale.description", "value": "Skala czcionki programu" },
+
+        { "key": "settings.general.darkmode", "value": "Tryb ciemny" },
+        { "key": "settings.general.darkmode.description", "value": "Czy program powinien używać trybu ciemny" },
+
+        { "key": "settings.general.scrap.mechanic.mode", "value": "Tryb Scrap Mechanic" },
+        { "key": "settings.general.scrap.mechanic.mode.description", "value": "Pozwala na wybranie tylko tego, co SM wybiera" },
+
+        { "key": "settings.general.experimental.features", "value": "Funkcje eksperymentalne" },
+        { "key": "settings.general.experimental.features.description", "value": "Włącza / Wyłącza panel Funkcje eksperymentalne" },
+
+        { "key": "settings.general.developer.mode", "value": "Tryb Developer" },
+        { "key": "settings.general.developer.mode.description", "value": "Włącza / Wyłącza tryb Developer" },
+
+        { "key": "settings.general.auto.save", "value": "Auto Save" },
+        { "key": "settings.general.auto.save.description", "value": "Włącza / Wyłącza Auto Save" },
+
+        { "key": "settings.general.auto.save.interval.description", "value": "Interwał w minutach do zapisywania programu" },
+        { "key": "settings.general.auto.save.interval", "value": "Automatyczne interwału zapisywanie" },
+
+        { "key": "settings.scrap.mechanic.mode.self.wired.logic.description", "value": "Włącza / Wyłącza własne podłączenie logiczne" },
+        { "key": "settings.scrap.mechanic.mode.self.wired.logic", "value": "Własne podłączenie logiczne" },
+
+        { "key": "settings.experimental.features.wasm.mode", "value": "Tryb WASM" },
+        { "key": "settings.experimental.features.wasm.mode.description", "value": "Włącza / Wyłącza tryb WASM" },
+
+        { "key": "settings.experimental.features.truthtable.export", "value": "Eksport tabeli prawdy" },
+        { "key": "settings.experimental.features.truthtable.mode.description", "value": "Włącza / Wyłącza tryb tabeli prawdy" }
+    ]
+}
