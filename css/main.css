@@ -26,6 +26,15 @@
     --ui-button-color-hover: #2c2c2c;
 
     --font-scale: 1;
+
+    --input-width: 3rem;
+    --input-height: 1.5rem;
+    --input-border-radius: 0.5rem;
+    --input-circle-radius: 00.5rem;
+    --input-circle-scale: 0.8;
+    --input-circle-size: calc(var(--input-height) * var(--input-circle-scale));
+    --input-center-sub: calc(var(--input-height) - var(--input-circle-size));
+    --input-center-x: calc(var(--input-center-sub) / 2);
 }
 
 html {
