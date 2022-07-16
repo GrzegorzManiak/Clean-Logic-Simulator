@@ -23,11 +23,10 @@ let stage = new Konva.Stage({
 (async function () {
     const lang = Localization.getInstance();
 
-    let l = Localization.determineLanguage();
-    console.log(l);
+    Localization.determineLanguage();
 
     // -- Load the localization resource
-    await lang.loadLocalizationResource();
+    await lang.loadLocalizationResource(true);
 
     // -- Load the settings UI
     SettingUI.getInstance(stage);

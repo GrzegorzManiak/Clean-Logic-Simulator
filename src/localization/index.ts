@@ -85,9 +85,10 @@ class Localization {
      * 
      * @returns Promise<void> - A promise that resolves when the resource is loaded
      */
-    public async loadLocalizationResource(forceLoad = false): Promise<void> {
+    public loadLocalizationResource(forceLoad = false): Promise<void> {
         // -- Get the resource
-        return this.loadResource(Localization.getResource(Localization.getLanguage()), forceLoad)
+        return new Promise((resolve, reject) => {
+            this.loadResource(Localization.getResource(Localization.getLanguage()), forceLoad)
             .then(resource => {
                 // -- Check if the resource is already loaded
                 if (!this.resources.includes(resource))
@@ -95,9 +96,10 @@ class Localization {
                     this.resources.push(resource);
 
                 // -- Execute all the hooks 
-                this.executeHooks();
+                return resolve(this.executeHooks());
             
-            }).catch(error => console.error(error));
+            }).catch(error => reject(error));
+        });
     }
 
 
@@ -140,14 +142,19 @@ class Localization {
         let resource: string | undefined = localStorage.getItem(`lang-res-${res.language}`);
 
         // -- If the resource is not in localstorage, load it from the server
-        if (!resource || forceLoad === true) await new Promise((resolve, reject) => {
+        if (!resource || forceLoad === true) resource = await new Promise((resolve, reject) => {
             // -- load it from the server
             fetch(res.resource)
                 .then(async(response) => { // -- Store the data
+                    // -- data from the server
+                    const data = await response.text();
+
                     // -- store it in webstorage
-                    localStorage.setItem(`lang-res-${res.language}`, await response.text());
-                    resolve(response);
-                }) .catch (error => reject(error)); 
+                    localStorage.setItem(`lang-res-${res.language}`, data);
+                    
+                    // -- Resolve and return the data
+                    return resolve(data);
+                }).catch (error => reject(error)); 
         });
 
         // -- Parse the resource
