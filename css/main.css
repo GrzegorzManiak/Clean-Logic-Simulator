@@ -69,16 +69,19 @@ html {
 }
 
 #cursor {
+    user-select: none;
     z-index: 1000;
     position: absolute;
 }
 
 #cursor > span {
+    user-select: none;
     position: absolute;
     transition: all 0.15s ease-in-out;
 }
 
 #cursor img {
+    user-select: none;
     transition: all 0.15s ease-in-out;
     position: absolute;
 }
