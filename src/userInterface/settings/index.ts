@@ -208,7 +208,7 @@ class Settings {
         this.add('Scrap Mechanic', 'settings.sm', ['fal', 'icon', 'fa-circle-dot'], false);
 
         // -- Experimental settings
-        this.add('Experimental', 'settings.export', ['fal', 'icon', 'fa-flask'], false);
+        this.add('Experimental', 'settings.experimental', ['fal', 'icon', 'fa-flask'], false);
 
 
         // -- load in the options
