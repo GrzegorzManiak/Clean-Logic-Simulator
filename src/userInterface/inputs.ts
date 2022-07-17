@@ -74,6 +74,29 @@ export function createToggleElement(value: boolean, id: string, callback: (x: bo
     // -- Set the label -- //
     label.setAttribute('for', input.id);
     label.classList.add('toggle');
+    label.setAttribute('tabindex', '0');
+
+    // -- [START ACCSESSIBILITY] -- //
+    let foucsed = false;
+
+    // -- add an focus event listener to the element
+    label.addEventListener('focus', () => {
+        foucsed = true;
+    });
+
+    // -- add an unfocus event listener to the element
+    label.addEventListener('blur', () => {
+        foucsed = false;
+    });
+
+    // -- add an keydown event listener to the element
+    label.addEventListener('keydown', (e) => {
+        if(foucsed === false) return;
+
+        if(e.key === 'Enter' || e.key === ' ')
+            label.click();
+    });
+    // -- [END ACCESSIBILITY] -- //
 
     // -- Append the elements to the main element -- //
     parent.appendChild(input);

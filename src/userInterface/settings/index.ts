@@ -225,6 +225,7 @@ class Settings {
         // -- Set the class names and id of the main element
         selector.className = 'settings-option flex-left';
         selector.id = 'selector-' + id;
+        selector.setAttribute('tabindex', '0');
 
         // -- Add all the classes that were passed in
         iconClasses.forEach(c => icon.classList.add(c));
@@ -274,6 +275,29 @@ class Settings {
             icon.classList.add('fa-solid');
 
         } else group.panelVisability(false);
+
+
+        // -- [START ACCSESSIBILITY] -- //
+        let foucsed = false;
+
+        // -- add an focus event listener to the element
+        selector.addEventListener('focus', () => {
+            foucsed = true;
+        });
+
+        // -- add an unfocus event listener to the element
+        selector.addEventListener('blur', () => {
+            foucsed = false;
+        });
+
+        // -- add an keydown event listener to the element
+        selector.addEventListener('keydown', (e) => {
+            if(foucsed === false) return;
+
+            if(e.key === 'Enter' || e.key === ' ')
+                this.setActive(group);
+        });
+        // -- [END ACCESSIBILITY] -- //
 
         
         // -- Return the group
