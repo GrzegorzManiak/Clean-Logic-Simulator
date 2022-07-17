@@ -101,6 +101,40 @@ input[type=tel].number:focus {
 /* NUMBER END */
 
 
+/* DROPDOWN START */
+select.dropdown {
+	width: fit-content;
+	height: fit-content;
+	background: var(--ui-panel-col-left);
+	border-radius: var(--input-border-radius);
+	border: 0;
+	transition: all 0.2s ease-in-out;
+	padding: 0.2rem;
+	text-align: center;
+	color: var(--color-font);
+	font-size: calc(1.1rem * var(--font-scale));
+	font-weight: 500;
+	font-family: 'montserrat', sans-serif;
+	cursor: none;
+}
+
+select.dropdown:focus {
+	outline: none;
+	border: var(--color-accent) solid 0.2rem;
+}
+
+select.dropdown option {
+	color: var(--color-font);
+	font-size: calc(1.1rem * var(--font-scale));
+	font-weight: 500;
+	font-family: 'montserrat', sans-serif;
+}
+
+
+
+
+
+
 /* MAIN START */
 
 #settings {

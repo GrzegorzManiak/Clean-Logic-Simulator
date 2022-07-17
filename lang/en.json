@@ -23,10 +23,13 @@
         { "key": "settings.export", "value": "Export"},
         { "key": "settings.developer", "value": "Developer"},
         { "key": "settings.sm", "value": "Scrap Mechanic"},
-        { "key": "settings.experimental", "value": "Experimental"},
+        { "key": "settings.experimental", "value": "Experimental"},        
 
         { "key": "settings.general.font.scale", "value": "Font Scale" },
         { "key": "settings.general.font.scale.description", "value": "The font scale of the program" },
+
+        { "key": "settings.general.language", "value": "Language"},
+        { "key": "settings.general.language.description", "value": "The language of the program"},
     
         { "key": "settings.general.darkmode", "value": "Darkmode" },
         { "key": "settings.general.darkmode.description", "value": "Whether the program should use darkmode" },

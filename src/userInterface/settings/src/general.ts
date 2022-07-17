@@ -1,4 +1,5 @@
 import SettingsClass from "..";
+import Localization from "../../../localization";
 import { UIelements } from "../../../types";
 
 const options: Array<UIelements.ISettings | undefined> = [
@@ -9,7 +10,7 @@ const options: Array<UIelements.ISettings | undefined> = [
         default: 100,
         min: 50,
         max: 200,
-        onChange: (value: number) => {
+        onChange: (value) => {
             if (value < 50) value = 50;
             if (value > 200) value = 200;
             SettingsClass.setLocalNumber('settings.gen.fontScale', value);
@@ -19,11 +20,32 @@ const options: Array<UIelements.ISettings | undefined> = [
         },
     },
     {
+        key: 'settings.general.language',
+        type: 'dropdown',
+        position: 'right',
+        value: () => SettingsClass.getLocalString('settings.gen.language', 'English'),
+        default: 'English', 
+        options: Localization.getLanguages(),
+        onChange: async(value) => {
+            SettingsClass.setLocalString('settings.gen.language', value);
+            
+            const langCode = Localization.suportedLanguages.find(lang => lang.name === value)?.language ?? 'en';
+            
+            Localization.determineLanguage(langCode);
+
+            const local = Localization.getInstance();
+
+            await local.loadLocalizationResource();
+
+            local.executeHooks();
+        }
+    },
+    {
         key: 'settings.general.darkmode',
         type: 'toggle',
         default: true,
         value: () => SettingsClass.getLocalBoolean('settings.gen.darkmode', true),
-        onChange: (value: boolean) => {
+        onChange: (value) => {
             SettingsClass.setLocalBoolean('settings.gen.darkmode', value);
         },
     },
@@ -33,7 +55,7 @@ const options: Array<UIelements.ISettings | undefined> = [
         type: 'toggle',
         default: true,
         value: () => SettingsClass.getLocalBoolean('settings.gen.scrapMechanic', true),
-        onChange: (value: boolean) => {
+        onChange: (value) => {
             SettingsClass.setLocalBoolean('settings.gen.scrapMechanic', value);
             SettingsClass.getGroup('scrap mechanic')?.buttonVisability(value);
         }
@@ -44,7 +66,7 @@ const options: Array<UIelements.ISettings | undefined> = [
         type: 'toggle',
         default: false,
         value: () => SettingsClass.getLocalBoolean('settings.gen.experimental', false),
-        onChange: (value: boolean) => {
+        onChange: (value) => {
             SettingsClass.setLocalBoolean('settings.gen.experimental', value);
             SettingsClass.getGroup('experimental')?.buttonVisability(value);
         },
@@ -54,7 +76,7 @@ const options: Array<UIelements.ISettings | undefined> = [
         type: 'toggle',
         default: false,
         value: () => SettingsClass.getLocalBoolean('settings.gen.developer', false),
-        onChange: (value: boolean) => {
+        onChange: (value) => {
             SettingsClass.setLocalBoolean('settings.gen.developer', value);
             SettingsClass.getGroup('developer')?.buttonVisability(value);
         },
@@ -66,7 +88,7 @@ const options: Array<UIelements.ISettings | undefined> = [
         type: 'toggle',
         default: true,
         value: () => SettingsClass.getLocalBoolean('settings.gen.autosave', true),
-        onChange: (value: boolean) => {
+        onChange: (value) => {
             SettingsClass.setLocalBoolean('settings.gen.autosave', value);
         }
     },
@@ -77,7 +99,7 @@ const options: Array<UIelements.ISettings | undefined> = [
         min: 1,
         max: 60,
         default: 5,
-        onChange: (value: number) => {
+        onChange: (value) => {
             if (value < 1) value = 1;
             if (value > 60) value = 60;
             SettingsClass.setLocalNumber('settings.gen.autosaveInterval', value);

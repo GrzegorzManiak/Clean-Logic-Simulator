@@ -4,8 +4,8 @@ class Localization {
     private static instance: Localization;
 
     static readonly suportedLanguages: Array<LocalizationTypes.TResource> = [
-        { language: 'en', dialect: ['us', 'uk'], resource: 'http://127.0.0.1:8080/lang/en.json' },
-        { language: 'pl', dialect: [], resource: 'http://127.0.0.1:8080/lang/pl.json' },
+        { language: 'en', name: 'English', dialect: ['us', 'uk'], resource: 'http://127.0.0.1:8080/lang/en.json' },
+        { language: 'pl', name: 'Polish', dialect: [], resource: 'http://127.0.0.1:8080/lang/pl.json' },
     ]
 
     public readonly resources: Array<LocalizationTypes.ILocalization> = [];
@@ -40,6 +40,18 @@ class Localization {
     }
 
     /**
+     * @name getLanguages
+     * 
+     * @description Gets the list of languages supported by the application.
+     * 
+     * @returns Array<string> - The list of language names supported by the application
+     */
+    public static getLanguages(): Array<string> {
+        return Localization.suportedLanguages.map(lang => lang.name);
+    }
+
+
+    /**
      * @name appendHook
      * 
      * @description Appends a hook to the list of hooks, called when the localization resource is loaded / changed.
@@ -56,12 +68,6 @@ class Localization {
         // -- Add the hook to the list of hooks
         this.hooks.push(hook);
 
-        // -- Execute the hook
-        callback({
-            key: hook.key,
-            value: this.getLocal(hook.key, hook.args)
-        });
-
         // -- Return a function that removes the hook from the list of hooks
         return () => {
             // -- Remove the hook from the list of hooks
@@ -69,12 +75,20 @@ class Localization {
         }
     }
 
-    private executeHooks(): void {
+    public async executeHooks(): Promise<void> {
         // -- Execute all the hooks
-        this.hooks.forEach(hook => hook.callback({
-            key: hook.key,
-            value: this.getLocal(hook.key, hook.args)
-        }));
+        return new Promise(async(resolve, reject) => {
+            this.hooks.forEach(async (hook) => {
+                // -- Execute the hook
+                hook.callback({
+                    key: hook.key,
+                    value: await this.getLocal(hook.key, hook.args)
+                });
+            });
+
+            // -- Resolve the promise
+            return resolve();
+        });
     }
 
     /**
@@ -96,7 +110,7 @@ class Localization {
                     this.resources.push(resource);
 
                 // -- Execute all the hooks 
-                return resolve(this.executeHooks());
+                return resolve();
             
             }).catch(error => reject(error));
         });
@@ -111,7 +125,7 @@ class Localization {
      * @param key: string - The key to get the value of
      * @param args: Array<string> - The arguments to replace in the string ${0}, ${1}, etc.
      */
-    public getLocal(key: string, args: Array<string> = []): string {
+    public async getLocal(key: string, args: Array<string> = []): Promise<string> {
         // -- Check if the resource is loaded
         if (!this.activeLocalization)
             throw new Error('Localization resource not loaded');
@@ -175,7 +189,7 @@ class Localization {
             this.activeLocalization = parsedResource;
 
             // -- set the active dialect
-            this.activeDialect = parsedResource.dialects.find(dialect =>
+            this.activeDialect = parsedResource.dialects?.find(dialect =>
                 dialect.dialect === Localization.dialect)?.keys as Array<LocalizationTypes.TKeyPair> ?? [];
         }
 

@@ -338,6 +338,21 @@ class Settings {
                     // Fire onChange
                     e.onChange(e.value());
                 break;
+
+
+                // -- Dropdown -- //
+                case 'dropdown':
+                    // -- Create the input element
+                    const [dropdown] =
+                        this.createDropdownElement(e.options, e.value(), option.id, e.onChange);
+
+                    // -- Append the elements to the option element
+                    right.appendChild(dropdown);
+
+                    // -- Fire the onChange event
+                    e.onChange(e.value());
+                break;
+
             }
 
             // -- Append the option to the parent -- //
@@ -415,9 +430,8 @@ class Settings {
         input.checked = value;
 
         // -- Add the event listener -- //
-        input.addEventListener('change', () => {
-            callback(input.checked);
-        });
+        input.addEventListener('change', () => 
+            callback(input.checked));
 
         // -- Set the label -- //
         label.setAttribute('for', input.id);
@@ -458,9 +472,8 @@ class Settings {
         input.classList.add('slider');
 
         // -- Add the event listener -- //
-        input.addEventListener('change', () => {
-            callback(parseInt(input.value));
-        });
+        input.addEventListener('change', () => 
+            callback(parseInt(input.value)));
 
         // -- Set the label -- //
         label.setAttribute('for', input.id);
@@ -476,11 +489,62 @@ class Settings {
 
 
     /**
+     * @name createDropdownElement
+     * 
+     * @description Creates a dropdown element
+     * 
+     * @param {Array<string>} options The options to display in the dropdown
+     * @param {string} value The current value of the dropdown
+     * @param {string} id The base of the id for the input elm
+     * @param {(x: string) => void} callback The callback function to call when the value changes
+     * 
+     * @returns [HTMLDivElement, HTMLSelectElement] The paremt element and the input element
+     */
+    public createDropdownElement(options: Array<string>, value: string, id: string, callback: (x: string) => void): [HTMLDivElement, HTMLSelectElement] {
+        const input = document.createElement('select'),
+            label = document.createElement('label'),
+            parent = document.createElement('div');
+
+        // -- Set the Input -- //
+        input.id = id + '-dropdown';
+        input.classList.add('dropdown');
+
+        // -- Add the options -- //
+        options.forEach(option => {
+            const optionElm = document.createElement('option');
+
+            optionElm.value = option;
+            optionElm.innerText = option;
+
+            input.appendChild(optionElm);
+        });
+
+        // -- Set the label -- //
+        label.setAttribute('for', input.id);
+        label.classList.add('dropdown');
+
+        // -- Add the event listener -- //
+        input.addEventListener('change', () => 
+            callback(input.value));
+
+        // -- Set the active value -- //
+        input.value = value;
+
+        // -- Append the elements to the main element -- //
+        parent.appendChild(input);
+        parent.appendChild(label);
+
+        // -- Return the main element -- //
+        return [parent, input];
+    }
+    
+
+    /**
      * @name getLocalBoolean 
      * 
      * @description This function will get the value of a local storage item and return it as a boolean
      * 
-     * @param {string} name The name of the item to get
+     * @param {string} key The name of the item to get
      * @param {boolean} defaultValue The default value to return if the item is not found
      * @returns {boolean} The value of the item
      */
@@ -505,6 +569,7 @@ class Settings {
     public static setLocalBoolean(key: string, value: boolean): void {
         localStorage.setItem(key, value.toString());
     }
+
 
 
     /**
@@ -536,6 +601,42 @@ class Settings {
      */
     public static setLocalNumber(key: string, value: number): void {
         localStorage.setItem(key, value.toString());
+    }
+
+
+
+    /**
+     * @name getLocalString
+     * 
+     * @description This function will get the value of a local storage item and return it as a string
+     * 
+     * @param {string} name The name of the item to get
+     * @param {string} defaultValue The default value to return if the item is not found
+     * 
+     * @returns {string} The value of the item
+     */
+    public static getLocalString(key: string, def: string): string {
+        const value = localStorage.getItem(key);
+        if (value === null) {
+            localStorage.setItem(key, def);
+            return def;
+        }
+        return value;
+    }
+
+    /**
+     * @name setLocalString
+     * 
+     * @description This function will set the value of a local storage item
+     * 
+     * @param {string} name The name of the item to set
+     * @param {string} value The value to set the item to
+     * 
+     * @returns {void}  
+     */
+
+    public static setLocalString(key: string, value: string): void {
+        localStorage.setItem(key, value);
     }
 }
 

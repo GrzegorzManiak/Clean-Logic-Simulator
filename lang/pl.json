@@ -1,6 +1,7 @@
 {
     "name": "Polish",
     "code": "pl",
+    "dialects": [],
     "keys": [
         { "key": "color", "value": "Color" },
 
@@ -18,6 +19,9 @@
 
         { "key": "settings.general.font.scale", "value": "Skala czcionki" },
         { "key": "settings.general.font.scale.description", "value": "Skala czcionki programu" },
+
+        { "key": "settings.general.language", "value": "Język"},
+        { "key": "settings.general.language.description", "value": "Język programu"},
 
         { "key": "settings.general.darkmode", "value": "Tryb ciemny" },
         { "key": "settings.general.darkmode.description", "value": "Czy program powinien używać trybu ciemny" },

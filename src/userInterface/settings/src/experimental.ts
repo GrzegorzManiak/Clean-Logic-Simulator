@@ -7,7 +7,7 @@ const options: Array<UIelements.ISettings | undefined> = [
         type: 'toggle',
         default: false,
         value: () => SettingsClass.getLocalBoolean('settings.exp.wasm', false),
-        onChange: (value: boolean) => {
+        onChange: (value) => {
             SettingsClass.setLocalBoolean('settings.exp.wasm', value);
         }
     },
@@ -16,7 +16,7 @@ const options: Array<UIelements.ISettings | undefined> = [
         type: 'toggle',
         default: false,
         value: () => SettingsClass.getLocalBoolean('settings.exp.truthtable', false),
-        onChange: (value: boolean) => {
+        onChange: (value) => {
             SettingsClass.setLocalBoolean('settings.exp.truthtable', value);
         }
     }

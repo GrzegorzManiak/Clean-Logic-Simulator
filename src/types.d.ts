@@ -155,7 +155,18 @@ export namespace Basic {
 }
 
 
+
+/**
+ * @name UIelements
+ * 
+ * @description This namespace contains all the types that are used in the user interface.
+ */
 export namespace UIelements {
+    /**
+     * @name TSettingsButton
+     * 
+     * @description Main settings button usaly located on the left, used to select a group of settings.
+     */
     export type TSettingsButton = {
         name: string;
         visability: (visable: boolean) => void;
@@ -166,44 +177,101 @@ export namespace UIelements {
         page: HTMLDivElement;
     }
 
-    export type TInputType = 'toggle' | 'slider' | 'number';
+    /**
+     * @name TInputType
+     * 
+     * @description Type of input used in settings.
+     */
+    export type TInputType = 'toggle' | 'slider' | 'number' | 'dropdown';
 
+    /**
+     * @name TPositioning
+     * 
+     * @description Positioning of the setting element, eg putting the dropdown below the main lable of the setting.
+     */
+    export type TPositioning = 'right' | 'bottom';
 
-    export type IBaseSetting = {
+    type IBaseSetting = {
         key: string;
         type: TInputType;
     }
 
-    // -- Toggle
-    type Toggle = IBaseSetting & {
+    /**
+     * @name Dropdown
+     * 
+     * @description Used for defining a dropdown menu wihin the settings menu
+     * 
+     * @see IBaseSetting
+     * @see TPositioning
+     */
+    export type Dropdown = IBaseSetting & {
+        type: 'dropdown';
+        position: TPositioning;
+        value: () => string;
+        options: string[];
+        default: string;
+        onChange: (value: string) => void | Promise<void>;
+    }
+
+    /**
+     * @name Toggle
+     * 
+     * @description Used for defining a toggle button wihin the settings menu
+     * 
+     * @see IBaseSetting
+     */
+    export type Toggle = IBaseSetting & {
         type: 'toggle';
         value: () => boolean;
         default: boolean;
-        onChange: (value: boolean) => void;
+        onChange: (value: boolean) => void | Promise<void>;
     }
-
-    // -- Slider
-    type Slider = IBaseSetting & {
+    
+    /**
+     * @name Slider
+     * 
+     * @description Used for defining a slider wihin the settings menu
+     * 
+     * @see IBaseSetting
+     */
+    export type Slider = IBaseSetting & {
         type: 'slider';
         value: () => number;
         min: number;
         max: number;
         default: number;
-        onChange: (value: number) => void;
+        onChange: (value: number) => void | Promise<void>;
     }
-
-    // -- Number
-    type Number = IBaseSetting & {
+    
+    /**
+     * @name Number
+     * 
+     * @description Used for defining a number input wihin the settings menu
+     * 
+     * @see IBaseSetting
+     */
+    export type Number = IBaseSetting & {
         type: 'number';
         value: () => number;
         min: number;
         max: number;
         default: number;
-        onChange: (value: number) => void;
+        onChange: (value: number) => void | Promise<void>;
     }
 
-    export type ISettings = Slider | Toggle | Number;
+    /**
+     * @name ISettings
+     * 
+     * @description A union of all the settings types
+     * 
+     * @see Toggle
+     * @see Slider
+     * @see Number
+     * @see Dropdown
+     */
+    export type ISettings = Slider | Toggle | Number | Dropdown;
 }
+
 
 
 /**
@@ -305,6 +373,7 @@ export namespace LocalizationTypes {
      */
     export type TResource = {
         language: TSupported;
+        name: string;
         dialect?: Array<string>;
         resource: string;
     }
