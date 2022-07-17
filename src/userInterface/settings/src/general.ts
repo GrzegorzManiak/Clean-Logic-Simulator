@@ -2,18 +2,27 @@ import SettingsClass from "..";
 import Localization from "../../../localization";
 import { UIelements } from "../../../types";
 
+import { 
+    getLocalBoolean, 
+    getLocalNumber, 
+    getLocalString, 
+    setLocalBoolean, 
+    setLocalNumber, 
+    setLocalString 
+} from "../../inputs";
+
 const options: Array<UIelements.ISettings | undefined> = [
     {
         key: 'settings.general.font.scale',
         type: 'slider',
-        value: () => SettingsClass.getLocalNumber('settings.gen.fontScale', 100),
+        value: () => getLocalNumber('settings.gen.fontScale', 100),
         default: 100,
         min: 50,
         max: 200,
         onChange: (value) => {
             if (value < 50) value = 50;
             if (value > 200) value = 200;
-            SettingsClass.setLocalNumber('settings.gen.fontScale', value);
+                setLocalNumber('settings.gen.fontScale', value);
 
             // Get the css root variable '--font-scale'
             document.documentElement.style.setProperty('--font-scale', `${value / 100}`);
@@ -23,12 +32,12 @@ const options: Array<UIelements.ISettings | undefined> = [
         key: 'settings.general.language',
         type: 'dropdown',
         position: 'right',
-        value: () => SettingsClass.getLocalString('settings.gen.language', 'English'),
+        value: () => getLocalString('settings.gen.language', 'English'),
         default: 'English', 
         options: Localization.getLanguages(),
         onChange: async(value) => {
-            SettingsClass.setLocalString('settings.gen.language', value);
-            
+            setLocalString('settings.gen.language', value);
+
             const langCode = Localization.suportedLanguages.find(lang => lang.name === value)?.language ?? 'en';
             
             Localization.determineLanguage(langCode);
@@ -44,9 +53,9 @@ const options: Array<UIelements.ISettings | undefined> = [
         key: 'settings.general.darkmode',
         type: 'toggle',
         default: true,
-        value: () => SettingsClass.getLocalBoolean('settings.gen.darkmode', true),
+        value: () => getLocalBoolean('settings.gen.darkmode', true),
         onChange: (value) => {
-            SettingsClass.setLocalBoolean('settings.gen.darkmode', value);
+            setLocalBoolean('settings.gen.darkmode', value);
         },
     },
     undefined,
@@ -54,10 +63,10 @@ const options: Array<UIelements.ISettings | undefined> = [
         key: 'settings.general.scrap.mechanic.mode',
         type: 'toggle',
         default: true,
-        value: () => SettingsClass.getLocalBoolean('settings.gen.scrapMechanic', true),
+        value: () => getLocalBoolean('settings.gen.scrapMechanic', true),
         onChange: (value) => {
-            SettingsClass.setLocalBoolean('settings.gen.scrapMechanic', value);
-            SettingsClass.getGroup('scrap mechanic')?.buttonVisability(value);
+            setLocalBoolean('settings.gen.scrapMechanic', value);
+            SettingsClass.getGroup('scrap mechanic')?.selectorVisability(value);
         }
     },
     undefined,
@@ -65,20 +74,20 @@ const options: Array<UIelements.ISettings | undefined> = [
         key: 'settings.general.experimental.features',
         type: 'toggle',
         default: false,
-        value: () => SettingsClass.getLocalBoolean('settings.gen.experimental', false),
+        value: () => getLocalBoolean('settings.gen.experimental', false),
         onChange: (value) => {
-            SettingsClass.setLocalBoolean('settings.gen.experimental', value);
-            SettingsClass.getGroup('experimental')?.buttonVisability(value);
+            setLocalBoolean('settings.gen.experimental', value);
+            SettingsClass.getGroup('experimental')?.selectorVisability(value);
         },
     },
     {
         key: 'settings.general.developer.mode',
         type: 'toggle',
         default: false,
-        value: () => SettingsClass.getLocalBoolean('settings.gen.developer', false),
+        value: () => getLocalBoolean('settings.gen.developer', false),
         onChange: (value) => {
-            SettingsClass.setLocalBoolean('settings.gen.developer', value);
-            SettingsClass.getGroup('developer')?.buttonVisability(value);
+            setLocalBoolean('settings.gen.developer', value);
+            SettingsClass.getGroup('developer')?.selectorVisability(value);
         },
     },
     undefined,
@@ -87,28 +96,28 @@ const options: Array<UIelements.ISettings | undefined> = [
         key: 'settings.general.auto.save',
         type: 'toggle',
         default: true,
-        value: () => SettingsClass.getLocalBoolean('settings.gen.autosave', true),
+        value: () => getLocalBoolean('settings.gen.autosave', true),
         onChange: (value) => {
-            SettingsClass.setLocalBoolean('settings.gen.autosave', value);
+            setLocalBoolean('settings.gen.autosave', value);
         }
     },
     {
         key: 'settings.general.auto.save.interval',
         type: 'slider',
-        value: () => SettingsClass.getLocalNumber('settings.gen.autosaveInterval', 5),
+        value: () => getLocalNumber('settings.gen.autosaveInterval', 5),
         min: 1,
         max: 60,
         default: 5,
         onChange: (value) => {
             if (value < 1) value = 1;
             if (value > 60) value = 60;
-            SettingsClass.setLocalNumber('settings.gen.autosaveInterval', value);
+            setLocalNumber('settings.gen.autosaveInterval', value);
         }
     }
 ]
 
 function General(Settings: SettingsClass) {
-    Settings.addOptions(options, 'general');
+    Settings.appendOptions(options, 'general');
 }
  
 export default General;

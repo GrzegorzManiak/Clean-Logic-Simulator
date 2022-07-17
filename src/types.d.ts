@@ -163,18 +163,21 @@ export namespace Basic {
  */
 export namespace UIelements {
     /**
-     * @name TSettingsButton
+     * @name TSelectorButton
      * 
      * @description Main settings button usaly located on the left, used to select a group of settings.
      */
-    export type TSettingsButton = {
-        name: string;
-        visability: (visable: boolean) => void;
-        buttonVisability: (show: boolean) => void;
-        button: HTMLDivElement;
-        icon: HTMLElement;
-        label: HTMLHeadElement;
-        page: HTMLDivElement;
+    export type TSelectorButton = {
+        id: string;
+        panelVisability: (visable: boolean) => void;
+        selectorVisability: (show: boolean) => void;
+        
+        elements: {
+            selector: HTMLDivElement;
+            icon: HTMLElement;
+            label: HTMLHeadElement;
+            page: HTMLDivElement;
+        }
     }
 
     /**

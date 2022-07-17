@@ -1,29 +1,34 @@
 import SettingsClass from "..";
 import { UIelements } from "../../../types";
 
+import { 
+    getLocalBoolean, 
+    setLocalBoolean, 
+} from "../../inputs";
+
 const options: Array<UIelements.ISettings | undefined> = [
     {
         key: 'settings.experimental.features.wasm.mode',
         type: 'toggle',
         default: false,
-        value: () => SettingsClass.getLocalBoolean('settings.exp.wasm', false),
+        value: () => getLocalBoolean('settings.exp.wasm', false),
         onChange: (value) => {
-            SettingsClass.setLocalBoolean('settings.exp.wasm', value);
+            setLocalBoolean('settings.exp.wasm', value);
         }
     },
     {
         key: 'settings.experimental.features.truthtable.export',
         type: 'toggle',
         default: false,
-        value: () => SettingsClass.getLocalBoolean('settings.exp.truthtable', false),
+        value: () => getLocalBoolean('settings.exp.truthtable', false),
         onChange: (value) => {
-            SettingsClass.setLocalBoolean('settings.exp.truthtable', value);
+            setLocalBoolean('settings.exp.truthtable', value);
         }
     }
 ]
 
 function Experimental(Settings: SettingsClass) {
-    Settings.addOptions(options, 'experimental');
+    Settings.appendOptions(options, 'experimental');
 }
  
 export default Experimental;
