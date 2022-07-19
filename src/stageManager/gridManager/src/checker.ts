@@ -2,14 +2,14 @@ import { GridConstants } from "../../../options";
 import { getScale } from "../../scrollManager";
 import { IGridDetails } from '..';
 
-import Konva from "Konva";
+import konva from "konva";
 
-function checker(gridLayer: Konva.Layer, gridDetails: IGridDetails) {
+function checker(gridLayer: konva.Layer, gridDetails: IGridDetails) {
     // Only render the grid if we are zoomed in enough, otherwise
     // it will be too small to see, but we still need to render it
     // causing a performance hit.
     if(getScale() > 0.5) {
-        const rect = new Konva.Rect({
+        const rect = new konva.Rect({
             x: gridDetails.stepSize + gridDetails.gridOffsetX, 
             y: gridDetails.stepSize + gridDetails.gridOffsetY,
             width: gridDetails.stepSize,
@@ -17,9 +17,9 @@ function checker(gridLayer: Konva.Layer, gridDetails: IGridDetails) {
             fill: GridConstants.gridColor,
         }).cache(); 
 
-        const rectGroup = new Konva.Group();
+        const rectGroup = new konva.Group();
 
-        let clone: Konva.Rect | null;
+        let clone: konva.Rect | null;
 
         // -- Horizontal Lines --
         for (let i = 0; i < gridDetails.horizontalLines; i++) {

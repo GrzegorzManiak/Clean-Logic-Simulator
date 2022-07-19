@@ -1,4 +1,4 @@
-import Konva from "Konva";
+import konva from "konva";
 import intractableObject from "./interactableObject";
 
 export namespace BlockList {
@@ -134,11 +134,11 @@ export namespace Basic {
         right: HTMLImageElement,
     }
 
-    export interface ICursorKonva {
-        top: Konva.Image,
-        bottom: Konva.Image,
-        left: Konva.Image,
-        right: Konva.Image,
+    export interface ICursorkonva {
+        top: konva.Image,
+        bottom: konva.Image,
+        left: konva.Image,
+        right: konva.Image,
     }
 
     export interface ICursorOptions {

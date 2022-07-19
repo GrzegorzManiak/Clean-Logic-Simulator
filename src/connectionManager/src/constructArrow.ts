@@ -1,13 +1,13 @@
-import Konva from 'Konva';
+import konva from 'konva';
 import { VisualConstants } from '../../options';
 
-function constructArrow(pos: [number, number], direction: 1 | 2 | 3 | 4): Konva.Group  {
+function constructArrow(pos: [number, number], direction: 1 | 2 | 3 | 4): konva.Group  {
     let [x, y] = pos,
-        Group = new Konva.Group();
+        Group = new konva.Group();
 
     let points: [number, number, number, number] = [0, 0, 0, 0];
 
-    const arrowOutline = new Konva.Arrow({
+    const arrowOutline = new konva.Arrow({
         points: points,
         pointerLength: VisualConstants.arrowWidth,
         pointerWidth: VisualConstants.arrowHeight,
@@ -22,7 +22,7 @@ function constructArrow(pos: [number, number], direction: 1 | 2 | 3 | 4): Konva.
     if(VisualConstants.strokeOutlineWidth > 0)
         Group.add(arrowOutline);
 
-    const arrow = new Konva.Arrow({
+    const arrow = new konva.Arrow({
         points: points,
         pointerLength: VisualConstants.arrowWidth,
         pointerWidth: VisualConstants.arrowHeight,

@@ -1,4 +1,4 @@
-import Konva from "Konva";
+import konva from "konva";
 import Global from "../../global";
 import trackMouse from './src/trackMouse';
 import intractableObject from "../../interactableObject";
@@ -9,10 +9,10 @@ import { SelectionConstants } from '../../options';
 class Selection {
     private static instance: Selection;
 
-    private readonly box: Konva.Rect;
+    private readonly box: konva.Rect;
 
-    public readonly stage: Konva.Stage;
-    public readonly layer: Konva.Layer = new Konva.Layer();
+    public readonly stage: konva.Stage;
+    public readonly layer: konva.Layer = new konva.Layer();
     public readonly globals: Global = Global.getInstance();
     public readonly connectionManager: ConnectionManager;
 
@@ -47,7 +47,7 @@ class Selection {
     private static setSelectedBlocks = (value: Array<intractableObject>) => Selection.selectedBlocks = value;
     public static clearSelectedBlocks = () => { Selection.selectedBlocks = [] };
 
-    private constructor(stage: Konva.Stage) { 
+    private constructor(stage: konva.Stage) { 
         this.stage = stage;
         this.connectionManager = ConnectionManager.getInstance(stage);
         this.box = this.createBox();
@@ -56,7 +56,7 @@ class Selection {
         this.hookOntoMouse();
     }
 
-    public static getInstance(stage: Konva.Stage): Selection {
+    public static getInstance(stage: konva.Stage): Selection {
         if(!Selection.instance) new Selection(stage);
         return Selection.instance;
     }
@@ -72,8 +72,8 @@ class Selection {
         Selection.clearSelectedBlocks();
     }
 
-    private createBox(): Konva.Rect {
-        return new Konva.Rect({
+    private createBox(): konva.Rect {
+        return new konva.Rect({
             fill: SelectionConstants.color,
             stroke: SelectionConstants.borderColor,
             strokeWidth: SelectionConstants.borderWidth,

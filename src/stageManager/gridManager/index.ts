@@ -1,4 +1,4 @@
-import Konva from 'Konva';
+import konva from 'konva';
 import { GridConstants } from '../../options';
 import { getPos, getScale } from '../scrollManager';
 
@@ -15,9 +15,9 @@ export type IGridDetails = {
     gridHeight: number,
 }
 
-function constructGrid(stage: Konva.Stage, style: 1 | 2 = 1): Konva.Layer {
+function constructGrid(stage: konva.Stage, style: 1 | 2 = 1): konva.Layer {
     const stepSize = GridConstants.gridSize * getScale(),
-        gridLayer = new Konva.Layer();
+        gridLayer = new konva.Layer();
 
     gridLayer.listening(false);
 

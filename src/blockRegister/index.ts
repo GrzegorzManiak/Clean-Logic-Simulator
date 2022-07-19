@@ -1,9 +1,9 @@
 import BlockRegistry from '../interactableObject/src/register';
 import intractableObject from '../interactableObject';
 import ConnectionManager from '../connectionManager';
-import Konva from 'Konva';
+import konva from 'konva';
 
-function register(stage: Konva.Stage) { 
+function register(stage: konva.Stage) { 
     const layer = ConnectionManager.getInstance(stage).layer;
     
     BlockRegistry.registerBlock({

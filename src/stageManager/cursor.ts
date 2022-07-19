@@ -1,4 +1,4 @@
-import Konva from "Konva";
+import konva from "konva";
 import Global from "../global";
 import { Basic } from "../types";
 
@@ -11,11 +11,11 @@ class Cursor {
     public readonly cursorElm: HTMLSpanElement = document.createElement('span');
     public readonly rotationElm: HTMLSpanElement = document.createElement('span');
     public readonly options: Basic.ICursorOptions;
-    public readonly stage: Konva.Stage;
+    public readonly stage: konva.Stage;
     private offset: Basic.ICords;
     static readonly sides: Array<Basic.TSides> = ['top', 'right', 'bottom', 'left'];
 
-    private constructor(stage: Konva.Stage, graphics: Basic.ICursorGraphics, options: Basic.ICursorOptions) {
+    private constructor(stage: konva.Stage, graphics: Basic.ICursorGraphics, options: Basic.ICursorOptions) {
         this.stage = stage;
         this.options = options;
         this.graphics = graphics;
@@ -23,7 +23,7 @@ class Cursor {
         this.instantiateCursor();
     }
 
-    public static getInstance(stage: Konva.Stage, graphics: Basic.ICursorGraphics, options: Basic.ICursorOptions): Cursor {
+    public static getInstance(stage: konva.Stage, graphics: Basic.ICursorGraphics, options: Basic.ICursorOptions): Cursor {
         if (!this.instance) new Cursor(stage, graphics, options);
         return this.instance;
     }

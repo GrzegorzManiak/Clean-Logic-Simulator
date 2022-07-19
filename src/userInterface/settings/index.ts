@@ -1,4 +1,4 @@
-import Konva from 'Konva';
+import konva from 'konva';
 import Localization from '../../localization';
 import { UIelements } from '../../types';
 
@@ -20,7 +20,7 @@ class Settings {
     public static elements: Array<UIelements.TSelectorButton> = [];
 
     public readonly local = Localization.getInstance();
-    public readonly stage: Konva.Stage;
+    public readonly stage: konva.Stage;
 
     // -- Main elements that are used to construct the settings menu
     public readonly bluryDiv: HTMLDivElement =          document.createElement('div');
@@ -41,7 +41,7 @@ class Settings {
     private activeButton: UIelements.TSelectorButton;
 
 
-    private constructor(stage: Konva.Stage) {
+    private constructor(stage: konva.Stage) {
         this.stage = stage;
 
         // -- Append to respective divs 
@@ -87,7 +87,7 @@ class Settings {
     }
 
 
-    public static getInstance(stage: Konva.Stage): Settings {
+    public static getInstance(stage: konva.Stage): Settings {
         if (!Settings.instance) Settings.instance = new Settings(stage);
         return Settings.instance;
     }

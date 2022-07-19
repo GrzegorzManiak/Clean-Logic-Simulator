@@ -1,8 +1,8 @@
-import Konva from 'Konva';
+import konva from 'konva';
 import intractableObject from '../../interactableObject';
 import { VisualConstants } from '../../options';
 
-function constructBezier(points: [number, number, number, number], selected: boolean, block: intractableObject, direction: 1 | 2 | 3 | 4): Konva.Group {
+function constructBezier(points: [number, number, number, number], selected: boolean, block: intractableObject, direction: 1 | 2 | 3 | 4): konva.Group {
     const [x1, y1, x2, y2] = points;
 
     // Variable to store data for the bezier curve
@@ -29,10 +29,10 @@ function constructBezier(points: [number, number, number, number], selected: boo
     }
 
     // group to hold all the elements
-    const Group = new Konva.Group();
+    const Group = new konva.Group();
 
     // Create the stroke outline
-    const StrokePath = new Konva.Path({
+    const StrokePath = new konva.Path({
         data: data,
         stroke: VisualConstants.strokeOutlineColor,
         strokeWidth: VisualConstants.strokeWidth + VisualConstants.strokeOutlineWidth,
@@ -45,7 +45,7 @@ function constructBezier(points: [number, number, number, number], selected: boo
         Group.add(StrokePath);
 
     // Create the bezier curve
-    const MainPath = new Konva.Path({
+    const MainPath = new konva.Path({
         data: data,
         stroke: selected ? block.blockOpts.color : VisualConstants.strokeColor,
         strokeWidth: VisualConstants.strokeWidth,

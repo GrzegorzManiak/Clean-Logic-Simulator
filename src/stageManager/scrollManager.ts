@@ -1,4 +1,4 @@
-import Konva from 'Konva';
+import konva from 'konva';
 import { GridConstants } from '../options';
 
 let scale = 1,
@@ -12,8 +12,8 @@ export function getPos(): { x: number, y: number } {
     return pos;
 }
 
-// https://Konvajs.org/docs/sandbox/Zooming_Relative_To_Pointer.html
-function movementManager(stage: Konva.Stage, followers: Array<Konva.Layer>): void {
+// https://konvajs.org/docs/sandbox/Zooming_Relative_To_Pointer.html
+function movementManager(stage: konva.Stage, followers: Array<konva.Layer>): void {
     // Scrolling
     stage.on('wheel', (e) => {
         // stop default scrolling

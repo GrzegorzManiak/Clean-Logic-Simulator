@@ -1,6 +1,6 @@
-import Konva from 'Konva';
+import konva from 'konva';
 
-function trackMouse(stage: Konva.Stage, box: Konva.Rect, origin: { x: number, y: number }, getSize: () => [{ x: number, y: number }, { x: number, y: number }], setSize: (org: [{ x: number, y: number }, { x: number, y: number }]) => void) {
+function trackMouse(stage: konva.Stage, box: konva.Rect, origin: { x: number, y: number }, getSize: () => [{ x: number, y: number }, { x: number, y: number }], setSize: (org: [{ x: number, y: number }, { x: number, y: number }]) => void) {
 
     // Get the mouse position
     const mousePos = stage.getPointerPosition() ?? { x: 0, y: 0};

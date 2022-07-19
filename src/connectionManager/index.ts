@@ -1,4 +1,4 @@
-import Konva from 'Konva';
+import konva from 'konva';
 import Global from '../global';
 import constructArrow from './src/constructArrow';
 import calculateCords from './src/calculateCords';
@@ -10,10 +10,10 @@ import { Basic } from '../types';
 class ConnectionManager {
     private static instance: ConnectionManager;
 
-    public readonly stage: Konva.Stage;
-    public readonly layer: Konva.Layer = new Konva.Layer();
+    public readonly stage: konva.Stage;
+    public readonly layer: konva.Layer = new konva.Layer();
     public readonly global: Global = Global.getInstance();
-    public readonly connectionLayer: Konva.Layer = new Konva.Layer();
+    public readonly connectionLayer: konva.Layer = new konva.Layer();
 
 
     // TODO: Refactor how connections are stored
@@ -37,12 +37,12 @@ class ConnectionManager {
     private setSelectedChild = (value: intractableObject): void => { this.selectedChild = value };
 
 
-    public static getInstance(stage: Konva.Stage): ConnectionManager {
+    public static getInstance(stage: konva.Stage): ConnectionManager {
         if(!ConnectionManager.instance) ConnectionManager.instance = new ConnectionManager(stage);
         return ConnectionManager.instance;
     }
 
-    private constructor(stage: Konva.Stage) {
+    private constructor(stage: konva.Stage) {
         this.stage = stage;
 
         // Make sure the connection layer isint listening

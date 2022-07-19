@@ -2,9 +2,9 @@ import { GridConstants } from "../../../options";
 import { getScale } from "../../scrollManager";
 import { IGridDetails } from '..';
 
-import Konva from "Konva";
+import konva from "konva";
 
-function lines(gridLayer: Konva.Layer, gridDetails: IGridDetails) {
+function lines(gridLayer: konva.Layer, gridDetails: IGridDetails) {
     // Only render the grid if we are zoomed in enough, otherwise
     // it will be too small to see, but we still need to render it
     // causing a performance hit.
@@ -16,7 +16,7 @@ function lines(gridLayer: Konva.Layer, gridDetails: IGridDetails) {
             const point: number = (i * gridDetails.stepSize ) + gridDetails.gridOffsetY,
                 startPoint: number = gridDetails.gridOffsetX;     
 
-            const line = new Konva.Line({
+            const line = new konva.Line({
                 points: [startPoint, point, gridDetails.gridWidth, point],
                 stroke: GridConstants.gridColor,
                 strokeWidth: GridConstants.gridLineWidth,
@@ -35,7 +35,7 @@ function lines(gridLayer: Konva.Layer, gridDetails: IGridDetails) {
             const point: number = (i * gridDetails.stepSize) + gridDetails.gridOffsetX,
                 startPoint: number = gridDetails.gridOffsetY;
 
-            const line = new Konva.Line({
+            const line = new konva.Line({
                 points: [point, startPoint, point, gridDetails.gridHeight],
                 stroke: GridConstants.gridColor,
                 strokeWidth: GridConstants.gridLineWidth,

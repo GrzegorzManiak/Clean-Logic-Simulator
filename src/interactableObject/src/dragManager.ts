@@ -1,13 +1,13 @@
-import Konva from 'Konva';
+import konva from 'konva';
 
 // We need a custom drag manager as the 'draggable' functiionality provided
-// by Konva does not provide the correct behaviour for our purposes.
+// by konva does not provide the correct behaviour for our purposes.
 // we need it for when 1 object is being dragged, another object is being
 // moved while the first one stays still.
 // This is used for the ghost block element.
 class DragManager {
-    private stage: Konva.Stage;
-    readonly draggableObject: Konva.Rect;
+    private stage: konva.Stage;
+    readonly draggableObject: konva.Rect;
 
     private listening: boolean = false;
     public setListening(listening: boolean): void { this.listening = listening; }
@@ -25,7 +25,7 @@ class DragManager {
     public getDragging(): boolean { return this.dragging; }
     private setDragging(dragging: boolean): void { this.dragging = dragging; }
 
-    public constructor(draggableObject: Konva.Rect) {
+    public constructor(draggableObject: konva.Rect) {
         this.stage = draggableObject.getStage();
         this.draggableObject = draggableObject;
         this.attatchHooks();

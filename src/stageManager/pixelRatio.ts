@@ -1,22 +1,22 @@
-import Konva from 'Konva';
+import konva from 'konva';
 
 // Singelton class for managing the pixel ratio
 export class PixelRatio {   
     private static instance: PixelRatio;
-    readonly anim: Konva.Animation;
+    readonly anim: konva.Animation;
 
-    readonly layers: Array<Konva.Layer>;
+    readonly layers: Array<konva.Layer>;
     pxrStep: number = 0.2;
     targetFPS: number = 30;
 
-    private constructor(layers: Array<Konva.Layer>, pxrStep: number = 0.2, targetFPS: number = 30) {
+    private constructor(layers: Array<konva.Layer>, pxrStep: number = 0.2, targetFPS: number = 30) {
 
         this.layers = layers;
         this.pxrStep = pxrStep;
         this.targetFPS = targetFPS;
 
         // Async FPS counter based on the stage
-        this.anim = new Konva.Animation(frame => {
+        this.anim = new konva.Animation(frame => {
      
             if (frame && frame.frameRate > targetFPS) {
                 
@@ -51,7 +51,7 @@ export class PixelRatio {
         }, layers).start(); 
     }
 
-    public static getInstance(layers: Array<Konva.Layer>, pxrStep: number = 0.2, targetFPS: number = 30): PixelRatio {      
+    public static getInstance(layers: Array<konva.Layer>, pxrStep: number = 0.2, targetFPS: number = 30): PixelRatio {      
         if (!PixelRatio.instance)
             PixelRatio.instance = new PixelRatio(layers, pxrStep, targetFPS);
         

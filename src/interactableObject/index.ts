@@ -1,4 +1,4 @@
-import Konva from 'Konva';
+import konva from 'konva';
 import ConnectionManager from '../connectionManager';
 import DragManager from './src/dragManager';
 import Global from '../global';
@@ -13,14 +13,14 @@ export interface ILineRef {
 
 // TODO: Needs a refactor
 class intractableObject {
-    public block: Konva.Rect;
-    public ghost: Konva.Rect;
+    public block: konva.Rect;
+    public ghost: konva.Rect;
 
     public selectionOffset: [number, number] = [0, 0];
     public dragOffset: Basic.ICords = { x: 0, y: 0 };
     
-    readonly stage: Konva.Stage;
-    readonly layer: Konva.Layer;
+    readonly stage: konva.Stage;
+    readonly layer: konva.Layer;
     readonly cm: ConnectionManager;
     readonly blockOpts: CanvasTypes.IBlock;
     readonly uuid: string;
@@ -30,7 +30,7 @@ class intractableObject {
 
     public static readonly Globals: Global = Global.getInstance();
     
-    constructor(stage: Konva.Stage, layer: Konva.Layer, block: CanvasTypes.IBlock, cords: [number, number]) {
+    constructor(stage: konva.Stage, layer: konva.Layer, block: CanvasTypes.IBlock, cords: [number, number]) {
         this.stage = stage;
         this.layer = layer;
         this.blockOpts = block;
@@ -135,7 +135,7 @@ class intractableObject {
     }
 
     public drawBlock(block: CanvasTypes.IBlock, cords: [number, number]): void {
-        this.block = new Konva.Rect({
+        this.block = new konva.Rect({
             cornerRadius: block.borderRadius,
             x: cords[0],
             y: cords[1],
@@ -208,7 +208,7 @@ class intractableObject {
     }
 
 
-    public snapToGrid(rect: Konva.Rect = this.block): void {
+    public snapToGrid(rect: konva.Rect = this.block): void {
         // Dose this block have snapToGrid enabled?
         if (this.blockOpts.snapToGrid === false)
             return;

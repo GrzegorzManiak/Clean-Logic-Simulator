@@ -1,4 +1,4 @@
-import Konva from 'Konva';
+import konva from 'konva';
 import ConnectionManager from './connectionManager';
 import constructGrid from './stageManager/gridManager';
 import movementManager from './stageManager/scrollManager';
@@ -7,10 +7,9 @@ import Register from './blockRegister';
 import Cursor from './stageManager/cursor';
 
 import SettingUI from './userInterface/settings';
-import Localization from './localization';
 
 // first we need to create a stage
-let stage = new Konva.Stage({
+let stage = new konva.Stage({
     container: 'canvas',   // id of container <div>
     width: window.innerWidth,
     height: window.innerHeight,
