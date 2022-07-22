@@ -68,13 +68,12 @@ class DragManager {
     }
 
 
-    // TODO: Change the hooks over to DOM events for better performance.
     private attatchHooks(): void {
         // This checks if the mouse is clicked down on the object
         this.draggableObject.on('mousedown', () => this.setMouseDown(true));
         
         // This resets all the states once the mouse is released.
-        this.stage.on('mouseup', () => {
+        this.stage.addEventListener('mouseup', () => {
             // -- Check if the user was previously
             //    Dragging an object
             if(this.getDragging() === true)
@@ -87,9 +86,9 @@ class DragManager {
         });
 
         // Executed once when the mouse enters the object
-        this.draggableObject.on('mouseenter', () => this.setMouseOver(true));
+        this.draggableObject.addEventListener('mouseenter', () => this.setMouseOver(true));
 
-        this.stage.on('mousemove', () => {
+        this.stage.addEventListener('mousemove', () => {
             // If the mouse is down and the mouse is over the object
             if(this.getMouseDown() === false)
                 return;
