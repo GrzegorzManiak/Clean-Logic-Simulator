@@ -3,7 +3,7 @@ import Global from '../global';
 import constructArrow from './src/constructArrow';
 import calculateCords from './src/calculateCords';
 import constructBezier from './src/constructBezier';
-import intractableObject from '../interactableObject';
+import intractableObject from '../connectionPoint';
 
 import { Basic } from '../types';
 

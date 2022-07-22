@@ -1,5 +1,5 @@
-import BlockRegistry from '../interactableObject/src/register';
-import intractableObject from '../interactableObject';
+import BlockRegistry from '../connectionPoint/src/register';
+import intractableObject from '../connectionPoint';
 import ConnectionManager from '../connectionManager';
 import konva from 'konva';
 
@@ -18,7 +18,7 @@ function register(stage: konva.Stage) {
         snapToGrid: true
     });
 
-    new intractableObject(stage, layer, BlockRegistry.getBlock('AND'), [0, 0]);   
+    new intractableObject(stage, layer, BlockRegistry.getBlock('AND'), [50, 50]);   
     
 
     BlockRegistry.registerBlock({
@@ -33,7 +33,7 @@ function register(stage: konva.Stage) {
         snapToGrid: true
     });
 
-    new intractableObject(stage, layer, BlockRegistry.getBlock('XOR'), [100, 0]);
+    new intractableObject(stage, layer, BlockRegistry.getBlock('XOR'), [150, 50]);
 
     BlockRegistry.registerBlock({
         id: 'OR',
@@ -47,7 +47,7 @@ function register(stage: konva.Stage) {
         snapToGrid: true
     });
 
-    new intractableObject(stage, layer, BlockRegistry.getBlock('OR'), [200, 0]);
+    new intractableObject(stage, layer, BlockRegistry.getBlock('OR'), [250, 50]);
 
     BlockRegistry.registerBlock({
         id: 'NOT',
@@ -61,7 +61,7 @@ function register(stage: konva.Stage) {
         snapToGrid: true
     });
 
-    new intractableObject(stage, layer, BlockRegistry.getBlock('NOT'), [300, 0]);
+    new intractableObject(stage, layer, BlockRegistry.getBlock('NOT'), [350, 50]);
 }
 
 export default register;

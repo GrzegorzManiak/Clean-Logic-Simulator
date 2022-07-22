@@ -1,8 +1,8 @@
 import konva from 'konva';
 import ConnectionManager from '../connectionManager';
-import DragManager from './src/dragManager';
+import DragManager from '../stageManager/dragManager';
 import Global from '../global';
-
+import connectionPoint from '../connection/node'
 import { GridConstants, VisualConstants } from '../options';
 import { CanvasTypes, Basic } from '../types';
 
@@ -25,8 +25,8 @@ class intractableObject {
     readonly blockOpts: CanvasTypes.IBlock;
     readonly uuid: string;
     readonly dragMannager: DragManager;
-    readonly canBeConnected: boolean = true;
-    readonly canConntect: boolean = true;
+    readonly canBeConnected: boolean = false;
+    readonly canConntect: boolean = false;
 
     public static readonly Globals: Global = Global.getInstance();
     
@@ -42,7 +42,7 @@ class intractableObject {
         // Calculate the uuid, completely random string modified by microseconds
         // used to identify the block
         this.uuid = `${Math.random().toString(36).substring(2, 15)}-${Date.now()}-${block.id}`;
-        this.dragMannager = new DragManager(this.block);
+        this.dragMannager = new DragManager(this.block, this.stage);
         this.drag();
     }
 
@@ -152,6 +152,14 @@ class intractableObject {
         // Add the block to the layer
         this.layer.add(this.block);     
         this.layer.add(this.ghost);
+
+        new connectionPoint({
+            mode: 'input',
+            maxConnections: 255,
+            offSet: { x: 0, y: 0 },
+            size: { width: 40, height: 40 },
+            master: this.block,
+        });
 
         // Hide the ghost
         this.hideGhost();

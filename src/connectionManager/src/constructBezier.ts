@@ -1,5 +1,5 @@
 import konva from 'konva';
-import intractableObject from '../../interactableObject';
+import intractableObject from '../../connectionPoint';
 import { VisualConstants } from '../../options';
 
 function constructBezier(points: [number, number, number, number], selected: boolean, block: intractableObject, direction: 1 | 2 | 3 | 4): konva.Group {

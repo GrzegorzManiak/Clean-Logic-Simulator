@@ -1,7 +1,7 @@
 import konva from "konva";
 import Global from "../../global";
 import trackMouse from './src/trackMouse';
-import intractableObject from "../../interactableObject";
+import intractableObject from "../../connectionPoint";
 import ConnectionManager from '../../connectionManager';
 
 import { SelectionConstants } from '../../options';
