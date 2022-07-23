@@ -82,16 +82,35 @@ class Selection {
         });
     }
 
+    public canSelect(): boolean {
+        if(Selection.canSelect === false) return false; 
+        if(this.globals.selectionEnabled === false) return false;
+
+        return true;
+    }
+
     private hookOntoMouse() {
+        // -- Gate to ensure that the 'mousedown' event has
+        //    Been executed therefore passing any tests that
+        //    are required to determine if the user is allowed
+        //    to select.
+        let mouseWasDown = false;
 
         // This is when the user clicks on the stage
         this.stage.on('mousedown', () => {
+            // -- Check if the user is allowed to instantiate the selection box
+            if(this.canSelect() === false) return;
+
             // -- If the user is not hovering over a block, and thers blocks selected,
             if (this.globals.hoveringOverBlock === false && Selection.getSelectedBlocks().length > 0)
                 this.cancleSelection();
 
-            if(Selection.canSelect === false || this.instantiateDrag() === false || this.globals.hoveringOverBlock === true)
-                return this.resetSelection();
+            // -- Check if the user is allowed to instantiate the selection box
+            if(Selection.canSelect === false || 
+                this.instantiateDrag() === false || 
+                this.globals.hoveringOverBlock === true)
+            return this.resetSelection();
+
 
             // Set the visible boxes opacity to the global opacity
             this.box.opacity(SelectionConstants.transparency);
@@ -101,15 +120,20 @@ class Selection {
 
             // -- set the global state to true
             this.globals.movingBlockSelection = true;
+
+            // -- set mouse was down to true
+            mouseWasDown = true;
         });
 
 
         // this is when the users moves the mouse
         this.stage.on('mousemove', () => {
-            if(Selection.canSelect === false)
+            if(this.canSelect() === false || mouseWasDown === false) {
+                mouseWasDown = false;   
                 return this.resetSelection();
+            }
 
-            if(Selection.getMovingBlockSelection() === true) return trackMouse(
+            else if(Selection.getMovingBlockSelection() === true) return trackMouse(
                 this.stage, 
                 this.box, 
 
@@ -123,6 +147,10 @@ class Selection {
 
         // This is when the user releases the mouse
         this.stage.on('mouseup', () => {
+            // -- If instructed so, deselect all blocks
+            if(this.canSelect() === false || mouseWasDown === false) 
+                return this.cancleSelection();
+
             // get all the sellected objects
             const objects = this.instantiateMove();
 
@@ -136,6 +164,9 @@ class Selection {
 
             // -- set the global state to false
             this.globals.movingBlockSelection = false;
+
+            // -- set mouse was down to false
+            mouseWasDown = false;
         });
     }
 

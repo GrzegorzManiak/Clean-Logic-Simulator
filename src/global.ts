@@ -13,6 +13,8 @@ class Global {
     public hoveringOverBlock: boolean = false;
     public movingBlockSelection: boolean = false;
     public movingBlock: boolean = false;
+
+    public selectionEnabled: boolean = true;       
 }
 
 export default Global;
