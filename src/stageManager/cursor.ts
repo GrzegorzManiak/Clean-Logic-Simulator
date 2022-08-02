@@ -21,6 +21,8 @@ class Cursor {
         this.graphics = graphics;
 
         this.instantiateCursor();
+
+        this.setCursorVisibility(false);
     }
 
     public static getInstance(stage: konva.Stage, graphics: Basic.ICursorGraphics, options: Basic.ICursorOptions): Cursor {
@@ -109,12 +111,24 @@ class Cursor {
         });
     }
 
-    public hideRealCursor(): void {
-        document.body.style.cursor = 'none';
-    }   
+    public setCursorVisibility(visible: boolean): void {
+        switch (visible) {
+            case true: 
+                // -- Show the cursor
+                this.cursorElm.style.display = 'block';
 
-    public showRealCursor(): void {
-        document.body.style.cursor = 'default';
+                // -- Hide the real cursor
+                document.body.style.cursor = 'none';
+                break;
+
+            case false: 
+                // -- Hide the cursor
+                this.cursorElm.style.display = 'none';
+
+                // -- Show the real cursor  
+                document.body.style.cursor = 'default';
+                break;
+        }
     }
 
     private createCursor(): any {
@@ -140,9 +154,6 @@ class Cursor {
 
         // -- Append the cursorDiv to the stage
         this.stage.content.appendChild(this.cursorElm);
-
-        // -- hide the real cursor
-        this.hideRealCursor();
 
         // -- Add a document listener to the cursorDiv
         document.addEventListener('mousemove', (e: MouseEvent) => this.updateCursor(e));
@@ -187,7 +198,6 @@ class Cursor {
             this.setDistance(this.options.distance);
             rotate = 0;
         }
-
 
         // -- Set the cursorDiv's style
         this.cursorElm.style.transform = transform;
