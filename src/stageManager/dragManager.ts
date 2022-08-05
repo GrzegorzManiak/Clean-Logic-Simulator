@@ -34,7 +34,18 @@ class DragManager {
         this.attatchHooks();
     }
 
+    /**
+     * @name clearState
+     * 
+     * @description This function is used to clear all the states of the drag manager.  
+     */
+    public clearState(): void {
+        this.setMouseDown(false);
+        this.setDragging(false);
+        this.setMouseOver(false);
+    }
         
+
     private dragStartHooks: unkFuncArr = [];
     /**
      * @name hookOnDragStart
@@ -69,8 +80,14 @@ class DragManager {
 
 
     private attatchHooks(): void {
-        // This checks if the mouse is clicked down on the object
-        this.draggableObject.on('mousedown', () => this.setMouseDown(true));
+        // -- Checks was the mouse over the object 
+        // when the user pressed down on the mouse.
+        this.draggableObject.on('mousedown', () => {
+            if(this.getMouseOver() === true)
+                this.setMouseDown(true);    
+
+            else this.setMouseDown(false);
+        });
         
         // This resets all the states once the mouse is released.
         this.stage.addEventListener('mouseup', () => {
@@ -82,20 +99,21 @@ class DragManager {
             // reset all the states
             this.setMouseDown(false);
             this.setDragging(false);
-            this.setMouseOver(false);
         });
 
-        // Executed once when the mouse enters the object
+
+        // -- Executed once when the mouse enters the object
         this.draggableObject.addEventListener('mouseenter', () => this.setMouseOver(true));
 
+        // -- Executed once when the mouse leaves the object
+        this.draggableObject.addEventListener('mouseleave', () => this.setMouseOver(false));    
+
+
+        // -- Main drag functionality   
         this.stage.addEventListener('mousemove', () => {
             // If the mouse is down and the mouse is over the object
             if(this.getMouseDown() === false)
                 return;
-
-            if(this.getMouseOver() === false) 
-                return;
-
 
             // -- Drag start
             if(this.getDragging() === false) {
